@@ -85,6 +85,9 @@ The ECS Service and Task Definition files define how ECS resources (such as cont
 - **Lambda Definition:**
 The Lambda Function Definition defines function-specific settings, such as memory allocation, timeout settings, and trigger events.
 
+- **Lambda Event Source Mapping:**
+Lambda Event Source Mapping allows you to connect Lambda functions to specific data sources, such as API Gateway, Elastic Load Balancer, or SQS queues. This mapping ensures that your Lambda functions automatically process events from these sources, enabling event-driven architectures for your deployments.
+
 All these configuration files should be stored in a Git repository.
 
 ### Monitoring and Rollback Mechanisms

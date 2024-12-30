@@ -12,7 +12,8 @@ GitMoxi relies on structured configuration files to manage deployments effective
 1. **Deployment Definition File**: Define stability checks, rollback policies, and traffic shifting rules.
 2. **Input File**: Provide environment-specific parameters that will be used in the other deployment files such as IAM roles, container images, and API IDs.
 3. **Service and Task Definitions**: Standard ECS service and task definitions, including networking and logging configurations.
-4. **Lambda Definition**: Specify function-specific settings, such as memory, timeout, runtime, and event source mappings.
+4. **Lambda Definition**: Specify function-specific settings, such as memory, timeout, and runtime.
+5. **Lambda Event Source Definition**: Connect Lambda functions to specific data sources like API Gateway, SQS, Kinesis streams etc., enabling automated event-driven workflows.
 
 ### Folder Structure
 The following is the recommended folder structure for managing ECS and Lambda configurations:
