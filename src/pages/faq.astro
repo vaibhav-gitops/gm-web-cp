@@ -82,8 +82,17 @@ const faq = [
     },
     {
         question: "How is Gitmoxi different from other CD tools for AWS?",
-        answer:
-            "TBD",
+        answer:`
+            <p class="pb-3 text-neutral-600">GitMoxi is not just another deployment tool — it’s a product designed to optimize and enhance deployment workflows through intelligent service-specific deployments, improve deployment consistency, and ensure rapid iteration. While traditional CI/CD pipelines focus on the end-to-end software delivery lifecycle, GitMoxi specializes in deployment automation, complementing your pipeline by making the deployment stage smarter and more efficient.</p>
+            <p class="pb-3 text-neutral-600 font-semibold">Key Differences and Benefits:</p>
+            <ul class="text-neutral-600" style="list-style-type: disc; margin-left: 20px;">
+            <li class="pb-2"><span class="font-semibold inline">Intelligent Service-Specific Deployments:</span> GitMoxi intelligently handles deployments for the specific AWS service, ensuring precise updates tailored to your application needs.</li>
+            <li class="pb-2"><span class="font-semibold inline">Detailed Logs for Troubleshooting:</span> GitMoxi provides comprehensive, step-by-step logs to simplify debugging and give you unparalleled visibility into deployment processes.</li>
+            <li class="pb-2"><span class="font-semibold inline">Centralized Configuration Management:</span> By utilizing a single source of truth for configuration, GitMoxi ensures consistency across environments without additional manual effort.</li>
+            <li class="pb-2"><span class="font-semibold inline">IaC Integration:</span> GitMoxi easily incorporates outputs from your Infrastructure-as-Code (IaC) tools, streamlining deployments by automatically injecting these configurations into the pipeline.</li>
+            <li class="pb-2"><span class="font-semibold inline">Flexible and Scalable:</span> Adapts to diverse deployment strategies and scales effortlessly across environments and services.</li>
+        </ul>
+        `
     },
     {
         question: "What event sources does Gitmoxi support for Lambda?",
@@ -114,7 +123,7 @@ const faq = [
 ];
 ---
 
-<Layout title="About" footerMargin={false}>
+<Layout title="FAQs" footerMargin={false}>
     <Container>
         <Sectionhead>
             <Fragment slot="title">Frequently Asked Questions</Fragment>
