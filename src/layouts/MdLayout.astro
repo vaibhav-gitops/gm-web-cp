@@ -1,0 +1,95 @@
+---
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Layout from "./Layout.astro";
+import Cta from "../components/cta.astro";
+const { frontmatter, headings } = Astro.props;
+import CopyCodeButton from "@components/ui/copycodebutton.jsx";
+---
+
+<Layout title={frontmatter.title}>
+  <CopyCodeButton client:load />
+  <div class="max-w-screen-xl mx-auto px-5">
+    <div class="max-w-screen-2xl flex gap-5 mt-16">
+    <!-- Section 1 on the left -->
+      <div class="pr-4 pl-2 w-1/5 lg:w-1/6 sticky top-20 self-start">  <!-- 20% width -->
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/overview">Overview</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/getting_started">Getting Started</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/core_concepts">Core Concepts</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/configuration">Configuration</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/deployment_input">Input File</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/ecs_deployment_definition">ECS Deployment Definition</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/lambda_deployment_definition">Lambda Deployment Definition</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/lambda_event_source_mapping">Lambda Event Source Mapping</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/cli_reference">CLI Reference</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/cicd_integration">Integration with CI/CD</a></span>
+        </div>
+        <div class="mb-2">
+          <span class="text-md font-medium underline"><a href="/docs/debugging">Debugging and Troubleshooting</a></span>
+        </div>
+      </div>
+
+      <!-- Section 2 in the center -->
+      <div class="max-w-full lg:w-4/6 prose"> <!-- 60% width -->
+        <slot />
+      </div>
+
+      <!-- Section 3 on the right -->
+      <div class="pl-4 w-1/5 lg:w-1/5 sticky top-20 self-start"> <!-- 20% width -->
+        <h2 class="text-xl font-medium">Table of Contents</h2>
+        <ul class="mt-4">
+          {headings
+              .filter((heading) => heading.depth > 1)
+              .map((heading) => (
+                  <li
+                      class={`depth-${heading.depth} mb-2 ml-2`}
+            >
+                  <a href={`#${heading.slug}`} class="text-blue-600 hover:underline">
+                    {heading.text}
+                  </a>
+                  </li>
+            ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <Cta />
+</Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    .copy-code {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #3730a3;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+    .copy-code:hover {
+      background-color: #312e81;
+    }
+  }
+</style>

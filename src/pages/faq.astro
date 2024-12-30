@@ -1,0 +1,142 @@
+---
+import React from 'react';
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import { ArrowIcon } from "@components/ui/icons";
+import Layout from "../layouts/Layout.astro";
+import Cta from "../components/cta.astro";
+
+const faq = [
+    {
+    question: "What is Gitmoxi?",
+    answer:
+    "Gitmoxi is an advanced continuous deployment (CD) product designed to simplify and enhance deployment processes on AWS, particularly for ECS and Lambda. With Gitmoxi, you can track, manage, and optimize deployments across various AWS regions using strategies like blue-green, rolling, and canary deployments."
+    },
+    {
+        question: "How does Gitmoxi improve deployment management?",
+        answer:
+            `
+            <p class="pb-3 text-neutral-600">Gitmoxi enhances deployment management across AWS ECS and Lambda by providing teams with powerful features to track, control, and optimize their deployment workflows:</p>
+            <ul class="text-neutral-600" style="list-style-type: disc; margin-left: 20px;">
+                <li class="pb-2"><span class="font-semibold inline">Version-Controlled Deployment Artifacts:</span> Gitmoxi versions every deployment artifact at each change, creating a reliable history of modifications and ensuring rollbacks are straightforward and accurate. By making Git the single source of truth, Gitmoxi empowers teams with complete traceability of all changes, helping them maintain deployment consistency and prevent accidental drift.</li>
+                <li class="pb-2"><span class="font-semibold inline">Support for Various Deployment Strategies:</span> With built-in support for Canary, Blue/Green, and Rolling deployments, Gitmoxi makes it easy to manage both simple and complex deployment needs across AWS regions. Whether fine-tuning a gradual rollout or executing a quick environment switch, teams can adopt the best deployment strategy for each situation without additional complexity or manual steps.</li>
+                <li class="pb-2"><span class="font-semibold inline">Detailed Error Logging and Actionable Insights:</span> Gitmoxi offers comprehensive error logs that go beyond basic data to provide actionable insights, helping teams diagnose issues quickly. These logs include timestamps, error contexts, and metadata to support faster issue resolution, reducing both response times and downtime impact.</li>
+                <li class="pb-2"><span class="font-semibold inline">Active Alarm Monitoring and Auto-Rollback Mechanisms:</span> Gitmoxi actively monitors critical alarms throughout deployments, ensuring that any detected issues can trigger an immediate rollback to the last stable state. This proactive approach allows teams to mitigate problems before they affect users, maintaining stability and confidence in the deployment process.</li>
+            </ul>`
+    },
+    {
+    question: "What deployment strategies does Gitmoxi support?",
+    answer:
+    `
+        <p class="pb-3 text-neutral-600">Gitmoxi supports multiple deployment strategies, including blue-green, rolling, and canary deployments. These options provide flexible control over release processes, making it easier to minimize downtime and safely deploy changes across environments.</p>
+        <ul class="text-neutral-600" style="list-style-type: disc; margin-left: 20px;">
+            <li class="pb-2"><span class="font-semibold inline">Blue-Green Deployments:</span> In a blue-green deployment, two identical environments (blue and green) are maintained. At any time, one environment (e.g., blue) serves live traffic while the other (green) is idle. When a new version is ready, it is deployed to the idle environment. Once validated, traffic is switched over to the new version, allowing for quick rollbacks if issues arise.</li>
+            <li class="pb-2"><span class="font-semibold inline">Rolling Deployments:</span> Rolling deployments gradually replace instances of the previous version of an application with the new version. This strategy updates a few instances at a time, which helps ensure that some parts of the application are always available. It minimizes downtime and allows for real-time monitoring of the new version as it is rolled out.</li>
+            <li class="pb-2"><span class="font-semibold inline">Canary Deployments:</span> Canary deployments involve gradually releasing a new version of an application to a small percentage of total traffic or users, rather than rolling it out to the entire user base at once. This strategy allows teams to monitor the performance of the new version and gather feedback from a limited set of requests, reducing the risk associated with a full-scale release.</li>
+        </ul>
+    `
+    },
+    {
+    question: "Can Gitmoxi handle both ECS and Lambda deployments?",
+    answer:
+    "Yes, Gitmoxi is built to efficiently manage deployments for both ECS (Elastic Container Service) and AWS Lambda, making it possible to deploy containerized applications and serverless functions from a unified platform. Gitmoxi has a deep understanding of AWS ECS and Lambda configurations, including critical components like Task Definitions, Service Definitions, and Event Source Mappings, which are integral to each deployment’s success. This insight into AWS’s architecture allows Gitmoxi to streamline deployments across complex, multi-service environments.",
+    },
+    {
+    question: "Is Gitmoxi compatible with infrastructure as code tools like Terraform and AWS CDK?",
+    answer:
+    "Absolutely! Gitmoxi integrates seamlessly with popular Infrastructure as Code (IaC) tools like Terraform and AWS CDK, enabling smooth integration into existing workflows and ensuring consistent, repeatable infrastructure provisioning alongside deployments. Gitmoxi goes a step further by directly absorbing configurations from the output files generated by these IaC tools. For instance, when you create a security group using Terraform, you can provide the Terraform output that includes the new security group’s ARN. Gitmoxi will parse this output automatically and update the security group ARN within the ECS Service definition. This capability helps maintain accurate, synchronized configurations across your infrastructure and deployment processes, reducing manual intervention and potential configuration errors.",
+    },
+    {
+    question: "Can I deploy applications across multiple AWS regions with Gitmoxi?",
+    answer:
+    "Yes, Gitmoxi is designed to simplify multi-region deployments, making it easy to deploy applications simultaneously across multiple AWS regions. This feature is especially valuable for enhancing application availability and ensuring low-latency performance for users in different geographic areas. Gitmoxi allows you to manage region-specific configurations and dependencies directly within its interface, giving you control over how deployments are synchronized across regions.",
+    },
+    {
+    question: "Does Gitmoxi provide real-time deployment insights?",
+    answer:`
+    <p class="text-neutral-600">Absolutely, Gitmoxi is equipped with comprehensive real-time tracking features that keep your team fully informed at every stage of the deployment process. With clear visibility into deployment statuses across services and regions, you can monitor successes and failures, receiving immediate alerts for any issues that arise. This continuous visibility helps teams stay informed throughout each deployment, making it easier to address potential problems on the spot.</p>
+    <p class="pt-3 text-neutral-600">Gitmoxi also provides detailed, actionable error logs that capture essential context, including timestamps and metadata, for swift issue diagnosis. These insights enable teams to respond proactively, quickly mitigate disruptions, and ensure a seamless experience for end users.</p>
+    `
+    },
+    {
+    question: "How do I track my deployments with Gitmoxi?",
+    answer:
+    "Gitmoxi offers both a user-friendly UI and a powerful CLI, allowing users to choose their preferred method for tracking deployments. The UI provides an overview of all active deployments, displaying real-time status updates and timestamps for any errors encountered. Each deployment is directly linked to its corresponding Git commit, making it simple to trace changes back to specific code updates. This dual approach ensures that users have flexible options for monitoring their deployments, whether they prefer visual interfaces or command-line tools.",
+    },
+    {
+    question: "How does Gitmoxi handle deployment errors and rollbacks?",
+    answer:`
+    <p class="text-neutral-600">Gitmoxi is designed to manage deployment errors with advanced diagnostics and quick recovery mechanisms. It offers <span class="font-semibold">detailed error logging and actionable insights </span>that go beyond basic error messages, providing in-depth information like timestamps, error contexts, and relevant metadata. This helps teams pinpoint the root cause of issues swiftly, reducing response time and downtime impact.</p>
+    <p class="pt-3 text-neutral-600">Gitmoxi also includes <span class="font-semibold">active alarm monitoring and automatic rollback mechanisms</span> to ensure stability. It actively monitors critical alarms during each deployment, and if an issue arises, Gitmoxi can immediately trigger a rollback to the last stable version. This proactive approach minimizes user impact by addressing problems before they escalate, empowering teams to deploy with confidence and maintain a seamless user experience.</p>
+    `
+    },
+    {
+        question: "How does Gitmoxi work with CI/CD pipelines and the GitOps model?",
+        answer:`
+        <p class="pb-3 text-neutral-600">Gitmoxi integrates seamlessly with CI/CD workflows and the GitOps model to streamline deployments:</p>
+        <ul class="text-neutral-600" style="list-style-type: disc; margin-left: 20px;">
+            <li class="pb-2"><span class="font-semibold inline">Push-Based Deployment: </span> Gitmoxi allows for a push-based deployment approach, where the CI/CD pipeline triggers Gitmoxi to initiate a deployment using deployment artifacts stored in a specific Git repository. This ensures that deployments are based on the most recent code changes, enhancing deployment efficiency.</li>
+            <li class="pb-2"><span class="font-semibold inline">GitOps Support:</span> When enabled, Gitmoxi actively monitors the designated Git repository for updates. Upon detecting any changes, it automatically triggers a new deployment. This GitOps model fosters a more automated and responsive deployment process, allowing teams to maintain continuous integration and delivery seamlessly.</li>
+        </ul>
+        `
+    },
+    {
+        question: "How is Gitmoxi different from other CD tools for AWS?",
+        answer:
+            "TBD",
+    },
+    {
+        question: "What event sources does Gitmoxi support for Lambda?",
+        answer:`
+        <p class="pb-3 text-neutral-600">Gitmoxi supports both pull and push-based event sources for AWS Lambda.</p>
+        <ul class="text-neutral-600" style="list-style-type: disc; margin-left: 20px;">
+            <li class="pb-2"><span class="font-semibold inline">Push-based sources</span> are event sources that trigger AWS Lambda functions directly in response to specific events, typically involving HTTP requests. Gitmoxi supports Application Load Balancer (ALB) and API Gateway push based event sources.</li>
+            <li class="pb-2">
+                <span class="font-semibold inline">Pull-based sources</span> refer to event sources that trigger AWS Lambda functions in response to new data or events, where Lambda polls the source for events rather than being directly invoked by them. These encompass all event sources listed in the 
+                <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html" target="_blank" class="text-blue-600 underline">Event Source Mapping documentation</a>, including services like Amazon SQS, DynamoDB Streams, and Kinesis Data Streams. This variety allows for flexible and scalable event-driven architectures.
+            </li>
+        </ul>
+        `
+    },
+    {
+        question: "What compute types are supported by Gitmoxi on ECS?",
+        answer:`
+            <p class="text-neutral-600">Gitmoxi supports the Fargate compute type on Amazon ECS, offering a seamless deployment experience for containerized applications. While Fargate simplifies management by abstracting infrastructure, it does not support advanced deployment strategies like blue-green and canary deployments, which are essential for minimizing downtime. Additionally, rollbacks in Fargate can be slow, and its error logs often lack the detailed, actionable insights necessary for effective troubleshooting. </p>
+            <p class="pt-3 text-neutral-600">Gitmoxi overcomes these challenges by enabling support for all deployment strategies and providing comprehensive error logging, ensuring a smoother deployment process and rapid issue resolution. This empowers teams to maintain high application reliability and improve user satisfaction.</p>
+    `
+    },
+    {
+        question: "What is the pricing for Gitmoxi?",
+        answer:`
+            <p class="text-neutral-600">Please visit the <a href="/pricing" class="text-blue-600 hover:underline">pricing page</a> to learn more about the various pricing tiers for Gitmoxi.</p>
+    `
+    },
+];
+---
+
+<Layout title="About" footerMargin={false}>
+    <Container>
+        <Sectionhead>
+            <Fragment slot="title">Frequently Asked Questions</Fragment>
+            <Fragment slot="desc"></Fragment>
+        </Sectionhead>
+
+        <div class="grid divide-y divide-neutral-200 max-w-4xl mx-auto mt-12">
+            {faq.map((item, index) => (
+                    <div key={index} class="py-5">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+                                <span>{item.question}</span>
+                                <span class="transition group-open:rotate-180">
+                                <ArrowIcon />
+                            </span>
+                            </summary>
+                            <p class="text-neutral-600 mt-3 group-open:animate-fadeIn" set:html={item.answer}/>
+                        </details>
+                    </div>
+            ))}
+        </div>
+    </Container>
+    <Cta />
+</Layout>
+---

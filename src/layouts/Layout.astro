@@ -1,0 +1,68 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import { SEO } from "astro-seo";
+import Footer from "@components/footer.astro";
+import Navbar from "@components/navbar/navbar.astro";
+
+interface Props {
+  title?: string;
+  footerMargin?: boolean;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const resolvedImageWithDomain = new URL(
+    "/opengraph.jpg",
+    Astro.site
+).toString();
+const { title, footerMargin = false } = Astro.props;
+
+const makeTitle = title
+    ? title
+    : "Gitmoxi";
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" href="../public/favicon.png" />
+
+  <SEO
+      title={makeTitle}
+      description="Supercharge your ECS and Lambda Deployments with Gitmoxi."
+      canonical={canonicalURL}
+      twitter={{
+        creator: "@surjithctly",
+        site: "@gitmoxi",
+        card: "summary_large_image",
+      }}
+      openGraph={{
+        basic: {
+          url: canonicalURL,
+          type: "website",
+          title: `Supercharge your ECS and Lambda Deployments with Gitmoxi.`,
+          image: resolvedImageWithDomain,
+        },
+        image: {
+          alt: "Gitmoxi",
+        },
+      }}
+  />
+  <style is:global>
+    img {
+      content-visibility: auto;
+    }
+    details > summary.list-none::-webkit-details-marker,
+    details > summary.list-none::marker {
+      display: none;
+    }
+  </style>
+  <ViewTransitions />
+</head>
+<body>
+<Navbar />
+<slot />
+<Footer margin={footerMargin} />
+</body>
+</html>

@@ -1,0 +1,134 @@
+---
+import Container from "@components/container.astro";
+import { Icon } from "astro-icon/components";
+import "@fontsource/nunito/700.css";
+
+const { margin } = Astro.props;
+
+const footermenu = {
+  company: [
+    {
+      title: "About",
+      path: "/about",
+    },
+    {
+      title: "Blog",
+      path: "/blog",
+    },
+    {
+      title: "Contact",
+      path: "/contact",
+    },
+  ],
+  product: [
+    {
+      title: "Documentation",
+      path: "/docs/overview",
+    },
+    {
+      title: "Pricing",
+      path: "/pricing",
+    },
+  ],
+  resources: [
+    {
+      title: "Help Center",
+      path: "#",
+    },
+    {
+      title: "Startup Guide",
+      path: "/docs/getting_started",
+    },
+  ],
+};
+---
+
+<footer
+  class:list={[
+    "py-14 bg-slate-100 border-t border-slate-100",
+    margin,
+  ]}>
+  <Container>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      <div class="sm:col-span-2 md:col-span-3 lg:col-span-2">
+        <a href="/" class="text-lg flex items-center"
+          >
+          <img
+              src="../src/assets/bg-removed-logo.png" alt="Gitmoxi Logo" class="h-10 w-auto mr-1"/>
+          <span class="pt-2 font-bold text-dark-blue"
+                 style="font-size: 1.6rem; font-weight: 700; font-family: 'Nunito', Arial, sans-serif;">Gitmoxi</span>
+        </a>
+        <div class="flex pl-9 gap-3 mt-4 items-center">
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-slate-200 hover:bg-slate-300 rounded w-6 h-6 inline-flex items-center justify-center text-slate-500">
+            <Icon name="bx:bxl-twitter" class="w-4 h-4" />
+            <span class="sr-only">Twitter or X</span></a
+          >
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-slate-200 hover:bg-slate-300 rounded w-6 h-6 inline-flex items-center justify-center text-slate-500">
+            <Icon name="bx:bxl-facebook-circle" class="w-4 h-4" /><span
+              class="sr-only">Facebook</span
+            ></a
+          >
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-slate-200 hover:bg-slate-300 rounded w-6 h-6 inline-flex items-center justify-center text-slate-500">
+            <Icon name="bx:bxl-linkedin-square" class="w-4 h-4" /><span
+              class="sr-only">Linkedin</span
+            ></a
+          >
+        </div>
+      </div>
+      <div>
+        <h3 class="font-medium text-sm text-slate-800">Company</h3>
+        <div class="flex flex-col mt-3">
+          {
+            footermenu.company.map((item) => (
+              <a
+                href={item.path || "#"}
+                class="py-2 text-sm text-slate-600 hover:text-indigo-600">
+                {item.title}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div>
+        <h3 class="font-medium text-sm text-slate-800">Product</h3>
+        <div class="flex flex-col mt-3">
+          {
+            footermenu.product.map((item) => (
+              <a
+                href={item.path || "#"}
+                class="py-2 text-sm text-slate-600 hover:text-indigo-600">
+                {item.title}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div>
+        <h3 class="font-medium text-sm text-slate-800">Resources</h3>
+        <div class="flex flex-col mt-3">
+          {
+            footermenu.resources.map((item) => (
+              <a
+                href={item.path || "#"}
+                class="py-2 text-sm text-slate-600 hover:text-indigo-600">
+                {item.title}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </Container>
+</footer>
