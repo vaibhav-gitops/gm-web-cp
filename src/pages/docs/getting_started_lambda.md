@@ -132,7 +132,12 @@ git push
 ```bash
 export LOG_GROUP="/aws/lambda/LambdaFunction_SQS"
 export LATEST_STREAM=$(aws logs describe-log-streams --log-group-name "$LOG_GROUP" --order-by "LastEventTime" --descending --limit 1 --query "logStreams[0].logStreamName" --output text)
-aws logs get-log-events --log-group-name "$LOG_GROUP" --log-stream-name "$LATEST_STREAM" --limit 10 | jq -r '.events[].message | capture("body\": \"(?<body>.*?)\"").body'
+aws logs get-log-events --log-group-name "$LOG_GROUP" --log-stream-name "$LATEST_STREAM" --limit 10
 ```
 
-- This should print `Hello from SQS!` to the console, which is the text of the initial event we pushed into the SQS queue from our terraform. This showcases that the integration was successful and our Lambda function is processing the events from the queue. 
+- You should see the CloudWatch output events where one of them displays `Hello from SQS!`. This message corresponds to the initial event we pushed into the SQS queue via Terraform. It confirms that the integration is successful and that our Lambda function is processing events from the queue as expected.
+
+
+
+
+
