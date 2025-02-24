@@ -2,12 +2,12 @@
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
-import PricingComponent, { type Plan } from "@components/pricing.astro";
+import PricingComponent from "@components/pricing.astro";
 import PricingFaq from "../components/pricing-faq.astro";
 import ComparePricing from "@components/compare-pricing.astro";
 import Cta from "../components/cta.astro";
 
-const plans: Plan[] = [
+const plans = [
   {
     name: "Explorer",
     price: "0",
@@ -22,32 +22,14 @@ const plans: Plan[] = [
     ],
     button: {
       text: "Get Started",
-      link: "/",
-    },
-  },
-  {
-    name: "Start-ups & Small Businesses",
-    price: "10,000",
-    desc: "Ideal for scaling startups",
-    popular: false,
-    color: "teal",
-    features: [
-      "Single-instance installation",
-      "Unlimited Users and Deployments",
-      "Full feature access",
-      "Authentication and Authorization",
-      "One year of premium support",
-    ],
-    button: {
-      text: "Get Started",
-      link: "#",
+      link: "/docs/getting_started",
     },
   },
   {
     name: "Enterprise",
     price: null,
     desc: "Tailored for large organizations",
-    popular: false,
+    popular: true,
     color: "teal",
     features: [
       "Support for multiple installations",
@@ -73,7 +55,7 @@ const plans: Plan[] = [
         One-Time Product Pricing based on Number of Installations.
       </Fragment>
     </Sectionhead>
-    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-screen-lg mt-12 mb-16">
+    <div class="grid md:grid-cols-2 gap-40 mx-auto max-w-screen-lg mt-12 mb-20 px-10">
       {plans.map((item) => <PricingComponent plan={item} />)}
     </div>
     <PricingFaq />

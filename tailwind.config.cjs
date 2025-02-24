@@ -9,7 +9,8 @@ module.exports = {
       },
       colors: {
         'font-primary': '#0c3245',
-        'dark-blue': '#0f2733'
+        'dark-blue': '#0f2733',
+        'dark-blue-200': '#0f4661',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
