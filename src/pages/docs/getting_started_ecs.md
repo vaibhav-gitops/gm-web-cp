@@ -35,10 +35,10 @@ Start by copying the deployment artifacts provided in the `ecs/rolling-update` f
 
  ```bash
  cd ecs/rolling-update
- mv nginx_taskdef.json.sample nginx_taskdef.json
- mv nginx_svcdef.json.sample nginx_svcdef.json
- mv nginx_depdef.json.sample nginx_depdef.json
- mv nginx_input.json.sample nginx_input.json
+ cp nginx_taskdef.json.sample nginx_taskdef.json
+ cp nginx_svcdef.json.sample nginx_svcdef.json
+ cp nginx_depdef.json.sample nginx_depdef.json
+ cp nginx_input.json.sample nginx_input.json
  cd ../../
  git commit -m "creating nginx svc with rolling update" -a
  git push
@@ -106,10 +106,10 @@ We will create a load-balanced ECS service and test the blue/green deployment. N
 
  ```bash
  cd ecs/blue-green-update
- mv bg_nginx_taskdef.json.sample bg_nginx_taskdef.json
- mv bg_nginx_svcdef.json.sample bg_nginx_svcdef.json
- mv bg_nginx_depdef.json.sample bg_nginx_depdef.json
- mv bg_nginx_input.json.sample bg_nginx_input.json
+ cp bg_nginx_taskdef.json.sample bg_nginx_taskdef.json
+ cp bg_nginx_svcdef.json.sample bg_nginx_svcdef.json
+ cp bg_nginx_depdef.json.sample bg_nginx_depdef.json
+ cp bg_nginx_input.json.sample bg_nginx_input.json
  cd ../..
  git commit -m "creating the blue/green test service" -a
  git push
