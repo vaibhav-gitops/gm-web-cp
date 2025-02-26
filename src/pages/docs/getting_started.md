@@ -5,14 +5,18 @@ layout: ../../layouts/MdLayout.astro
 ---
 
 # Getting Started with Gitmoxi
-Gitmoxi is inspired by GitOps paradigm, that is, you store, version control, and collaborate on deployment artifacts in Git. Gitmoxi uses these files to create and update associated objects in AWS services. So you will need GitHub and AWS accounts to try Gitmoxi continuous deployment features. In this getting started guide, you will setup Gitmoxi on you laptop, use deployment artifacts from GitHub, and deploy resources in AWS.
+Gitmoxi is inspired by GitOps paradigm where you store, version control, and collaborate on deployment artifacts in Git. Gitmoxi uses these files to create and update associated objects in AWS services. So you will need GitHub and AWS accounts to try Gitmoxi continuous deployment features. In this getting started guide, you will setup Gitmoxi on you laptop, use deployment artifacts from GitHub, and deploy resources in AWS.
 
 ### Prerequisites
 * Mac laptop (tested on Sonoma 14.5)
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [Git CLI](https://github.com/git-guides/install-git#install-git-on-mac)
-* Either [Hashicorp Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) or [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) to create the infrastructure components.
-* If you want to use existing infrastructure components such as ECS cluster, task execution IAM role, VPC, subnets, then you don't need Terraform or CDK. Just see the relevant test section and it will guide you on how to provide those values.
+* [Hashicorp Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+* Gitmoxi CLI
+  ```bash
+  pip install gmctl
+  gmctl --help
+  ```
 
 ### Installation Setup
 <details class="mb-5 pl-5">
@@ -41,23 +45,23 @@ Gitmoxi is inspired by GitOps paradigm, that is, you store, version control, and
 ### Authenticate to AWS account
 * Ensure you have an **AWS account** with the [required privileges](./security.md) (or for testing you can also use admin privileges if available).
 * Authenticate to the account.
-* Set the following env variables. You can the find the `AWS_PROFILE` in `~/.aws/credentials` file usually the first line before authentication secrets will have in `[]` brackets.
+* Set the following env variables. You can the find the `AWS_PROFILE` in `~/.aws/credentials` file; usually the first line before authentication secrets will have profile in `[]` brackets.
   ```bash
   export AWS_ACCOUNT=<your AWS account id>
   export AWS_PROFILE=<the profile from authentication>
   export AWS_REGION=<your default AWS region>
   ```
 
-### Setting up GitHub
+### Setting up GitHub repository for the deployment artifacts
 
 * Start by forking the https://github.com/gitmoxi/gm-demo repository.
 * **[Create a GitHub access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)** so that Gitmoxi can read the manifest files for deployment. Give this token access to the `repo` all actions and `read:packages`.
   ```bash
   export GITHUB_TOKEN=<token you created above>
   ```
-  **Note** that for production deployments you will use AWS Secrets Manager or SSM Parameter Store (SecureString) to store the GitHub token.
+**Note** that for production deployments you will use AWS Secrets Manager or SSM Parameter Store (SecureString) to store the GitHub token.
 
-### Run Gitmoxi
+### Install Gitmoxi
 
 * Start by replacing the environment variables with your AWS account and GitHub token values from above.
   ```bash
@@ -67,26 +71,31 @@ Gitmoxi is inspired by GitOps paradigm, that is, you store, version control, and
   sed -i 's/<AWS_PROFILE>/'"$AWS_PROFILE"'/g' .env
   sed -i 's/<GITHUB_TOKEN>/'"$GITHUB_TOKEN"'/g' .env
   ```
-* Start the DynamoDB and Redis local containers, followed by creation of tables in DynamoDB, and then launch Gitmoxi application containers. It is easier to just create 3 terminals and launch the following commands in each of them.
+* Start the DynamoDB and Redis local containers
 
   ```bash
   # Terminal 1
   docker-compose -f dynamo-redis-compose.yml up 
-  
+  ```
+* In second different terminal create the tables used by Gitmoxi application
+
+  ```bash
   # Terminal 2
   source create_tables.sh
-  
+  ```
+* In third terminal start the Gitmoxi application
+  ```bash  
   # Terminal 3
   docker-compose -f gitmoxi-docker-compose.yml up
   ```
-  You can check that the UI is running at http://localhost:3000
+You can check that the UI is running at http://localhost:3000
 
 ### Setup GitHub repository for use with Gitmoxi
+Add the `gm-demo` repository you forked above
 
-* In UI, click on `Respositories` section
-* Enter the URL for the forked repo above `https://github.com/<your-user-name>/gm-demo`
-* Enter `main` for the branch
-* Enter `GITHUB_TOKEN` for GitHub Credentials. (Do not enter the actual token. Just the string as it is the evironment variable where token is stored.)
+  ```bash
+  gmctl repo add -r https://github.com/<your-github-username>/gm-demo -b main -a GITHUB_TOKEN
+  ```
 
 <br/>
 <div class="highlight-box">With everything set up, you're now ready to begin testing!! The following two sub-sections will guide you through testing GitMoxi for ECS and Lambda deployments.</div>
