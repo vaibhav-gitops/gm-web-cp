@@ -38,6 +38,7 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
   limactl start template://docker --mount-writable  # Proceed with preset configurations. This takes a few minutes to start.
   docker context create lima-docker --docker "host=unix://$HOME/sock/docker.sock"
   docker context use lima-docker
+  rm ~/.docker/config.json
   ```
 
 </details>
