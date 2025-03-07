@@ -43,6 +43,18 @@ module.exports = {
               color: '#2563eb',
               textDecoration: "underline",
             },
+            "code::before": {
+              content: "none", // Removes the backtick before
+            },
+            "code::after": {
+                content: "none", // Removes the backtick after
+            },
+            "code": {
+              backgroundColor: "#e4e2e2",  // Light gray background
+              padding: "2px 4px",
+              borderRadius: "4px",
+              fontWeight: "400",
+            },
           },
         },
       },
