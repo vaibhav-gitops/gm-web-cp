@@ -5,6 +5,4 @@ astroship-pro/
 .DS_Store
 LICENSE.md
 node_modules
-package.json
 package-lock.json
-package*
