@@ -1,6 +1,6 @@
 ---
-title: "Debugging and Troubleshooting"
-navtitle: "Debugging and Troubleshooting"
+title: "Deployment Observability"
+navtitle: "Deployment Observability"
 layout: ../../layouts/MdLayout.astro
 ---
 

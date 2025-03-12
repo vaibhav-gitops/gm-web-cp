@@ -47,7 +47,7 @@ Start by copying the deployment artifacts provided in the `ecs/rolling-update` f
 Now let us trigger the deployment based on above commit. The CLI command `gmctl commit deploy` will deploy the changes associated with the latest commit. 
 
  ```bash
- gmctl commit deploy -r https://github.com/<your-github-username>/gm-demo -b main 
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
  ```
 You should see a new service `rolling-nginx-svc` created in your ECS cluster! The GitOps flow ensures you have a reviewed and approved record of the artifacts that is deployed. 
 
@@ -70,7 +70,7 @@ Commit these changes to the repository
 And deploy the changes. Just the same command as above and it will deploy the latest changes!
 
  ```bash
- gmctl commit deploy -r https://github.com/<your-github-username>/gm-demo -b main
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main
  ```
 
 The `rolling-nginx-svc` has tasks attached to a public subnet and public IP is enabled. So you can access the public IP of the task and see the text `It Works` from `httpd` container instead of the `NGINX welcome message`. This will confirm that the rolling deployment has successfully completed.
@@ -78,12 +78,12 @@ The `rolling-nginx-svc` has tasks attached to a public subnet and public IP is e
 You can also get a list of the deployments and their status details using the `gmctl` commands. The first command gives a list of the deployments.
 
  ```bash
- gmctl deployment ecs get -r https://github.com/<your-github-username>/gm-demo 
+ gmctl deployment ecs get -r $GM_DEMO_REPO_URL 
  ```
 The flags, `-v -A`, provide more verbose details.
 
  ```bash
- gmctl deployment ecs get -r https://github.com/<your-github-username>/gm-demo -v -A
+ gmctl deployment ecs get -r $GM_DEMO_REPO_URL -v -A
  ```
 
 ## Cool, tell me more what is happening here? 
@@ -118,7 +118,7 @@ We will create a load-balanced ECS service and test the blue/green deployment. N
  Now we are ready to deploy this commit.
 
  ```bash
- gmctl commit deploy -r https://github.com/<your-github-username>/gm-demo -b main
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main
  ```
 
 In the AWS console, `us-west-2` region, you should see ECS `bg-nginx-svc` in the `gitmoxidemo` cluster. The tasks for this service are running on private subnets. So you can only access them through the load balancer endpoint. You should see the `NGINX welcome message` when you go to the load balancer endpoint.
@@ -147,7 +147,7 @@ Commit these changes to the repository
 And deploy the changes using our familiar `gmctl commit deploy ` command. 
 
  ```bash
- gmctl commit deploy -r https://github.com/<your-github-username>/gm-demo -b main
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main
  ```
 
 After a few seconds the tasks with new container image (`httpd`) will be running and registered to the ALB target group. You can open the ALB endpoint in browser and hit refresh multiple times. You should see the return flip between `It Works` message from the new `httpd` containers to the `NGINX welcome message` from the old `nginx` containers. You can also open the AWS console, go to the ALB, and see that the target group weights are increasing linearly by 10%. Once the whole traffic is shifted the old tasks container `nginx` containers will be deleted. The full traffic is now served by the new tasks with new container. 

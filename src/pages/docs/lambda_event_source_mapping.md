@@ -6,7 +6,7 @@ layout: ../../layouts/MdLayout.astro
 
 # Lambda Event Source Mapping
 
-The Lambda Event Source Mapping Configuration defines how AWS Lambda functions interact with different event sources. It supports both **push-based** and **pull-based** event sources, enabling seamless integration with services like API Gateway, SQS, Elastic Load Balancing, among many others. Currently, GitMoxi supports API Gateway and Elastic Loader Balancer as the push-based event sources. In addition, GitMoxi supports all the pull-based event sources supported by the <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html" target="_blank">Lambda Event Source Mapping API</a>.
+The Lambda Event Source Mapping Configuration defines how AWS Lambda functions interact with different event sources. It supports both **push-based** and **pull-based** event sources, enabling seamless integration with services like API Gateway, SQS, Elastic Load Balancing, among many others. Currently, GitMoxi supports API Gateway and Elastic Loader Balancer as the push-based event sources. In addition, GitMoxi supports all the pull-based event sources supported by the [Lambda Event Source Mapping API]("https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html").
 
 The following attributes can be specified in the Lambda event source definition (`_lambdaeventsourcedef.json`) file.
 

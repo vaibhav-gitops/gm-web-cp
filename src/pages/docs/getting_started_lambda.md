@@ -19,38 +19,45 @@ This guide helps you test the deployment of AWS Lambda functions with GitMoxi. I
 - SQS: Queue and pushes a test message to the queue. Required for testing SQS integration. 
 
 ```bash
-cd lambda/core-infra
+cd lambda/core-infra/terraform
 terraform init
 terraform plan
 terraform apply --auto-approve
 terraform output --json > terraform_output.json
+cd ../../
 ```
 
 ## Creating the three lambda functions and testing the integrations
 
-We will simulate a GitOps flow. We will append a new line at the end of individual lambda definitions to register a change to the file. Then we will commit these changes. GitMoxi will poll for these changes and deploy a new version of the Lambda function.
-
+We will copy the sample files and drop the `.sample` extension. This will create the Lambda definition file, event source definition file, deployment configuration file, and input file. Once we add and commit these files, then we can trigger the deployment for this commit. 
 ### <u> 1. Testing API Gateway integration </u>
-
+Assuming you are in the `lambda` directory
 ```bash
-cd ../..
-echo "" >> lambda/lambda-api-gateway/test_lambdadef.json
+cd lambda-api-gateway
+cp test_lambdadef.json.sample test_lambdadef.json
+cp test_lambdadepdef.json.sample test_lambdadepdef.json
+cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
+cp test_lambdainput.json.sample test_lambdainput.json
 git add .
 git commit -m "Updated Lambda API Gateway Def to trigger a deployment"
 git push
 ```
+Now trigger the deployment.
+```bash
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
+```
 
-After pushing the changes, a new Lambda deployment will be triggered, resulting in the creation of a new version of the function named LambdaFunction_APIGateway.
+A new Lambda deployment will be triggered, resulting in the creation of a new version of the function named LambdaFunction_APIGateway.
 
 **What just happened**
-- A GitOps workflow was triggered by the push. GitMoxi observed the changes in the commit, automatically detecting the modified files, and then triggered a deployment specifically for the fucntion whose files were updated.
+- A GitOps workflow was triggered by the `gmctl commit deploy` command. GitMoxi observed the changes in the commit, automatically detecting the modified files, and then triggered a deployment specifically for the function whose files were updated.
 - A new version for the specific Lambda function was created.
-- The function was integrated with API Gateway, with API Gateway added as a trigger. To view this integration, navigate to the Lambda function in the AWS Console, go to the Alias tab, and check the Triggers section. Alternatively, you can also observe the integration through the new test route created in the API Gateway through our Terraform configuration.
+- The function was integrated with API Gateway, with API Gateway added as a trigger. To view this integration, navigate to the Lambda function in the AWS Console, go to the `Alias` tab, and check the `Triggers` section. Alternatively, you can also observe the integration through the new test route created in the API Gateway through our Terraform configuration.
 - Permissions were added for API Gateway to trigger the Lambda function. These permissions are visible in the Lambda console under the Alias tab in the Permissions section.
 - The API Gateway endpoint is now available, allowing you to test the integration and view its output. Run the following command to see the output of the integration:
 
  ```bash
- curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform_output.json)"
+ curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform/terraform_output.json)"
  ```
 
 - This command triggers the API Gateway endpoint and should return `Blue from Lambda!`, showcasing successful deployment and integration of the BlueFunction.zip.  
@@ -65,22 +72,35 @@ git add .
 git commit -m "Updated Lambda API Gateway Def to trigger a B/G deployment"
 git push
 ```
+Trigger deployment of latest commit
+```bash
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
+```
 
 Let's repeat polling the API Gateway endpoint. While the deployment is in progress and traffic shifting is underway, the endpoint will return a mix of `Blue from Lambda!` and `Green from Lambda!`. After the deployment is complete, the endpoint will only return `Green from Lambda!`.
 
 ```bash
-curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform_output.json)"
+curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform/terraform_output.json)"
 ```
 
 ### <u> 2. Testing Elastic Load Balancer integration </u>
 
 We will repeat a similar process to trigger an initial deployment to test the integration and then another deployment to test the Blue/Green Deployment.
 
+Assuming you are in the `lambda` directory
 ```bash
-echo "" >> lambda/lambda-elb/test_lambdadef.json
+cd lambda-elb
+cp test_lambdadef.json.sample test_lambdadef.json
+cp test_lambdadepdef.json.sample test_lambdadepdef.json
+cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
+cp test_lambdainput.json.sample test_lambdainput.json
 git add .
 git commit -m "Updated Lambda ELB Def to trigger a deployment"
 git push
+```
+Now trigger the deployment.
+```bash
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
 ```
 
 **What just happened**
@@ -90,7 +110,7 @@ git push
 - The ELB endpoint should enable us to test the integration. Run the following command to see the output of the integration:
 
 ```bash
-curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform_output.json)" | jq -r '.message'
+curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform/terraform_output.json)" | jq -r '.message'
 ```
 - The commend triggers the ELB endpoint and should return `Blue from Lambda!`
 
@@ -104,11 +124,15 @@ git add .
 git commit -m "Updated Lambda ELB Def to trigger a B/G deployment"
 git push
 ```
+Trigger deployment of latest commit
+```bash
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
+```
 
 Let's repeat polling the API Gateway endpoint. While the deployment is in progress and traffic shifting is underway, the endpoint will return a mix of `Blue from Lambda!` and `Green from Lambda!`. After the deployment is complete, the endpoint will only return `Green from Lambda!`.
 
 ```bash
-curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform_output.json)" | jq -r '.message'
+curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform/terraform_output.json)" | jq -r '.message'
 ```
 
 ### <u> 3. Testing SQS integration </u>
@@ -117,11 +141,20 @@ For SQS testing, we will showcase that our Lambda fucntion can start processing 
 
 Once again, we will trigger a deployment to test the integration. Here we won't test blue/green deployment, though if you have a use-case - it is indeed possible with GitMoxi. 
 
+Assuming you are in the `lambda` directory
 ```bash
-echo "" >> lambda/lambda-sqs/test_lambdadef.json
+cd lambda-sqs
+cp test_lambdadef.json.sample test_lambdadef.json
+cp test_lambdadepdef.json.sample test_lambdadepdef.json
+cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
+cp test_lambdainput.json.sample test_lambdainput.json
 git add .
 git commit -m "Updated Lambda SQS Def to trigger a deployment"
 git push
+```
+Now trigger the deployment.
+```bash
+ gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
 ```
 
 **What just happened**
