@@ -38,6 +38,7 @@ cp test_lambdadef.json.sample test_lambdadef.json
 cp test_lambdadepdef.json.sample test_lambdadepdef.json
 cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
 cp test_lambdainput.json.sample test_lambdainput.json
+cd ..
 git add .
 git commit -m "Updated Lambda API Gateway Def to trigger a deployment"
 git push
@@ -57,7 +58,7 @@ A new Lambda deployment will be triggered, resulting in the creation of a new ve
 - The API Gateway endpoint is now available, allowing you to test the integration and view its output. Run the following command to see the output of the integration:
 
  ```bash
- curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform/terraform_output.json)"
+ curl "$(jq -r '.api_endpoint_with_route.value' core-infra/terraform/terraform_output.json)"
  ```
 
 - This command triggers the API Gateway endpoint and should return `Blue from Lambda!`, showcasing successful deployment and integration of the BlueFunction.zip.  
@@ -67,9 +68,8 @@ A new Lambda deployment will be triggered, resulting in the creation of a new ve
 Let's update the Lambda definition to replace the blue function with the green function, triggering a new deployment with the updated function code.
 
 ```bash
-sed -i 's|"S3Key": "{{ s3_object_blue_key }}"|"S3Key": "{{ s3_object_green_key }}"|' lambda/lambda-api-gateway/test_lambdadef.json
-git add .
-git commit -m "Updated Lambda API Gateway Def to trigger a B/G deployment"
+sed -i '' 's|"S3Key": "{{ s3_object_blue_key }}"|"S3Key": "{{ s3_object_green_key }}"|' lambda-api-gateway/test_lambdadef.json
+git commit -m "Updated Lambda API Gateway Def to trigger a B/G deployment" -a
 git push
 ```
 Trigger deployment of latest commit
@@ -80,7 +80,7 @@ Trigger deployment of latest commit
 Let's repeat polling the API Gateway endpoint. While the deployment is in progress and traffic shifting is underway, the endpoint will return a mix of `Blue from Lambda!` and `Green from Lambda!`. After the deployment is complete, the endpoint will only return `Green from Lambda!`.
 
 ```bash
-curl "$(jq -r '.api_endpoint_with_route.value' lambda/core-infra/terraform/terraform_output.json)"
+curl "$(jq -r '.api_endpoint_with_route.value' core-infra/terraform/terraform_output.json)"
 ```
 
 ### <u> 2. Testing Elastic Load Balancer integration </u>
@@ -94,6 +94,7 @@ cp test_lambdadef.json.sample test_lambdadef.json
 cp test_lambdadepdef.json.sample test_lambdadepdef.json
 cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
 cp test_lambdainput.json.sample test_lambdainput.json
+cd ..
 git add .
 git commit -m "Updated Lambda ELB Def to trigger a deployment"
 git push
@@ -110,7 +111,7 @@ Now trigger the deployment.
 - The ELB endpoint should enable us to test the integration. Run the following command to see the output of the integration:
 
 ```bash
-curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform/terraform_output.json)" | jq -r '.message'
+curl -s "$(jq -r '.elb_endpoint.value' core-infra/terraform/terraform_output.json)" | jq -r '.message'
 ```
 - The commend triggers the ELB endpoint and should return `Blue from Lambda!`
 
@@ -119,9 +120,8 @@ curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform/terraform_out
 Similar as before, let's update the Lambda definition to replace the blue function with the green function, triggering a new deployment with the updated function code.
 
 ```bash
-sed -i 's|"S3Key": "{{ s3_object_blue_key }}"|"S3Key": "{{ s3_object_green_key }}"|' lambda/lambda-elb/test_lambdadef.json
-git add .
-git commit -m "Updated Lambda ELB Def to trigger a B/G deployment"
+sed -i '' 's|"S3Key": "{{ s3_object_blue_key }}"|"S3Key": "{{ s3_object_green_key }}"|' lambda-elb/test_lambdadef.json
+git commit -m "Updated Lambda ELB Def to trigger a B/G deployment" -a
 git push
 ```
 Trigger deployment of latest commit
@@ -132,7 +132,7 @@ Trigger deployment of latest commit
 Let's repeat polling the API Gateway endpoint. While the deployment is in progress and traffic shifting is underway, the endpoint will return a mix of `Blue from Lambda!` and `Green from Lambda!`. After the deployment is complete, the endpoint will only return `Green from Lambda!`.
 
 ```bash
-curl -s "$(jq -r '.elb_endpoint.value' lambda/core-infra/terraform/terraform_output.json)" | jq -r '.message'
+curl -s "$(jq -r '.elb_endpoint.value' core-infra/terraform/terraform_output.json)" | jq -r '.message'
 ```
 
 ### <u> 3. Testing SQS integration </u>
@@ -148,6 +148,7 @@ cp test_lambdadef.json.sample test_lambdadef.json
 cp test_lambdadepdef.json.sample test_lambdadepdef.json
 cp test_lambdaeventsourcedef.json.sample test_lambdaeventsourcedef.json
 cp test_lambdainput.json.sample test_lambdainput.json
+cd ..
 git add .
 git commit -m "Updated Lambda SQS Def to trigger a deployment"
 git push
@@ -165,10 +166,22 @@ Now trigger the deployment.
 ```bash
 export LOG_GROUP="/aws/lambda/LambdaFunction_SQS"
 export LATEST_STREAM=$(aws logs describe-log-streams --log-group-name "$LOG_GROUP" --order-by "LastEventTime" --descending --limit 1 --query "logStreams[0].logStreamName" --output text)
-aws logs get-log-events --log-group-name "$LOG_GROUP" --log-stream-name "$LATEST_STREAM" --limit 10
+aws logs get-log-events --log-group-name "$LOG_GROUP" --log-stream-name "$LATEST_STREAM" --start-from-head --limit 10  --region us-east-1
 ```
 
 - You should see the CloudWatch output events where one of them displays `Hello from SQS!`. This message corresponds to the initial event we pushed into the SQS queue via Terraform. It confirms that the integration is successful and that our Lambda function is processing events from the queue as expected.
+
+## Cleanup
+
+Let's now delete all the AWS resources we create to perform the Lambda testing.
+
+```bash
+aws lambda delete-function --function-name LambdaFunction_APIGateway --region us-east-1
+aws lambda delete-function --function-name LambdaFunction_ELB --region us-east-1
+aws lambda delete-function --function-name LambdaFunction_SQS --region us-east-1
+cd core-infra/terraform 
+terraform destroy --auto-approve
+```
 
 
 

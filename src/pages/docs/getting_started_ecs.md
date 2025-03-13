@@ -34,13 +34,14 @@ We will follow the GitOps paradigm where were will commit the deployment artifac
 Start by copying the deployment artifacts provided in the `ecs/rolling-update` folder. For ECS, Gitmoxi looks for changes to files ending in suffix `_taskdef.json, _svcdef.json, and _input.json`. This way we trigger deployments only when relevant files are changed. The `_depdef.json` file has additiona configuration for deployment.
 
  ```bash
- cd ecs/rolling-update
+ cd ../../rolling-update
  cp nginx_taskdef.json.sample nginx_taskdef.json
  cp nginx_svcdef.json.sample nginx_svcdef.json
  cp nginx_depdef.json.sample nginx_depdef.json
  cp nginx_input.json.sample nginx_input.json
  cd ../../
- git commit -m "creating nginx svc with rolling update" -a
+ git add .
+ git commit -m "creating nginx svc with rolling update"
  git push
  ```
 
@@ -49,7 +50,7 @@ Now let us trigger the deployment based on above commit. The CLI command `gmctl 
  ```bash
  gmctl commit deploy -r $GM_DEMO_REPO_URL -b main 
  ```
-You should see a new service `rolling-nginx-svc` created in your ECS cluster! The GitOps flow ensures you have a reviewed and approved record of the artifacts that is deployed. 
+You should see a new service `rolling-nginx-svc` created in your ECS cluster! The GitOps flow ensures you have a reviewed and approved record of the artifacts that is deployed.
 
 ## Perform rolling update
 ECS natively supports rolling update. So all we have to do is update the container image, commit the changes, and trigger the deployment just like above.
@@ -75,7 +76,7 @@ And deploy the changes. Just the same command as above and it will deploy the la
 
 The `rolling-nginx-svc` has tasks attached to a public subnet and public IP is enabled. So you can access the public IP of the task and see the text `It Works` from `httpd` container instead of the `NGINX welcome message`. This will confirm that the rolling deployment has successfully completed.
 
-You can also get a list of the deployments and their status details using the `gmctl` commands. The first command gives a list of the deployments.
+You can also get a list of the deployments and their status details at http://localhost:3000/deployments/ecs or using the `gmctl` commands. The first command gives a list of the deployments.
 
  ```bash
  gmctl deployment ecs get -r $GM_DEMO_REPO_URL 
@@ -111,7 +112,8 @@ We will create a load-balanced ECS service and test the blue/green deployment. N
  cp bg_nginx_depdef.json.sample bg_nginx_depdef.json
  cp bg_nginx_input.json.sample bg_nginx_input.json
  cd ../..
- git commit -m "creating the blue/green test service" -a
+ git add .
+ git commit -m "creating the blue/green test service"
  git push
  ```
 
@@ -123,10 +125,9 @@ We will create a load-balanced ECS service and test the blue/green deployment. N
 
 In the AWS console, `us-west-2` region, you should see ECS `bg-nginx-svc` in the `gitmoxidemo` cluster. The tasks for this service are running on private subnets. So you can only access them through the load balancer endpoint. You should see the `NGINX welcome message` when you go to the load balancer endpoint.
 
-```bash
-<grab the alb endpoint from terraform_output.json>
-run the curl command on it
-```
+ ```bash
+ curl -s "$(jq -r '.alb_endpoint.value' ecs/core-infra/terraform/terraform_output.json)"
+ ```
 
 ## Perform blue/green deployment
 Once again we will change the task container image from `nginx` to `httpd`. This time we will do the blue/green deployment so there will be two sets of tasks running - the old with `nginx` container, and the new with `http` container. Then we will do the `linear` traffic shift, moving 10% of traffic every 10 seconds from old to new tasks. This shift is done by changing the target group weights on the ALB listener forwarding rule. 
@@ -150,7 +151,13 @@ And deploy the changes using our familiar `gmctl commit deploy ` command.
  gmctl commit deploy -r $GM_DEMO_REPO_URL -b main
  ```
 
-After a few seconds the tasks with new container image (`httpd`) will be running and registered to the ALB target group. You can open the ALB endpoint in browser and hit refresh multiple times. You should see the return flip between `It Works` message from the new `httpd` containers to the `NGINX welcome message` from the old `nginx` containers. You can also open the AWS console, go to the ALB, and see that the target group weights are increasing linearly by 10%. Once the whole traffic is shifted the old tasks container `nginx` containers will be deleted. The full traffic is now served by the new tasks with new container. 
+After a few seconds the tasks with new container image (`httpd`) will be running and registered to the ALB target group. Now ping the ALB endpoint multiple times using the curl command. 
+
+ ```bash
+ curl -s "$(jq -r '.alb_endpoint.value' ecs/core-infra/terraform/terraform_output.json)"
+ ```
+
+You should see the output flip between `It Works` message from the new `httpd` containers to the `NGINX welcome message` from the old `nginx` containers. You can also open the AWS console, go to the ALB, and see that the target group weights are increasing linearly by 10%. Once the whole traffic is shifted the old tasks container `nginx` containers will be deleted. The full traffic is now served by the new tasks with new container. 
 
 [Gitmoxi ECS blue/green deployment documentation]() provides further details on features such as different traffic shifting patterns, multiple target group support, controls such as shift percent and shift interval, alarms to monitor and rollback.
 
@@ -161,4 +168,26 @@ You can delete the `bg-nginx-svc` service using command below. Please adjust the
  aws ecs delete-service --cluster gitmoxidemo --service bg-nginx-svc --region us-west-2 --force
  ```
 
- In the next section you will test Lambda create and update using the same GitOps flow as above providing you with a unified deployment workflow for both ECS and Lambda. 
+## Cleanup
+
+Let's now delete all the AWS resources we create to perform the Lambda testing.
+
+```bash
+cd ecs/core-infra/terraform
+terraform destroy --auto-approve
+cd ../../..
+```
+
+<br/>
+<div class="highlight-box">In the next section you will test Lambda create and update using the same GitOps flow as above providing you with a unified deployment workflow for both ECS and Lambda.</div>
+
+<style>
+  .highlight-box { 
+    border-radius: 8px;
+    background-color: rgba(219,239,255,0.72);
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+</style>
+
+ 

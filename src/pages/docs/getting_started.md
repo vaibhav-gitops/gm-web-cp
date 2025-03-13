@@ -19,15 +19,15 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
   ```
 
 ### Installation Setup
-<details class="mb-5 pl-5">
+<details class="mb-5 pl-3">
 <summary class="text-lg"><strong>Install with Docker Desktop (may require Docker License)</strong></summary>
 
 [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 </details>
 
-<details class="mb-5 pl-5">
-<summary style="font-size: 18px"><strong>Install with Lima</strong></summary>
+<details class="mb-5 pl-3">
+<summary class="text-lg"><strong>Install with Lima</strong></summary>
 
 #### Install Lima, Docker CLI, and Docker Compose
 * Lima is an open-source container runtime that runs containers in a lightweight Linux VM, offering a seamless, Docker-compatible alternative.
@@ -44,7 +44,7 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
 </details>
 
 ### Authenticate to AWS account
-* Ensure you have an **AWS account** with the [required privileges](./security.md) (or for testing you can also use admin privileges if available).
+* Ensure you have an **AWS account** with the required privileges (or for testing you can also use admin privileges if available).
 * Authenticate to the account.
 * Set the following env variables. You can the find the `AWS_PROFILE` in `~/.aws/credentials` file; usually the first line before authentication secrets will have profile in `[]` brackets.
   ```bash
@@ -59,6 +59,7 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
 * **[Create a GitHub access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)** so that Gitmoxi can read the manifest files for deployment. Give this token access to the `repo` all actions and `read:packages`.
   ```bash
   export GITHUB_TOKEN=<token you created above>
+  export GM_DEMO_REPO_URL=https://github.com/<your-github-username>/gm-demo # Make sure to replace the username
   ```
 **Note** that for production deployments you will use AWS Secrets Manager or SSM Parameter Store (SecureString) to store the GitHub token.
 
@@ -95,7 +96,7 @@ You can check that the UI is running at http://localhost:3000
 Add the `gm-demo` repository you forked above
 
   ```bash
-  gmctl repo add -r https://github.com/<your-github-username>/gm-demo -b main -a GITHUB_TOKEN
+  gmctl repo add -r $GM_DEMO_REPO_URL -b main -a GITHUB_TOKEN
   ```
 
 <br/>
