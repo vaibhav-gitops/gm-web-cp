@@ -1,50 +1,51 @@
 ---
 import Badge from "@components/ui/badge.astro";
 import { Picture } from "astro:assets";
-import FeatureImg1 from "../assets/features/6.png";
-import FeatureImg2 from "../assets/features/2.png";
-import FeatureImg3 from "../assets/features/3.png";
+import FeatureImg1 from "../assets/features/1.svg";
+import FeatureImg2 from "../assets/features/2.svg";
+import FeatureImg3 from "../assets/features/3.svg";
 import { Icon } from "astro-icon/components";
 import Link from "@components/ui/link.astro";
 
 const { nomargin } = Astro.props;
 ---
 
-<div class="grid md:grid-cols-2 py-2">
-  <div class="grid place-items-center">
+<div class="bg-custom-blue lg:col-span-5 pb-10">
+<div class="grid md:grid-cols-2 pb-5">
+  <div class="grid place-items-center mx-auto">
     <Picture
       src={FeatureImg1}
       alt="Feature Image"
       formats={["avif", "webp"]}
       loading="lazy"
+      class="max-w-sm h-auto"
     />
   </div>
 
-  <div class="grid place-items-center">
-    <div class="max-w-lg">
-      <h3 class="text-3xl font-medium mt-4 [text-wrap:balance] text-font-primary">
-        One Controller. Three Services. Unlimited Flexibility
+  <div class="grid place-items-center md:w-11/12">
+    <div class="max-w-2xl ml-auto">
+      <h3 class="text-3xl mt-4 [text-wrap:balance] text-custom-gray">
+        With GitOps, every change is managed through a Git repository, making deployments
+        <span class="font-medium-plus text-custom-light-gray"> declarative</span>,
+        <span class="font-medium-plus text-custom-light-gray"> trackable</span>, and
+        <span class="font-medium-plus text-custom-light-gray"> easy to audit.</span>
       </h3>
       <ul class="grid mt-6 text-left gap-y-4">
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:check-circle-fill" class="w-5 h-5"/>
+          <span class="text-lg">Version Controlled Deployment Artifacts (no configuration sprawl)</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:check-circle-fill" class="w-6 h-6" />
+          <span class="text-lg">Service native declarative artifact definition (full power of each service and no lock-ins)</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Seamless deployments to EKS, ECS, and Lambda</span>
+          <span class="text-lg">Direct auditability between commit changes and deployments.</span>
         </li>
 
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Supports Canary, Blue/Green, and Rolling strategies</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Effortless GitOps-powered deployment management</span>
-        </li>
       </ul>
-      <div class="flex items-center gap-4 mt-6">
+      <div class="flex items-center gap-4 mt-6 bg">
         <Link sytle="inverted" href="/docs/getting_started" size="sm" class="inline-flex items-center group gap-px">
           <span>Try Now</span>
           <svg
@@ -63,38 +64,38 @@ const { nomargin } = Astro.props;
   </div>
 </div>
 
-<div class="grid md:grid-cols-2 py-10">
+<div class="grid md:grid-cols-2 py-20">
   <div class="grid place-items-center pb-10 md:pb-0 md:order-2">
     <Picture
       src={FeatureImg2}
       alt="Feature Image"
       formats={["avif", "webp"]}
       loading="lazy"
+      class="max-w-xl h-auto"
     />
   </div>
 
   <div class="grid place-items-center">
-    <div class="max-w-lg">
-      <h3 class="text-3xl font-medium mt-4 [text-wrap:balance] text-font-primary">
-        Smart Spot & On-Demand Scaling
+    <div class="ml-auto text-left max-w-2xl">
+      <h3 class="text-3xl mt-4 [text-wrap:balance] text-custom-gray max-w-2xl">
+        A
+        <span class="font-medium-plus text-custom-light-gray">unified </span>
+        <span class="font-medium-plus text-teal-400">service-aware </span>
+        <span class="font-medium-plus text-custom-light-gray">deployment controller </span>
+        that streamlines deployment workflow and allows you to leverage the full power of every service.
       </h3>
       <ul class="grid mt-6 text-left gap-y-4">
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Use Spot to optimize costs</span>
+          <span class="text-lg">Blue/Green, Rolling, Canary Deployments</span>
         </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Seamlessly scale to On-Demand when required</span>
+          <span class="text-lg">Circuit Breaking and Rollback</span>
         </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Intelligent rebalancing tailored to your application needs</span>
+          <span class="text-lg">Integrations with infrastructure as Code (Terraform and CDK)</span>
         </li>
       </ul>
       <div class="flex items-center gap-4 mt-6">
@@ -116,146 +117,32 @@ const { nomargin } = Astro.props;
   </div>
 </div>
 
-<div class="grid md:grid-cols-2 py-2">
-  <div class="grid place-items-center">
-    <Picture
-        src={FeatureImg1}
-        alt="Feature Image"
-        formats={["avif", "webp"]}
-        loading="lazy"
-    />
-  </div>
-
-  <div class="grid place-items-center">
-    <div class="max-w-xl">
-      <h3 class="text-3xl font-medium mt-4 [text-wrap:balance] text-font-primary">
-        See Every Deployment, Solve Every Issue
-      </h3>
-
-      <ul class="grid mt-6 text-left gap-y-4">
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg"> End-to-End Deployment Observability & Traceability</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Detailed Error Insights</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Instant Rollback to minimize impact</span>
-        </li>
-      </ul>
-      <div class="flex items-center gap-4 mt-6">
-        <Link sytle="inverted" href="/docs/getting_started" size="sm" class="inline-flex items-center group gap-px">
-          <span>Try Now</span>
-          <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="w-4 h-4 mt-px group-hover:translate-x-1 transition-transform">
-            <path
-                fill-rule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clip-rule="evenodd"></path>
-          </svg>
-        </Link>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="grid md:grid-cols-2 py-10">
-  <div class="grid place-items-center pb-10 md:pb-0 md:order-2">
+<div class="grid md:grid-cols-2 py-20">
+  <div class="grid place-items-center ml-auto">
     <Picture
         src={FeatureImg3}
         alt="Feature Image"
         formats={["avif", "webp"]}
         loading="lazy"
+        class="max-w-3xl h-auto"
     />
   </div>
 
-  <div class="grid place-items-center">
-    <div class="max-w-lg">
-      <h3 class="text-3xl font-medium mt-4 [text-wrap:balance] text-font-primary">
-        AI-Powered DevOps Assistance
+  <div class="grid place-items-center md:w-11/12">
+    <div class="max-w-2xl ml-auto">
+      <h3 class="text-3xl mt-4 [text-wrap:balance] text-custom-gray max-w-2xl">
+        Comprehensive deployment visibility with
+        <span class="font-medium-plus text-custom-light-gray">AI-powered root cause analysis</span>
+        for faster issue resolution and more reliable deployments.
       </h3>
       <ul class="grid mt-6 text-left gap-y-4">
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Integrated AI troubleshooting agent</span>
+          <span class="text-lg">Gitmoxi DevOps Agent</span>
         </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
+        <li class="flex items-center gap-3 text-custom-gray">
           <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Automated log analysis</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Actionable recommendations to resolve issues quickly</span>
-        </li>
-      </ul>
-      <div class="flex items-center gap-4 mt-6">
-        <Link href="/docs/getting_started" size="sm" class="inline-flex items-center group gap-px">
-          <span>Try Now</span>
-          <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="w-4 h-4 mt-px group-hover:translate-x-1 transition-transform">
-            <path
-                fill-rule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clip-rule="evenodd"></path>
-          </svg>
-        </Link>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="grid md:grid-cols-2 py-2">
-  <div class="grid place-items-center">
-    <Picture
-        src={FeatureImg1}
-        alt="Feature Image"
-        formats={["avif", "webp"]}
-        loading="lazy"
-    />
-  </div>
-
-  <div class="grid place-items-center">
-    <div class="max-w-xl">
-      <h3 class="text-3xl font-medium mt-4 [text-wrap:balance] text-font-primary">
-        Seamless Integration with Github, CI/CD, LLMs, Secret Managers, and More!
-      </h3>
-
-      <ul class="grid mt-6 text-left gap-y-4">
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Built-in integrations for DevOps & AI</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Works natively with your existing tools</span>
-        </li>
-
-        <li class="flex items-center gap-3 text-neutral-800">
-          <Icon name="ph:check-circle-fill" class="w-5 h-5" />
-
-          <span class="text-lg">Effortless setup — no custom configurations required</span>
+          <span class="text-lg">Comprehensive Deployment Logs</span>
         </li>
       </ul>
       <div class="flex items-center gap-4 mt-6">
@@ -275,4 +162,5 @@ const { nomargin } = Astro.props;
       </div>
     </div>
   </div>
+</div>
 </div>

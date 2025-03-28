@@ -52,18 +52,18 @@ import CopyCodeButton from "@components/ui/copycodebutton.jsx";
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/cicd_integration">Integration with CI/CD</a></span>
         </div>
-        <div class="mb-2">
+        <div class="mb-16">
           <span class="text-md font-medium underline"><a href="/docs/debugging">Debugging and Troubleshooting</a></span>
         </div>
       </div>
 
       <!-- Section 2 in the center -->
-      <div class="max-w-full lg:w-4/6 prose"> <!-- 60% width -->
+      <div class="max-w-full lg:w-4/6 prose mb-16"> <!-- 60% width -->
         <slot />
       </div>
 
       <!-- Section 3 on the right -->
-      <div class="pl-4 w-1/5 lg:w-1/5 sticky top-20 self-start"> <!-- 20% width -->
+      <div class="pl-4 w-1/5 lg:w-1/5 sticky top-20 self-start mb-16"> <!-- 20% width -->
         <h2 class="text-xl font-medium">Table of Contents</h2>
         <ul class="mt-4">
           {headings
