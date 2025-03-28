@@ -2,6 +2,8 @@
 import Container from "@components/container.astro";
 import { Icon } from "astro-icon/components";
 import "@fontsource/nunito/700.css";
+import LogoImg from "../assets/bg-removed-logo.png";
+import { Picture } from "astro:assets";
 
 const { margin } = Astro.props;
 
@@ -53,8 +55,15 @@ const footermenu = {
       <div class="sm:col-span-2 md:col-span-3 lg:col-span-2">
         <a href="/" class="text-lg flex items-center"
           >
-          <img
-              src="../src/assets/bg-removed-logo.png" alt="Gitmoxi Logo" class="h-10 w-auto mr-1"/>
+          <!--<img-->
+          <!--    src="../src/assets/bg-removed-logo.png" alt="Gitmoxi Logo" class="h-10 w-auto mr-1"/>-->
+          <Picture
+              src={LogoImg}
+              alt="GitmoxiLogo"
+              formats={["avif", "webp"]}
+              loading="lazy"
+              class="h-10 w-auto mr-1"
+          />
           <span class="pt-2 font-bold text-custom-blue"
                  style="font-size: 1.6rem; font-weight: 700; font-family: 'Nunito', Arial, sans-serif;">Gitmoxi</span>
         </a>
