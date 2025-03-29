@@ -52,7 +52,7 @@ let formSuccess = false;
         {!formSuccess && (
                 <form method="POST" class="download-form" id="downloadForm">
                     <div class="form-group">
-                        <label for="email">Email Address *</label>
+                        <h4>Email Address *</h4>
                         <input
                                 type="email"
                                 id="email"
@@ -76,9 +76,9 @@ let formSuccess = false;
                                     required
                                     disabled
                             />
-                            <label for="acceptTerms">
+                            <h4>
                                 I have read and accept the End User License Agreement
-                            </label>
+                            </h4>
                         </div>
                     </div>
 
@@ -272,7 +272,11 @@ let formSuccess = false;
         padding: 0.6rem;
         border: 1px solid #ddd;
         border-radius: 0.25rem;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    label[for="email"] {
+        font-size: 0.9rem;
     }
 
     input[type="checkbox"] {
