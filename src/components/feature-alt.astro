@@ -1,9 +1,9 @@
 ---
 import Badge from "@components/ui/badge.astro";
 import { Picture } from "astro:assets";
-import FeatureImg1 from "../assets/features/1.svg";
-import FeatureImg2 from "../assets/features/2.svg";
-import FeatureImg3 from "../assets/features/3.svg";
+import FeatureImg1 from "../assets/features/1.png";
+import FeatureImg2 from "../assets/features/2.png";
+import FeatureImg3 from "../assets/features/3.png";
 import { Icon } from "astro-icon/components";
 import Link from "@components/ui/link.astro";
 
@@ -71,7 +71,7 @@ const { nomargin } = Astro.props;
       alt="Feature Image"
       formats={["avif", "webp"]}
       loading="lazy"
-      class="max-w-xl h-auto"
+      class="max-w-screen-sm h-auto"
     />
   </div>
 
@@ -124,7 +124,7 @@ const { nomargin } = Astro.props;
         alt="Feature Image"
         formats={["avif", "webp"]}
         loading="lazy"
-        class="max-w-xl h-auto"
+        class="max-w-screen-md h-auto"
     />
   </div>
 

@@ -11,7 +11,7 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const resolvedImageWithDomain = new URL(
-    "/opengraph.jpg",
+    "/opengraph.png",
     Astro.site
 ).toString();
 const { title, footerMargin = false } = Astro.props;
@@ -26,7 +26,7 @@ const makeTitle = title
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <link rel="icon" href="../public/favicon.png" />
+  <link rel="icon" href="/favicon.png" />
   <SEO
       title={makeTitle}
       description="Supercharge your ECS and Lambda Deployments with Gitmoxi."
