@@ -8,8 +8,8 @@ function CopyCodeButton() {
         const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
         const addCopyButton = (codeBlock) => {
-            // Skip if already initialized
-            if (codeBlock.querySelector(".copy-code")) return;
+            // Skip if already initialized or if inside the EULA container
+            if (codeBlock.querySelector(".copy-code") || codeBlock.closest(".eula-scroll-box")) return;
 
             const wrapper = document.createElement("div");
             wrapper.style.position = "relative";

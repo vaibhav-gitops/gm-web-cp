@@ -1,51 +1,50 @@
 ---
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
 import Layout from "./Layout.astro";
 import Cta from "../components/cta.astro";
 const { frontmatter, headings } = Astro.props;
 import CopyCodeButton from "@components/ui/copycodebutton.jsx";
+import DownloadForm from '../components/donwloadform.astro';
 ---
 
 <Layout title={frontmatter.title}>
   <CopyCodeButton client:load />
   <div class="max-w-screen-xl mx-auto px-5">
     <div class="max-w-screen-2xl flex gap-5 mt-16">
-    <!-- Section 1 on the left -->
-      <div class="pr-4 pl-2 w-1/5 lg:w-1/6 sticky top-20 self-start">  <!-- 20% width -->
+      <!-- Section 1 on the left -->
+      <div class="pr-4 pl-2 w-1/5 lg:w-1/6 sticky top-20 self-start">
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/overview">Overview</a></span>
         </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/getting_started">Getting Started</a></span>
         </div>
-            <div class="mb-2 ml-4">
-              <span class="text-sm font-medium underline"><a href="/docs/getting_started_ecs">Testing ECS</a></span>
-            </div>
-            <div class="mb-2 ml-4">
-              <span class="text-sm font-medium underline"><a href="/docs/getting_started_lambda">Testing Lambda</a></span>
-            </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/getting_started_ecs">Testing ECS</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/getting_started_lambda">Testing Lambda</a></span>
+        </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/core_concepts">Core Concepts</a></span>
         </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/gm_for_ecs">Gitmoxi for ECS</a></span>
         </div>
-            <div class="mb-2 ml-4">
-              <span class="text-sm font-medium underline"><a href="/docs/ecs_deployment_definition">ECS Deployment Definition</a></span>
-            </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/ecs_deployment_definition">ECS Deployment Definition</a></span>
+        </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/gm_for_lambda">Gitmoxi for Lambda</a></span>
         </div>
-            <div class="mb-2 ml-4">
-              <span class="text-sm font-medium underline"><a href="/docs/lambda_event_source_mapping">Lambda Event Source Mapping</a></span>
-            </div>
-            <div class="mb-2 ml-4">
-              <span class="text-sm font-medium underline"><a href="/docs/lambda_deployment_definition">Lambda Deployment Definition</a></span>
-            </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/lambda_event_source_mapping">Lambda Event Source Mapping</a></span>
+        </div>
+        <div class="mb-2 ml-4">
+          <span class="text-sm font-medium underline"><a href="/docs/lambda_deployment_definition">Lambda Deployment Definition</a></span>
+        </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/input_files">Input Parameterization</a></span>
-        </div> 
+        </div>
         <div class="mb-2">
           <span class="text-md font-medium underline"><a href="/docs/cli_reference">CLI Reference</a></span>
         </div>
@@ -58,25 +57,23 @@ import CopyCodeButton from "@components/ui/copycodebutton.jsx";
       </div>
 
       <!-- Section 2 in the center -->
-      <div class="max-w-full lg:w-4/6 prose mb-16"> <!-- 60% width -->
+      <div class="max-w-full lg:w-4/6 prose mb-16">
         <slot />
       </div>
 
       <!-- Section 3 on the right -->
-      <div class="pl-4 w-1/5 lg:w-1/5 sticky top-20 self-start mb-16"> <!-- 20% width -->
+      <div class="pl-4 w-1/5 lg:w-1/5 sticky top-20 self-start mb-16">
         <h2 class="text-xl font-medium">Table of Contents</h2>
         <ul class="mt-4">
           {headings
               .filter((heading) => heading.depth > 1)
               .map((heading) => (
-                  <li
-                      class={`depth-${heading.depth} mb-2 ml-2`}
-            >
-                  <a href={`#${heading.slug}`} class="text-blue-600 hover:underline">
-                    {heading.text}
-                  </a>
+                  <li class={`depth-${heading.depth} mb-2 ml-2`}>
+                    <a href={`#${heading.slug}`} class="text-blue-600 hover:underline">
+                      {heading.text}
+                    </a>
                   </li>
-            ))}
+              ))}
         </ul>
       </div>
     </div>
@@ -84,21 +81,71 @@ import CopyCodeButton from "@components/ui/copycodebutton.jsx";
   <Cta />
 </Layout>
 
+<!-- Modal Component -->
+<div id="downloadModal" client:load>
+  <div class="modal-content">
+    <DownloadForm />
+    <span class="close-modal">&times;</span>
+  </div>
+</div>
+
+<script type="module" client:load>
+  window.onload = function() {
+    document.body.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'downloadLink') {
+        e.preventDefault(); // Prevent default link behavior
+
+        const modal = document.querySelector('#downloadModal');
+        if (modal) {
+          modal.style.display = 'block';
+          document.body.style.overflow = 'hidden'; // Disable page scrolling
+        }
+      }
+    });
+
+    // Closing the modal
+    const closeButton = document.querySelector('.close-modal');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        const modal = document.querySelector('#downloadModal');
+        if (modal) {
+          modal.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  };
+</script>
+
 <style>
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
-    .copy-code {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background-color: #173baf;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      line-height: 1rem;
-    }
-    .copy-code:hover {
-      background-color: #162f8f;
-    }
+  #downloadModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    max-width: 100%;
+  }
+
+  #downloadModal .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    max-width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .close-modal {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 25px;
   }
 </style>

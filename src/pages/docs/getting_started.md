@@ -7,6 +7,8 @@ layout: ../../layouts/MdLayout.astro
 # Getting Started with Gitmoxi
 Gitmoxi is inspired by GitOps paradigm where you store, version control, and collaborate on deployment artifacts in Git. Gitmoxi uses these files to create and update associated objects in AWS services. So you will need GitHub and AWS accounts to try Gitmoxi continuous deployment features. In this getting started guide, you will setup Gitmoxi on you laptop, use deployment artifacts from GitHub, and deploy resources in AWS.
 
+<a href="#" id="downloadLink" class="text-blue-600 hover:underline">Download Now</a>
+
 ### Prerequisites
 * Mac laptop (tested on Sonoma 14.5)
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)

@@ -10,7 +10,7 @@ const { plan } = Astro.props;
 
 const colors = {
   teal: "text-teal-600",
-  orange: "text-teal-600",
+  orange: "text-teal-900",
 };
 type Color = keyof typeof colors;
 export type Plan = {
@@ -32,21 +32,21 @@ export type Plan = {
     class:list={[
       "flex flex-col w-full order-first lg:order-none border border-dark-blue py-5 px-6 relative rounded-lg",
       plan.popular
-        ? "  border-orange-500 shadow-lg shadow-orange-50"
-        : " border-dark-blue shadow-sm",
+        ? "  border-custom-blue shadow-lg"
+        : " border-custom-blue shadow-lg",
     ]}>
-    {
-      plan.popular && (
-        <span class="inline-flex absolute px-3 py-1 text-xs -top-3 left-1/2 -translate-x-1/2 font-medium rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white ">
-          Popular
-        </span>
-      )
-    }
+    <!--{-->
+    <!--  plan.popular && (-->
+    <!--    <span class="inline-flex absolute px-3 py-1 text-xs -top-3 left-1/2 -translate-x-1/2 font-medium rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white ">-->
+    <!--      Popular-->
+    <!--    </span>-->
+    <!--  )-->
+    <!--}-->
 
     <div class="">
       <h3 class:list={[colors[plan.color] || "text-neutral-800"]}>
         {plan.name}
-      </h3><p class="mt-2 text-black">
+      </h3><p class="mt-2 text-custom-blue">
         {
           plan.price ? (
             <span class="flex items-baseline">
