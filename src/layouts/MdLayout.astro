@@ -91,11 +91,13 @@ import DownloadForm from '../components/donwloadform.astro';
 
 <script type="module" client:load>
   window.onload = function() {
+    console.log("On window load");
     document.body.addEventListener('click', (e) => {
       if (e.target && e.target.id === 'downloadLink') {
-        e.preventDefault(); // Prevent default link behavior
+        e.preventDefault();
 
         const modal = document.querySelector('#downloadModal');
+        console.log(modal);
         if (modal) {
           modal.style.display = 'block';
           document.body.style.overflow = 'hidden'; // Disable page scrolling
