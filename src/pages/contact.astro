@@ -4,6 +4,7 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Contactform from "@components/contactform.astro";
+import Cta from "../components/cta.astro";
 ---
 
 <Layout title="Contact">
@@ -36,9 +37,10 @@ import Contactform from "@components/contactform.astro";
           <!--</div>-->
         </div>
       </div>
-      <div class="bg-slate-100 p-5 md:p-8 rounded-xl mb-5">
+      <div class="bg-slate-100 p-5 md:p-8 rounded-xl mb-10">
         <Contactform />
       </div>
     </div>
   </Container>
+  <Cta/>
 </Layout>
