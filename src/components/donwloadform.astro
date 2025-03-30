@@ -4,36 +4,98 @@ import { z } from 'astro:content';
 
 // Your EULA text - customize as needed
 const eulaText = `
-IMPORTANT: PLEASE READ THIS END USER LICENSE AGREEMENT CAREFULLY.
+END USER LICENSE AGREEMENT (EULA)
 
-By downloading, installing, or using this software, you agree to be bound by the terms of this agreement.
+IMPORTANT: PLEASE READ THIS AGREEMENT CAREFULLY BEFORE DOWNLOADING, INSTALLING, OR USING THE SOFTWARE.
 
-1. GRANT OF LICENSE
-   Subject to the terms of this Agreement, SKAI Software Corp. grants you a limited, non-exclusive, non-transferable license to use the software for your personal or internal business purposes.
+By downloading, installing, or using this software, you acknowledge that you have read this Agreement, understand it, and agree to be bound by its terms. If you do not agree to these terms, do not install or use the software.
 
-2. RESTRICTIONS
-   You may not:
-   a) Modify, adapt, translate, or create derivative works from the software
-   b) Reverse engineer, decompile, or disassemble the software
-   c) Rent, lease, loan, sell, sublicense, or otherwise transfer the software
-   d) Remove or alter any proprietary notices on the software
+-------------------------------------------------------------------------------
 
-3. OWNERSHIP
-   The software is owned and copyrighted by SKAI Software Corp. Your license gives you limited rights to use the software. SKAI Software Corp. reserves all other rights.
+1. GRANT OF LICENSE  
+Subject to the terms of this Agreement, SKAI Software Corporation grants you a limited, non-exclusive, non-transferable, non-sublicensable license to install and use the software solely for your personal or internal business purposes.  
 
-4. TERMINATION
-   This license is effective until terminated. Your rights under this Agreement will terminate automatically without notice if you fail to comply with any term of this Agreement.
+-------------------------------------------------------------------------------
 
-5. DISCLAIMER OF WARRANTY
-   THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. SKAI SOFTWARE CORP. DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+2. RESTRICTIONS  
+You may NOT:  
+a) Modify, adapt, translate, or create derivative works from the software.  
+b) Reverse engineer, decompile, or disassemble the software, except as expressly permitted by applicable law.  
+c) Rent, lease, loan, sell, sublicense, distribute, or otherwise transfer the software to any third party.  
+d) Remove, alter, or obscure any proprietary notices, trademarks, or labels from the software.  
 
-6. LIMITATION OF LIABILITY
-   IN NO EVENT SHALL SKAI SOFTWARE CORP. BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE SOFTWARE.
+-------------------------------------------------------------------------------
 
-7. GOVERNING LAW
-   This Agreement shall be governed by the laws of Delaware.
+3. OWNERSHIP  
+The software is and remains the exclusive property of SKAI Software Corporation. This Agreement does NOT transfer ownership of the software; it only grants you a limited license to use it. SKAI Software Corporation reserves all rights not expressly granted.  
 
-By downloading and using this software, you acknowledge that you have read this Agreement, understand it, and agree to be bound by its terms and conditions.`;
+-------------------------------------------------------------------------------
+
+4. TERMINATION  
+This Agreement is effective until terminated. Your rights under this Agreement will automatically terminate without notice if you violate any provision.  
+
+Upon termination, you MUST IMMEDIATELY:  
+- Cease all use of the software.  
+- Delete or destroy all copies in your possession.  
+
+Termination does not limit SKAI Software Corporation’s right to pursue any other remedies available under law or equity.  
+
+-------------------------------------------------------------------------------
+
+5. DISCLAIMER OF WARRANTY  
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.  
+
+SKAI SOFTWARE CORPORATION DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  
+
+SKAI SOFTWARE CORPORATION DOES NOT WARRANT THAT THE SOFTWARE WILL BE ERROR-FREE, UNINTERRUPTED, OR COMPATIBLE WITH ALL SYSTEMS.  
+
+YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT USE OF THE SOFTWARE IS AT YOUR SOLE RISK.  
+
+-------------------------------------------------------------------------------
+
+6. LIMITATION OF LIABILITY  
+TO THE FULLEST EXTENT PERMITTED BY LAW:  
+
+IN NO EVENT SHALL SKAI SOFTWARE CORPORATION BE LIABLE FOR ANY INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOST PROFITS, BUSINESS INTERRUPTION, OR LOSS OF DATA, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.  
+
+IN NO EVENT SHALL SKAI SOFTWARE CORPORATION'S TOTAL LIABILITY UNDER THIS AGREEMENT EXCEED THE AMOUNT YOU PAID FOR THE SOFTWARE, IF ANY.  
+
+SOME JURISDICTIONS DO NOT ALLOW CERTAIN LIMITATIONS OF LIABILITY, SO SOME OF THESE LIMITATIONS MAY NOT APPLY TO YOU.  
+
+-------------------------------------------------------------------------------
+
+7. INDEMNIFICATION  
+You agree to INDEMNIFY, DEFEND, AND HOLD HARMLESS SKAI Software Corporation, its affiliates, officers, directors, employees, and agents from any claims, liabilities, damages, costs, or expenses (including attorneys’ fees) arising out of:  
+a) Your use or misuse of the software.  
+b) Your violation of this Agreement.  
+c) Your violation of any applicable laws or third-party rights.  
+
+-------------------------------------------------------------------------------
+
+8. GOVERNING LAW & JURISDICTION  
+This Agreement shall be governed by and construed in accordance with the LAWS OF THE STATE OF DELAWARE, U.S.A., WITHOUT REGARD TO ITS CONFLICT OF LAW PRINCIPLES.  
+
+ANY DISPUTE ARISING FROM OR RELATED TO THIS AGREEMENT SHALL BE EXCLUSIVELY RESOLVED IN THE STATE OR FEDERAL COURTS LOCATED IN DELAWARE, AND YOU IRREVOCABLY CONSENT TO SUCH JURISDICTION.  
+
+-------------------------------------------------------------------------------
+
+9. SEVERABILITY  
+If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.  
+
+-------------------------------------------------------------------------------
+
+10. FORCE MAJEURE  
+SKAI Software Corporation shall NOT BE LIABLE for any failure or delay in performance due to causes beyond its reasonable control, including but not limited to natural disasters, war, government actions, network failures, or cyber-attacks.  
+
+-------------------------------------------------------------------------------
+
+11. ENTIRE AGREEMENT  
+This Agreement constitutes the ENTIRE AGREEMENT between you and SKAI Software Corporation regarding the software and supersedes all prior agreements, representations, or understandings.  
+
+-------------------------------------------------------------------------------
+
+BY DOWNLOADING, INSTALLING, OR USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THIS AGREEMENT AND AGREE TO BE BOUND BY ITS TERMS.
+`
 
 // Form validation schema
 const formSchema = z.object({
@@ -202,6 +264,9 @@ let formSuccess = false;
                 form.reset();
                 setTimeout(() => {
                     downloadModal.style.display = 'none';
+                    document.documentElement.style.overflow = '';
+                    document.body.style.overflow = '';
+                    document.body.style.touchAction = '';
                 }, 400);
             }
         });
@@ -268,6 +333,11 @@ let formSuccess = false;
         margin-top: 0.75rem;
     }
 
+    input, textarea {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+    }
+
     input[type="email"] {
         padding: 0.6rem;
         border: 1px solid #ddd;
@@ -275,13 +345,8 @@ let formSuccess = false;
         font-size: 0.85rem;
     }
 
-    label[for="email"] {
-        font-size: 0.9rem;
-    }
-
-    input[type="checkbox"] {
-        width: 1.25rem;
-        height: 1.25rem;
+    input[type="email"], input[type="text"] {
+        font-size: 16px;
     }
 
     input[type="checkbox"]:disabled {
@@ -347,5 +412,11 @@ let formSuccess = false;
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        input, textarea {
+            font-size: 16px;
+        }
     }
 </style>
