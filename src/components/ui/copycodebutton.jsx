@@ -3,57 +3,86 @@ import { useEffect } from "react";
 function CopyCodeButton() {
     useEffect(() => {
         const copyButtonLabel = "Copy";
+        const copiedButtonLabel = "Copied";
 
-        // Select all pre blocks only once when the component mounts
+        // Select all pre blocks
         const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
         const addCopyButton = (codeBlock) => {
-            // Skip if already initialized or if inside the EULA container
             if (codeBlock.querySelector(".copy-code") || codeBlock.closest(".eula-scroll-box")) return;
 
-            const wrapper = document.createElement("div");
-            wrapper.style.position = "relative";
-
+            // Create copy button
             const copyButton = document.createElement("button");
             copyButton.className = "copy-code";
-            copyButton.appendChild(document.createTextNode(` ${copyButtonLabel}`));
+            copyButton.innerText = copyButtonLabel;
 
-            codeBlock.setAttribute("tabindex", "0");
+            // Apply styling similar to GitHub
+            Object.assign(copyButton.style, {
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                padding: "4px 8px",
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#ddd",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "12px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                transition: "background 0.2s ease-in-out",
+                zIndex: "10",
+            });
+
+            // Hover effect
+            copyButton.addEventListener("mouseenter", () => (copyButton.style.background = "rgba(255, 255, 255, 0.2)"));
+            copyButton.addEventListener("mouseleave", () => (copyButton.style.background = "rgba(255, 255, 255, 0.1)"));
+
+            // Ensure the code block has relative positioning
+            codeBlock.style.position = "relative";
+            codeBlock.style.overflowX = "auto"; // Prevents layout issues on mobile
+
+            // Append button inside pre block
             codeBlock.appendChild(copyButton);
 
-            codeBlock.parentNode.insertBefore(wrapper, codeBlock);
-            wrapper.appendChild(codeBlock);
-
-            // Handle copy button click event
+            // Handle copy event
             copyButton.addEventListener("click", async () => {
                 const code = codeBlock.querySelector("code").innerText;
 
-                // Copy code to clipboard
-                await navigator.clipboard.writeText(code);
-                copyButton.innerText = "Copied";
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(code);
+                    } else {
+                        // Fallback for mobile
+                        const textArea = document.createElement("textarea");
+                        textArea.value = code;
+                        textArea.style.position = "absolute";
+                        textArea.style.left = "-9999px";
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand("copy");
+                        document.body.removeChild(textArea);
+                    }
 
-                // Reset the button text after 2 seconds
-                setTimeout(() => {
-                    copyButton.innerText = copyButtonLabel;
-                }, 2000);
-            });
-        };
-
-        // Initialize copy buttons for all code blocks
-        codeBlocks.forEach(addCopyButton);
-
-        // Cleanup event listeners when the component unmounts
-        return () => {
-            codeBlocks.forEach((codeBlock) => {
-                const copyButton = codeBlock.querySelector(".copy-code");
-                if (copyButton) {
-                    copyButton.removeEventListener("click", () => {});
+                    copyButton.innerText = copiedButtonLabel;
+                    setTimeout(() => (copyButton.innerText = copyButtonLabel), 2000);
+                } catch (err) {
+                    console.error("Copy failed:", err);
+                    alert("Copying not supported on this browser.");
                 }
             });
         };
+
+        codeBlocks.forEach(addCopyButton);
+
+        // Cleanup function
+        return () => {
+            document.querySelectorAll(".copy-code").forEach((btn) => btn.remove());
+        };
     }, []);
 
-    return null; // No visual output is needed
+    return null;
 }
 
 export default CopyCodeButton;
