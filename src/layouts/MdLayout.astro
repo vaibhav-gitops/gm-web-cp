@@ -5,6 +5,7 @@ import Layout from "./Layout.astro";
 import Cta from "../components/cta.astro";
 const { frontmatter, headings } = Astro.props;
 import CopyCodeButton from "@components/ui/copycodebutton.jsx";
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 ---
 
 <Layout title={frontmatter.title}>
