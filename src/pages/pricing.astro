@@ -9,9 +9,9 @@ import Cta from "../components/cta.astro";
 
 const plans = [
   {
-    name: "Explorer",
+    name: "Explore",
     price: "0",
-    desc: "Perfect for individuals and small teams",
+    desc: "Perfect for testing and experimentation",
     color: "teal",
     popular: false,
     features: [
@@ -26,9 +26,9 @@ const plans = [
     },
   },
   {
-    name: "Enterprise",
+    name: "Scale",
     price: null,
-    desc: "Tailored for large organizations",
+    desc: "Tailored for production deployments",
     popular: true,
     color: "teal",
     features: [
@@ -58,7 +58,7 @@ const plans = [
     <div class="grid md:grid-cols-2 gap-40 mx-auto max-w-screen-lg mt-12 mb-20 px-10">
       {plans.map((item) => <PricingComponent plan={item} />)}
     </div>
-    <PricingFaq />
+    <!--<PricingFaq />-->
   </Container>
   <Cta />
 </Layout>

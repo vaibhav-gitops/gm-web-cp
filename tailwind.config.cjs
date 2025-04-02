@@ -7,10 +7,17 @@ module.exports = {
       fontFamily: {
         sans: ["Inter Variable", "Inter", ...defaultTheme.fontFamily.sans],
       },
+      fontWeight: {
+        'medium-plus': '500',
+      },
       colors: {
         'font-primary': '#0c3245',
         'dark-blue': '#0f2733',
         'dark-blue-200': '#0f4661',
+        'custom-blue': '#0A1822',
+        'custom-light-gray':'#cbdfec',
+        'custom-gray': '#6B8DA1',
+        'custom-green': '#7EDBD7'
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -44,16 +51,19 @@ module.exports = {
               textDecoration: "underline",
             },
             "code::before": {
-              content: "none", // Removes the backtick before
+              content: "none",
             },
             "code::after": {
-                content: "none", // Removes the backtick after
+                content: "none",
             },
             "code": {
-              backgroundColor: "#e4e2e2",  // Light gray background
+              backgroundColor: "#e4e2e2",
               padding: "2px 4px",
               borderRadius: "4px",
               fontWeight: "400",
+              whiteSpace: "pre-wrap",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
             },
           },
         },

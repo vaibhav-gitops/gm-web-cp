@@ -1,0 +1,422 @@
+---
+// DownloadForm.astro
+import { z } from 'astro:content';
+
+// Your EULA text - customize as needed
+const eulaText = `
+END USER LICENSE AGREEMENT (EULA)
+
+IMPORTANT: PLEASE READ THIS AGREEMENT CAREFULLY BEFORE DOWNLOADING, INSTALLING, OR USING THE SOFTWARE.
+
+By downloading, installing, or using this software, you acknowledge that you have read this Agreement, understand it, and agree to be bound by its terms. If you do not agree to these terms, do not install or use the software.
+
+-------------------------------------------------------------------------------
+
+1. GRANT OF LICENSE  
+Subject to the terms of this Agreement, SKAI Software Corporation grants you a limited, non-exclusive, non-transferable, non-sublicensable license to install and use the software solely for your personal or internal business purposes.  
+
+-------------------------------------------------------------------------------
+
+2. RESTRICTIONS  
+You may NOT:  
+a) Modify, adapt, translate, or create derivative works from the software.  
+b) Reverse engineer, decompile, or disassemble the software, except as expressly permitted by applicable law.  
+c) Rent, lease, loan, sell, sublicense, distribute, or otherwise transfer the software to any third party.  
+d) Remove, alter, or obscure any proprietary notices, trademarks, or labels from the software.  
+
+-------------------------------------------------------------------------------
+
+3. OWNERSHIP  
+The software is and remains the exclusive property of SKAI Software Corporation. This Agreement does NOT transfer ownership of the software; it only grants you a limited license to use it. SKAI Software Corporation reserves all rights not expressly granted.  
+
+-------------------------------------------------------------------------------
+
+4. TERMINATION  
+This Agreement is effective until terminated. Your rights under this Agreement will automatically terminate without notice if you violate any provision.  
+
+Upon termination, you MUST IMMEDIATELY:  
+- Cease all use of the software.  
+- Delete or destroy all copies in your possession.  
+
+Termination does not limit SKAI Software Corporation’s right to pursue any other remedies available under law or equity.  
+
+-------------------------------------------------------------------------------
+
+5. DISCLAIMER OF WARRANTY  
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.  
+
+SKAI SOFTWARE CORPORATION DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  
+
+SKAI SOFTWARE CORPORATION DOES NOT WARRANT THAT THE SOFTWARE WILL BE ERROR-FREE, UNINTERRUPTED, OR COMPATIBLE WITH ALL SYSTEMS.  
+
+YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT USE OF THE SOFTWARE IS AT YOUR SOLE RISK.  
+
+-------------------------------------------------------------------------------
+
+6. LIMITATION OF LIABILITY  
+TO THE FULLEST EXTENT PERMITTED BY LAW:  
+
+IN NO EVENT SHALL SKAI SOFTWARE CORPORATION BE LIABLE FOR ANY INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOST PROFITS, BUSINESS INTERRUPTION, OR LOSS OF DATA, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.  
+
+IN NO EVENT SHALL SKAI SOFTWARE CORPORATION'S TOTAL LIABILITY UNDER THIS AGREEMENT EXCEED THE AMOUNT YOU PAID FOR THE SOFTWARE, IF ANY.  
+
+SOME JURISDICTIONS DO NOT ALLOW CERTAIN LIMITATIONS OF LIABILITY, SO SOME OF THESE LIMITATIONS MAY NOT APPLY TO YOU.  
+
+-------------------------------------------------------------------------------
+
+7. INDEMNIFICATION  
+You agree to INDEMNIFY, DEFEND, AND HOLD HARMLESS SKAI Software Corporation, its affiliates, officers, directors, employees, and agents from any claims, liabilities, damages, costs, or expenses (including attorneys’ fees) arising out of:  
+a) Your use or misuse of the software.  
+b) Your violation of this Agreement.  
+c) Your violation of any applicable laws or third-party rights.  
+
+-------------------------------------------------------------------------------
+
+8. GOVERNING LAW & JURISDICTION  
+This Agreement shall be governed by and construed in accordance with the LAWS OF THE STATE OF DELAWARE, U.S.A., WITHOUT REGARD TO ITS CONFLICT OF LAW PRINCIPLES.  
+
+ANY DISPUTE ARISING FROM OR RELATED TO THIS AGREEMENT SHALL BE EXCLUSIVELY RESOLVED IN THE STATE OR FEDERAL COURTS LOCATED IN DELAWARE, AND YOU IRREVOCABLY CONSENT TO SUCH JURISDICTION.  
+
+-------------------------------------------------------------------------------
+
+9. SEVERABILITY  
+If any provision of this Agreement is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.  
+
+-------------------------------------------------------------------------------
+
+10. FORCE MAJEURE  
+SKAI Software Corporation shall NOT BE LIABLE for any failure or delay in performance due to causes beyond its reasonable control, including but not limited to natural disasters, war, government actions, network failures, or cyber-attacks.  
+
+-------------------------------------------------------------------------------
+
+11. ENTIRE AGREEMENT  
+This Agreement constitutes the ENTIRE AGREEMENT between you and SKAI Software Corporation regarding the software and supersedes all prior agreements, representations, or understandings.  
+
+-------------------------------------------------------------------------------
+
+BY DOWNLOADING, INSTALLING, OR USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THIS AGREEMENT AND AGREE TO BE BOUND BY ITS TERMS.
+`
+
+// Form validation schema
+const formSchema = z.object({
+    email: z.string().email("Please enter a valid email address"),
+    acceptTerms: z.literal(true, {
+        errorMap: () => ({ message: "You must accept the terms to continue" }),
+    }),
+});
+
+let formError = '';
+let formSuccess = false;
+---
+
+<div class="download-container">
+    <div class="download-card">
+        {!formSuccess && (
+                <form method="POST" class="download-form" id="downloadForm">
+                    <div class="form-group">
+                        <h4>Email Address *</h4>
+                        <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="your@email.com"
+                                required
+                        />
+                        <span id="email-error" class="error-message hidden"></span>
+                    </div>
+
+                    <div class="eula-container">
+                        <h4>End User License Agreement</h4>
+                        <div class="eula-scroll-box" id="eulaScrollBox">
+                            <pre>{eulaText}</pre>
+                        </div>
+                        <div class="eula-checkbox-container">
+                            <input
+                                    type="checkbox"
+                                    id="acceptTerms"
+                                    name="acceptTerms"
+                                    required
+                                    disabled
+                            />
+                            <h4>
+                                I have read and accept the End User License Agreement
+                            </h4>
+                        </div>
+                    </div>
+
+                    {formError && <div class="error-message">{formError}</div>}
+
+                    <button type="submit" class="download-button" id="downloadButton" disabled>
+                        <span id="buttonText">Send Download Link</span>
+                        <span class="spinner hidden" id="spinner"></span>
+                    </button>
+                </form>
+        )}
+    </div>
+</div>
+
+<script>
+    // Client-side JavaScript to handle EULA scrolling, form enabling, and email validation
+    document.addEventListener('DOMContentLoaded', () => {
+        const eulaScrollBox = document.getElementById('eulaScrollBox');
+        const acceptTermsCheckbox = document.getElementById('acceptTerms');
+        const downloadButton = document.getElementById('downloadButton');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+        const form = document.getElementById('downloadForm');
+
+        if (!eulaScrollBox || !acceptTermsCheckbox || !downloadButton || !emailInput || !emailError || !form) return;
+
+        // Email validation regex pattern
+        const emailPattern = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Function to validate email
+        function validateEmail() {
+            if (emailInput.value === '') {
+                emailError.textContent = 'Email is required';
+                emailError.classList.remove('hidden');
+                return false;
+            } else if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+                return false;
+            } else {
+                emailError.classList.add('hidden');
+                return true;
+            }
+        }
+
+        // Function to check if user has scrolled to bottom of EULA
+        function checkScrolledToBottom() {
+            const scrollableHeight = eulaScrollBox.scrollHeight - eulaScrollBox.clientHeight;
+            const SCROLL_THRESHOLD = 20; // Within 20px of bottom is considered "scrolled to bottom"
+
+            if (eulaScrollBox.scrollTop + SCROLL_THRESHOLD >= scrollableHeight) {
+                // User has scrolled to bottom, enable checkbox
+                acceptTermsCheckbox.disabled = false;
+            }
+        }
+
+        function updateDownloadButtonState() {
+            const isEmailValid = validateEmail();
+            const isCheckboxChecked = acceptTermsCheckbox.checked;
+
+            downloadButton.disabled = !(isEmailValid && isCheckboxChecked);
+        }
+
+        emailInput.addEventListener('input', updateDownloadButtonState);
+        emailInput.addEventListener('blur', updateDownloadButtonState);
+        eulaScrollBox.addEventListener('scroll', checkScrolledToBottom);
+        acceptTermsCheckbox.addEventListener('change', updateDownloadButtonState);
+
+        // Form submission validation
+        form.addEventListener('submit', (e) => {
+            if (!validateEmail()) {
+                e.preventDefault();
+                emailInput.focus();
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('downloadForm');
+        const downloadModal = document.getElementById('downloadModal');
+        if (!form) return;
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const emailInput = document.getElementById('email');
+            const acceptTermsCheckbox = document.getElementById('acceptTerms');
+            const downloadButton = document.getElementById('downloadButton');
+            const buttonText = document.getElementById('buttonText');
+            const spinner = document.getElementById('spinner');
+
+            if (!emailInput || !acceptTermsCheckbox || !downloadButton) return;
+
+            spinner.classList.remove("hidden");
+            buttonText.classList.add("hidden");
+            const apiUrl = "https://7tip4nqocj.execute-api.us-east-1.amazonaws.com/SendDownloadMail";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: emailInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to send email");
+                }
+
+                alert("Thank you! We've sent an email with the Gitmoxi Trial download link. Please check your inbox (and spam folder) in a few minutes.");
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error sending email. Please try again.");
+            } finally {
+                buttonText.classList.remove("hidden");
+                spinner.classList.add("hidden");
+                downloadButton.disabled = true;
+                form.reset();
+                setTimeout(() => {
+                    downloadModal.style.display = 'none';
+                    document.documentElement.style.overflow = '';
+                    document.body.style.overflow = '';
+                    document.body.style.touchAction = '';
+                }, 400);
+            }
+        });
+    });
+</script>
+
+<style>
+    .download-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem;
+    }
+
+    .download-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1.25rem;
+        max-width: 700px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .download-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .eula-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .eula-scroll-box {
+        height: 350px;
+        overflow-y: auto;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 0.25rem;
+        background-color: #f9fafb;
+        font-size: 0.75rem;
+    }
+
+    .eula-scroll-box pre {
+        white-space: pre-wrap;
+        font-family: inherit;
+        margin: 0;
+    }
+
+    .eula-checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    input, textarea {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    input[type="email"] {
+        padding: 0.6rem;
+        border: 1px solid #ddd;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+    }
+
+    input[type="email"], input[type="text"] {
+        font-size: 16px;
+    }
+
+    input[type="checkbox"]:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .download-button {
+        background-color: #00897B;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        margin-top: 0.5rem;
+        padding: 0.75rem 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s, opacity 0.2s;
+    }
+
+    .download-button:hover:not(:disabled) {
+        background-color: #00796B;
+    }
+
+    .download-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 0.875rem;
+    }
+
+    .success-message {
+        text-align: center;
+        padding: 1.5rem;
+        background-color: #f0fdf4;
+        border-radius: 0.25rem;
+        border: 1px solid #86efac;
+    }
+
+    h4 {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid white;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin-left: 8px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        input, textarea {
+            font-size: 16px;
+        }
+    }
+</style>

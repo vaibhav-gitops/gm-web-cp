@@ -6,14 +6,11 @@ import Button from "./ui/button.astro";
      To make this contact form work, create your free access key from https://web3forms.com/
      Then you will get all form submissions in your email inbox. -->
 <form
-  action="https://api.web3forms.com/submit"
   method="POST"
   id="form"
   class="needs-validation"
   data-astro-reload
   novalidate>
-  <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
-  <!-- Create your free access key from https://web3forms.com/ -->
   <input type="checkbox" class="hidden" style="display:none" name="botcheck" />
   <div class="mb-5">
     <input
@@ -54,7 +51,10 @@ import Button from "./ui/button.astro";
       Please enter your message.
     </div>
   </div>
-  <Button type="submit" size="lg" block>Send Message</Button>
+  <button type="submit" class="submit-button" id="submitButton">
+    <span id="buttonText">Send Message</span>
+    <span class="spinner hidden" id="spinner"></span>
+  </button>
   <div id="result" class="mt-3 text-center"></div>
 </form>
 
@@ -76,63 +76,102 @@ import Button from "./ui/button.astro";
   .was-validated :invalid {
     border-color: #dc3545;
   }
+
+  .submit-button {
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    width: 100%;
+  }
+
+  .submit-button:hover {
+    background-color: #00695C;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-left: 8px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
 
 <script is:inline>
-  // astro:page-load to support view Transitions.
-  // use DOMContentLoaded event if you are not using View Transitions
-
   document.addEventListener(
-    "astro:page-load",
-    () => {
-      const form = document.getElementById("form");
-      const result = document.getElementById("result");
+      "astro:page-load",
+      () => {
+        const form = document.getElementById("form");
+        const result = document.getElementById("result");
+        const buttonText = document.getElementById('buttonText');
+        const spinner = document.getElementById('spinner');
 
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        form.classList.add("was-validated");
-        if (!form.checkValidity()) {
-          form.querySelectorAll(":invalid")[0].focus();
-          return;
-        }
-        const formData = new FormData(form);
-        const object = Object.fromEntries(formData);
-        const json = JSON.stringify(object);
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          form.classList.add("was-validated");
+          if (!form.checkValidity()) {
+            form.querySelectorAll(":invalid")[0].focus();
+            return;
+          }
 
-        result.innerHTML = "Sending...";
+          spinner.classList.remove("hidden");
+          buttonText.classList.add("hidden");
 
-        fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: json,
-        })
-          .then(async (response) => {
-            let json = await response.json();
-            if (response.status == 200) {
-              result.classList.add("text-green-500");
-              result.innerHTML = json.message;
-            } else {
-              console.log(response);
-              result.classList.add("text-red-500");
-              result.innerHTML = json.message;
-            }
+          const formData = new FormData(form);
+          const object = Object.fromEntries(formData);
+          const json = JSON.stringify(object);
+
+          fetch("https://7tip4nqocj.execute-api.us-east-1.amazonaws.com/contactus", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
           })
-          .catch((error) => {
-            console.log(error);
-            result.innerHTML = "Something went wrong!";
-          })
-          .then(function () {
-            form.reset();
-            form.classList.remove("was-validated");
-            setTimeout(() => {
-              result.style.display = "none";
-            }, 5000);
-          });
-      });
-    },
-    { once: true },
+              .then(async (response) => {
+                let json = await response.json();
+                if (response.status == 200) {
+                  result.classList.add("text-green-500");
+                  result.innerHTML = json.message;
+                } else {
+                  result.classList.add("text-red-500");
+                  result.innerHTML = json.message;
+                }
+              })
+              .catch((error) => {
+                result.innerHTML = "Something went wrong!";
+              })
+              .then(function () {
+                form.reset();
+                buttonText.classList.remove("hidden");
+                spinner.classList.add("hidden");
+                form.classList.remove("was-validated");
+                setTimeout(() => {
+                  result.style.display = "none";
+                }, 8000);
+              });
+        });
+      },
+      { once: true },
   );
 </script>

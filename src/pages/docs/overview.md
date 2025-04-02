@@ -9,7 +9,7 @@ GitMoxi is an innovative Continuous Deployment (CD) tool designed specifically f
 
 GitMoxi leverages the GitOps paradigm to manage and automate deployments for Amazon Elastic Container Service (ECS) with AWS Fargate and AWS Lambda. Deployment-related artifacts, such as service configurations, task definitions, and Lambda function definitions, are maintained in Git repositories. When these files are modified and committed, GitMoxi detects the changes and triggers the necessary updates or creations, whether it's deploying ECS services or updating Lambda functions. The tool supports deploying multiple services and functions simultaneously across clusters and regions, all orchestrated through changes committed to the configured repositories and branches.
 
-<img alt="overview" src="../overview.png" title="Gitmoxi Overview"/>
+<img alt="overview" src="/overview.png" title="Gitmoxi Overview"/>
 
 ## Key Features and Benefits
 

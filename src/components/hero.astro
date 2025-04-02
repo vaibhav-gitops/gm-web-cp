@@ -4,32 +4,36 @@ import heroImage from "../assets/hero-screenshot.png";
 import Container from "@components/container.astro";
 ---
 
-<div class="overflow-x-clip"
+<div class="overflow-x-clip bg-custom-blue"
      style="font-family: 'helvetica', sans-serif;">
   <Container>
     <main class="grid lg:grid-cols-5 place-items-center relative">
-      <div class="max-w-sm md:max-w-max lg:col-span-2">
-        <h1
-          class="text-3xl lg:text-4xl xl:text-7xl font-bold text-font-primary lg:tracking-tight xl:tracking-tighter [text-wrap:balance] text-center lg:text-start">
-          <span class="font-bold text-dark-blue">Supercharge deployments with </span>Gitmoxi
+      <div class="max-w-sm md:max-w-max lg:col-span-5 mt-40 mb-28">
+        <p class="text-lg mt-4 text-custom-gray lg:text-2xl text-center">
+            <span class="font-medium leading-[50px]">
+            Industry's First
+            </span>
+        </p>
+        <h1 class="text-white font-medium-plus text-6xl md:text-7xl text-center">
+          <span class="leading-[80px]">GitOps based <br/>Unified Deployment Controller</span>
         </h1>
-        <p
-          class="text-lg mt-4 max-w-lg text-slate-700 [text-wrap:balance] text-center lg:text-start">
-          <span class="font-bold">The first-ever GitOps-based unified deployment controller
-          for EKS, ECS, and Lambda.</span>
+        <p class="text-lg mt-4 text-custom-gray lg:text-2xl text-center">
+          <span class="font-medium leading-[50px]">
+            For ECS-EC2, Fargate, and Lambda
+          </span>
         </p>
       </div>
-      <div class="py-3 lg:col-span-3 lg:-mr-44">
-        <Picture
-          src={heroImage}
-          alt="Deployments made easy"
-          formats={["avif", "webp"]}
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          widths={[240, 540, 720, heroImage.width]}
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
+      <!--<div class="py-3 lg:col-span-3 lg:-mr-44">-->
+      <!--  <Picture-->
+      <!--    src={heroImage}-->
+      <!--    alt="Deployments made easy"-->
+      <!--    formats={["avif", "webp"]}-->
+      <!--    sizes="(max-width: 1024px) 100vw, 50vw"-->
+      <!--    widths={[240, 540, 720, heroImage.width]}-->
+      <!--    loading="eager"-->
+      <!--    fetchpriority="high"-->
+      <!--  />-->
+      <!--</div>-->
     </main>
   </Container>
 </div>

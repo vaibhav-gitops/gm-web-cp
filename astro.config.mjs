@@ -3,11 +3,10 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
-import rehypePrettyCode from "rehype-pretty-code";
 import react from "@astrojs/react";
 
 export default defineConfig({
-  site: "https://astroship-pro.web3templates.com",
+  site: "https://gitmoxi.io",
   image: {
     domains: ["unsplash.com", "images.unsplash.com"],
   },
