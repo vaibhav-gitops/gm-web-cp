@@ -6,3 +6,4 @@ astroship-pro/
 LICENSE.md
 node_modules
 package-lock.json
+.vscode

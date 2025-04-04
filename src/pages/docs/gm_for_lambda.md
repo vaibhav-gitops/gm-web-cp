@@ -7,7 +7,18 @@ layout: ../../layouts/MdLayout.astro
 # Gitmoxi for AWS Lambda
 Gitmoxi provides GitOps based complete life-cycle management for AWS Lambda functions. When the Lambda deployment files are created, changed, or deleted in Git repository, Gitmoxi seamlessly orchestrates those changes for the Lambda functions. Gitmoxi supports both push-based (e.g. API-GW, ALB) and pull-based (e.g. SQS, Kafka) Lambda functions enabling you to build and deploy wide range of API and event-driven applications in a completely serverless archtiecture. For Lambda functions deployment, Gitmoxi orchestrates blue/green deployment where invocations can be shifted from old to new using canary, linear, or all_at_once paradigms. Gitmoxi manages the versions and invocation weight shifting automatically providing a seamless deployment workflow that can easily scale as your number of Lambda functions grow. 
 
-For Lambda GitOps workflow, there are four files that Gitmoxi uses - function definition (`_lambdadef.json`), event source definition (`_lambdaeventsourcedef.json`), deployment configuration definition (`_lambdadepdef.json`), and input file (`_lambdainput.json`). Let us understand these files in more detail as their content and their changes drives the Gitmoxi Lambda GitOps workflow.
+## Key Files and Workflow
+
+In the Lambda GitOps workflow, Gitmoxi uses four key files to manage deployments:
+
+| File | Name | Purpose |
+|------|------|---------|
+| **Function definition** | `_lambdadef.json` | Defines Lambda function parameters and configuration |
+| **Event source definition** | `_lambdaeventsourcedef.json` | Specifies event triggers and sources for the Lambda function |
+| **Deployment configuration** | `_lambdadepdef.json` | Controls deployment strategies and versioning |
+| **Input file** | `_lambdainput.json` | Provides parameterization values for substitution |
+
+Let's explore each of these files, as their contents—and any changes to them—drive Gitmoxi's Lambda deployment logic.
 
 ## Function definition file
 The Lambda function definition JSON file (`_lambdadef.json`) can contain all the attributes defined by the [Lambda Create Function Request](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html#API_CreateFunction_RequestSyntax). This is the native Lambda function definition. So when the Lambda service team adds more features or changes you can instantly adopt those! 

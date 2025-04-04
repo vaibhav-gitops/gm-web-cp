@@ -5,97 +5,111 @@ layout: ../../layouts/MdLayout.astro
 ---
 
 # Lambda Deployment Definition
-The deployment definition is a JSON configuration that specifies how Lambda functions should be deployed, including traffic shifting strategies, alarms, environment variables, and readiness checks. The following attributes can be specified in the Lambda deployment definition (`_lambdadepdef.json`) file.
 
-## Environment setting for Lambda function deployment
-### environment
-This setting allows you to change the region for an ECS service deployment. For example, you change the `region` attribute in the environment and deploy the same service to different regions.  
+This document outlines the JSON configuration that specifies how AWS Lambda functions should be deployed using Gitmoxi, including traffic shifting strategies, alarms, environment variables, and readiness checks.
 
--- **region (string)**
-The AWS region where the service should be deployed. If this setting is not provided, then the region for the service deployment is derived from the `AWS_REGION` environment variable set when installing Gitmoxi.
+## Environment Settings
 
--- **account (string)**
-The AWS account ID where the service should be deployed. Currently, Gitmoxi only supports deployment to the same AWS account where Gitmoxi is installed. If this setting is not provided, then the account id for the service deployment is derived from the `AWS_ACCOUNT` environment variable set when installing Gitmoxi.
+### `environment`
 
--- **Example configuration**
+Configure the deployment environment for your Lambda function.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `region` | string | The AWS region for function deployment. If not provided, uses the `AWS_REGION` environment variable set during Gitmoxi installation. |
+| `account` | string | The AWS account ID for function deployment. Currently, Gitmoxi only supports deployment to the same AWS account where it's installed. If not provided, uses the `AWS_ACCOUNT` environment variable. |
+
+**Example:**
 ```json
-    "environment": {
-        "region": "us-west-2",
-        "account": "12345"
-    }
-```
-## Traffic shifting configurations
-## alias (string) (required)
-This field specifies the alias for the Lambda function. The alias is used to route traffic to a specific version of the Lambda function. This is a required field and does not assume a default value.
-
--- **Example configuration**
-```json
-    "alias": "PROD"
+"environment": {
+    "region": "us-west-2",
+    "account": "123456789012"
+}
 ```
 
-### trafficShiftingConfig
-Defines the traffic shifting strategy for the deployment. Traffic shifting enables gradual transitions to new Lambda versions. The presence of `trafficShiftingConfig` setting with a dictionary value signals traffic shifting is enabled.
+## Alias Configuration
 
--- **percent (int) [default: 20]:**
-Specifies the percentage of traffic to shift in each step. It should be a value between 0 and 100. 
+### `alias` (Required)
 
--- **waitInterval (int) [default: 60]:**
-Specifies the time (in seconds) to wait between incremental traffic shifts. 
+| Type | Default | Description |
+|------|---------|-------------|
+| string | *none* | Specifies the alias for the Lambda function. The alias is used to route traffic to a specific version of the function. This is a required field with no default value. |
 
--- **type (string) [default: CANARY]:**
-Defines the type of traffic shifting strategy. The possible values are:
-- CANARY: Gradually shifts traffic in two phases.
-- LINEAR: Shifts traffic in equal increments over multiple intervals.
-- ALL_AT_ONCE: Shifts all traffic at once.
-
--- **Example configuration**
+**Example:**
 ```json
-    "trafficShiftingConfig": { 
-        "percent": 20,
-        "waitInterval": 60, 
-        "type" : "CANARY"
-    }
+"alias": "PROD"
 ```
 
-### alarms
-Defines the CloudWatch alarms to monitor during the deployment. If alarms are triggered, the deployment will be rolled back. If not configured, the alarms are not monitored.
+## Traffic Shifting Configuration
 
--- **alarmNames (list of strings) [default: []]:**
-A list of CloudWatch alarm names to monitor.
+### `trafficShiftingConfig`
 
--- **Example configuration**
+Define the traffic shifting strategy for your Lambda deployment. The presence of this setting with a dictionary value enables traffic shifting, which allows gradual migration from the old to new Lambda function versions.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `percent` | integer | 20 | Percentage of traffic to shift in each step (0-100). |
+| `waitInterval` | integer | 60 | Time in seconds to wait between traffic shifting steps. |
+| `type` | string | "CANARY" | Traffic shifting strategy type: <br>• `CANARY`: Gradually shifts traffic in two phases<br>• `LINEAR`: Shifts traffic in equal increments over multiple intervals<br>• `ALL_AT_ONCE`: Shifts all traffic at once |
+
+**Example:**
 ```json
-    "alarms": { 
-        "alarmNames": 
-            [
-                "string",
-                ...
-            ]
-    }
+"trafficShiftingConfig": { 
+    "percent": 20,
+    "waitInterval": 60, 
+    "type": "CANARY"
+}
 ```
-## Lambda function readiness check
-### readinessCheck
+
+## Alarm Configuration
+
+### `alarms`
+
+CloudWatch alarms to monitor during deployment. If any of the specified alarms trigger, the deployment will be rolled back.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `alarmNames` | array | `[]` | List of CloudWatch alarm names to monitor during deployment. |
+
+**Example:**
+```json
+"alarms": { 
+    "alarmNames": [
+        "HighLatencyAlarm",
+        "ErrorRateAlarm"
+    ]
+}
+```
+
+## Readiness Check Configuration
+
+### `readinessCheck`
+
 Specifies readiness checks to ensure the new version is stable and functional before routing traffic to it.
 
--- **waitInterval (int) [default: 10]:**
-The time (in seconds) to wait between readiness check retries.
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `waitInterval` | integer | 10 | Time in seconds to wait between readiness check retries. |
+| `maxRetries` | integer | 5 | Maximum number of retries allowed during the readiness check. |
 
--- **maxRetries (int) [default: 5]:**
-The maximum number of retries allowed during the readiness check.
--- **Example configuration**
+**Example:**
 ```json
 "readinessCheck": {
-        "waitInterval": 10,
-        "maxRetries": 5
-    }
+    "waitInterval": 10,
+    "maxRetries": 5
+}
 ```
-## Full example
-Following is a full example of Lambda deployment definition (`_lambdadepdef.json`) file:
+
+## Complete Example
+
+Below is a comprehensive example of a Lambda deployment definition (`_lambdadepdef.json`):
+
 ```json
 {
     "alias": "PROD",
     "environment": {
-        "region": "us-east-1"
+        "region": "us-east-1",
+        "account": "123456789012"
     },
     "trafficShiftingConfig": {
         "percent": 50,

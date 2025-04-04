@@ -5,71 +5,416 @@ layout: ../../layouts/MdLayout.astro
 ---
 
 # Gitmoxi for Amazon ECS
-Gitmoxi provides GitOps based complete life-cycle management for Amazon ECS services. When the ECS deployment files are created, changed, or deleted in Git repository, Gitmoxi seamlessly orchestrates those changes in the ECS clusters. Based on your application needs, Gitmoxi can perform rolling update or blue-green update with variety of traffic shifting patterns. 
 
-For ECS GitOps workflow, there are four files that Gitmoxi uses - service definition (`_svcdef.json`), task definition (`_taskdef.json`), deployment configuration definition (`_depdef.json`), and input file (`_input.json`). Let us understand these files in more detail as their content and their changes drives the Gitmoxi ECS GitOps workflow.
+## Introduction
 
-## Service definition file
-The ECS service definition JSON file (`_svcdef.json`) can contain all the attributes defined by the [ECS Create Service Request](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html#API_CreateService_RequestSyntax). This is the native ECS service definition. So when the ECS service team adds more features or changes you can instantly adopt those! 
+Managing container deployments at scale can be complex and error-prone. Gitmoxi solves this challenge by providing full GitOps-based lifecycle management for Amazon ECS services. With Gitmoxi, you can declaratively define your ECS infrastructure as code and store it in Git, ensuring that your deployment process is repeatable, auditable, and version-controlled.
 
-One of the key attributes to note in the service definition file is `deploymentController`. When the value of this attribute is set to `ECS`, then Gitmoxi will leverage the rolling deployment feature provided natively by the ECS service. When the value is set to `EXTERNAL`, then Gitmoxi performs its own deployment using the blue/green deployment paradigm. So if you want to use blue/green and traffic shifting then set the parameter to `EXTERNAL` in the `_svcdef.json` file.
+When ECS deployment files are created, modified, or deleted in a Git repository, Gitmoxi automatically orchestrates the corresponding changes in your ECS clusters. Based on your application's needs, Gitmoxi supports both rolling updates and blue/green deployments with a variety of traffic shifting strategies.
 
--- **Example configuration**
+## Key Files and Workflow
+
+In the ECS GitOps workflow, Gitmoxi uses four key files to manage deployments:
+
+| File | Name | Purpose |
+|------|------|---------|
+| **Service definition** | `_svcdef.json` | Defines ECS service parameters |
+| **Task definition** | `_taskdef.json` | Specifies container configurations |
+| **Deployment configuration** | `_depdef.json` | Controls deployment strategies and traffic shifting |
+| **Input file** | `_input.json` | Provides parameterization values |
+
+Let's explore each of these files, as their contents—and any changes to them—drive Gitmoxi's ECS deployment logic.
+
+## Service Definition File
+
+The ECS service definition file (`_svcdef.json`) includes all attributes supported by the [Amazon ECS CreateService API](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html#API_CreateService_RequestSyntax). This file is written using native ECS definitions, meaning you can immediately take advantage of new ECS features as they are released—no waiting for tool-specific updates.
+
+A particularly important attribute in this file is `deploymentController`:
+- If set to `"ECS"`, Gitmoxi leverages ECS's native rolling deployment mechanism.
+- If set to `"EXTERNAL"`, Gitmoxi performs its own deployment using a blue/green strategy, including advanced traffic shifting.
+
+To enable blue/green deployments with Gitmoxi, simply set `deploymentController` to `EXTERNAL` in the `_svcdef.json` file.
+
+### Example Service Definition
+<details>
+<summary>Click to expand service definition example</summary>
+
 ```json
-    "deploymentController": {
-        "type": "EXTERNAL"
+{
+  "cluster": "production-cluster",
+  "serviceName": "web-frontend",
+  "taskDefinition": "web-frontend:latest",
+  "desiredCount": 10,
+  "deploymentController": {
+    "type": "EXTERNAL"
+  },
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/web-frontend/1234567890123456",
+      "containerName": "web-app",
+      "containerPort": 8080
     }
+  ],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "subnet-12345678",
+        "subnet-87654321"
+      ],
+      "securityGroups": [
+        "sg-12345678"
+      ],
+      "assignPublicIp": "DISABLED"
+    }
+  }
+}
 ```
+</details>
 
-## Task definition file
+## Task Definition File
+
 The ECS task definition JSON file (`_taskdef.json`) can contain all the attributes defined by the [ECS Task Definition Registration Request](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RegisterTaskDefinition.html#API_RegisterTaskDefinition_RequestSyntax). 
 
-Whenever an ECS service needs to be created or updated, Gitmoxi will use the task definition file to register a new task definition, obtain the ARN for new revision, and use that ARN in the service creation or update. If task definition file is not present then Gitmoxi uses the task definition attribute (`"taskDefinition"`) from the service definition file. If neither the task definition file nor the attribute are provided then the service creation will fail. 
+Whenever an ECS service needs to be created or updated, Gitmoxi will:
+1. Register a new task definition using the task definition file
+2. Obtain the ARN for the new revision
+3. Use that ARN in the service creation or update process
 
-## Deployment definition file
-The ECS deployment definition JSON file (`_depdef.json`) contains various settings such as traffic shifting, circuit breaking, stability checks which are used by Gitmoxi during ECS service deployment. These settings are described in more details in [the next section](./ecs_deployment_definition).
+If the task definition file is not present, Gitmoxi uses the task definition attribute (`"taskDefinition"`) from the service definition file. If neither the task definition file nor the attribute are provided, the service creation will fail.
 
-## Input file
-The ECS deployment input JSON file (`_input.json`) provides substitution values when you want to parameterize the attributes in service, task, or deployment definition files. These files are explained in the [input files section](./input_files).
+### Example Task Definition
+<details>
+<summary>Click to expand task definition example</summary>
 
-Let us understand how the changes to these files influence associated ECS service objects.
+```json
+{
+  "family": "web-frontend",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "web-app",
+      "image": "123456789012.dkr.ecr.us-west-2.amazonaws.com/web-frontend:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/web-frontend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512"
+}
+```
+</details>
+
+## Deployment Definition File
+
+The ECS deployment definition JSON file (`_depdef.json`) contains various settings used by Gitmoxi during ECS service deployment, including:
+
+- Traffic shifting strategies
+- Circuit breaking parameters
+- Stability checks
+- Alarm integrations
+
+These settings control how Gitmoxi transitions between old and new task revisions, monitors deployment health, and responds to failures.
+
+### Example Deployment Definition
+<details>
+<summary>Click to expand ECS deployment definition example</summary>
+
+```json
+{
+  "trafficShift": {
+    "type": "LINEAR",
+    "interval": 60,
+    "percentage": 20
+  },
+  "stabilityCheck": {
+    "timeout": 600,
+    "timeoutPerTask": 120,
+    "interval": 15
+  },
+  "circuitBreaker": {
+    "failureThreshold": 5,
+    "failureThresholdPercentage": 30
+  }
+}
+```
+</details>
+
+For complete details on deployment configuration options, see the [ECS Deployment Definition Guide](./ecs_deployment_definition).
+
+## Input File
+
+The ECS deployment input JSON file (`_input.json`) provides substitution values when you want to parameterize the attributes in service, task, or deployment definition files. This enables you to reuse configuration templates across different environments or services.
+
+### Example Input File
+<details>
+<summary>Click to expand input file example</summary>
+
+```json
+{
+  "cluster": "production-cluster",
+  "desiredCount": 10,
+  "servicePrefix": "web-",
+  "serviceName": "frontend",
+  "image": "123456789012.dkr.ecr.us-west-2.amazonaws.com/web-frontend:latest",
+  "environment": "production",
+  "cpu": "256",
+  "memory": "512"
+}
+```
+</details>
+
+### Example Usage in Task Definition
+<details>
+<summary>Click to expand input substitution example</summary>
+
+```json
+{
+  "family": "${servicePrefix}${serviceName}",
+  "containerDefinitions": [
+    {
+      "name": "${serviceName}",
+      "image": "${image}",
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "${environment}"
+        }
+      ],
+      "cpu": ${cpu},
+      "memory": ${memory}
+    }
+  ]
+}
+```
+</details>
+
+For more details on parameter substitution, see the [Input Files Guide](./input_files).
+
 ## Gitmoxi GitOps for ECS
 
-Whenever **any** of the service definition, task definition, and/or input file are changed, Gitmoxi triggers a new deployment which can create or update associated ECS service. This is because service and task definition changes naturally indicate changes, and the changes to input file indicates some parameter value has changed. If only the deployment definition (`_depdef.json`) file has changed then Gitmoxi will not trigger a new deployment because this file only contains deployment settings.
+Here's how changes to deployment files influence your ECS services:
 
-Based on the service definition file, Gitmoxi checks if an active service exists in the specified cluster and region. If service doesn't exist, Gitmoxi will create the service based on service definition. And if service exists, then Gitmoxi will update the service. 
+1. **When changes are detected**: Whenever the service definition, task definition, and/or input file are changed, Gitmoxi triggers a new deployment to create or update the associated ECS service.
 
-Gitmoxi will register the task definition, using the task definition file, obtain the ARN of the task definition revision, and use that ARN for ECS service creation or update. Irrespective of whether the task definition file has changed or not, Gitmoxi always registers the task definition and uses that revision. 
+2. **Service creation**: If no active service exists in the specified cluster and region, Gitmoxi creates a new service based on the service definition.
 
-Gitmoxi deletes an active ECS service **only** when the associated service definition file is deleted.
+3. **Service update**: If the service already exists, Gitmoxi updates it with the new configuration.
 
-## Gitmoxi ECS deployment strategies
+4. **Task definition registration**: Gitmoxi always registers the task definition (regardless of whether it has changed) and uses the latest revision for service creation or update.
 
-* **Rolling update:** In an ECS service rolling update, new task versions are *gradually* created while the old versions are deleted. How many new versions are created and how many old versions are deleted is dependent on `minimumHealthyPercent` and `maximumPercent` attribute from ECS service defintion `deploymentConfiguration` section. Let us take an example of service with desired count of 10, that is 10 replica tasks are running. If `minimumHealthyPercent` is set to 100 then none of the old tasks can be deleted unless new tasks are created. But if it is set to say 50, then 5 old tasks can be deleted even before any new tasks are created. If the `maximumPercent` is set to 100 then at any given time the number of running tasks (old + new)can't go above 10. If the `maximumPrecent` is set to 200 then total running tasks can go upto 20 (200% of 10), that is all 10 new tasks can be created even before any old tasks have been deleted. In production, for example, if you don't want to risk availability, then you may keep `minimumHealthyPercent` to 100 and `maximumPercent` to 150. This will create 5 new tasks but won't delete any old ones until new tasks are ready. Then it will delete 5 old tasks and create the remaining 5 new tasks.
+> **Note**: Changes to only the deployment definition file (`_depdef.json`) will not trigger a new deployment because this file contains deployment settings rather than service attributes.
 
-The rolling update is simple to orchestrate and it can be cost effective especially if the desired count is very high (For e.g. 50+ tasks). The maximum number of tasks at any given time is controlled by the `maximumPercent` and you can keep it within 110-150% without compromising availability from deletion of old tasks. 
+## Deployment Strategies
 
-The rolling update is not suitable if old and new tasks can't be mixed to serve the same traffic. For e.g. if your old tasks are serving traffic on `/api/v1` and if new tasks only serve traffic on `/api/v2` then you can't mix these revisions. In rolling update both the old and new tasks co-exist during the time of deployment and either of them can get the request. Rolling update is also unsuitable if you want to have more control on the traffic shifting between the old and the new. For example, in a gaming service, you may have live sessions on old tasks and want to wait before terminating them. Lastly, rolling update is also not easy for rollbacks, since the old and new tasks are all mixed. Any rollback (or rollforward) starts the same gradual process of creating new and deleting old which may not be appropriate for *quickly* reverting adverse changes. 
+Gitmoxi supports two main deployment strategies for ECS services:
 
-* **Blue/green update:** For an ECS blue/green deployment, Gitmoxi will:
-    * Create a new set of tasks based on latest changes
-    * Wait for the all the new tasks to achieve running status
-    * If service uses a load balancer and traffic shifting is configured, then Gitmoxi will perform traffic shifting from old to new tasks.
-    * If the traffic shifting is successful then old tasks will be deleted
-    * If at any point there is failure such as new tasks not getting to running status or traffic shifting resulting in CloudWatch alarms, then traffic is restored to old tasks and new tasks are deleted. 
+### Rolling Update Deployment
 
-The blue/green update makes it much easier to do rollbacks and allows you granulat control in shifting traffic from old to new. It can drastically minimize the downtime risks from bad deployments as you can quickly revert entire traffic to old stable version. 
+In an ECS service rolling update, new task versions are *gradually* created while the old versions are deleted. The deployment process is controlled by two key parameters in the ECS service definition:
 
-The main drawback of blue/green is that it requires the service to be behind an Application Load Balancer. Without any ALB, there aren't any good mechanisms to split the traffic and test new deployment. Another drawback is the additional cost not only from ALB but also from 2x the number of tasks that are running during the traffic testing time period. 
+- `minimumHealthyPercent`: Minimum percentage of tasks that must remain running
+- `maximumPercent`: Maximum percentage of tasks (old + new) allowed during deployment
 
-* **Blue/green traffic shifting patterns:** For blue/green deployment, Gitmoxi supports following traffic shift patterns:
-    * CANARY: Shifts traffic in two phases. E.g. First shift 20%, wait for a configured time interval and if no alarm triggers then shift the remaining 80%.
-    * LINEAR: Shifts traffic in equal increments over multiple intervals. E.g. a LINEAR shift of 20% will result in 20%, 40%, 60%, 80%, and 100% traffic shift pattern. Gitmoxi will wait for the configured time interval after each percent shift and only increase the percent if there are no alarm triggers. 
-    * ALL_AT_ONCE: Shifts 100% of traffic to the new tasks and if there is any alarm triggers during the wait time then rever traffic to old tasks. 
+#### Example Scenario
 
-## Gitmoxi deployment stability checks and circuit breaker
-For every deployment, Gitmoxi checks that the desired number of tasks get to running state. Gitmoxi stability check configuration allows you to specify a timeout and polling interval to call the ECS APIs and check for task status. If all tasks don't become stable within the specified timeout then the deployment is considered failed. You can specify either an absolute timeout or specify it based on desired number of tasks. If a service task takes longer to startup or if there are too many replica counts, then it might be better to provide the timeout in terms of desired count. For example, if your service has desired count of 10, you can either specify absolute time, say 600 seconds as the timeout, or specify 120 seconds per task for the timeout setting which will make the absolute time 1200 seconds (120 x 10). If both absolute and per task values are specified then Gitmoxi will take the max of the two values and do the stability check in that time window.
+For a service with 10 running tasks:
 
-Gitmoxi also has a deployment circuit breaker which will stop and rollback the deployment if number of new task failures exceeds a configured threshold. For this as well, you can either provide an absolute threshold or specify it as a percent of the desired count. For example, if your service has desired count of 10, then you can specify 5 as absolute failure threshold. Or, you can specify 30% task failures, which will set the threshold as 3 failures (30% * 10). If both values are provided Gitmoxi takes the minimum of the two values as the threshold.
+| Configuration | Behavior |
+|---------------|----------|
+| minimumHealthyPercent: 100<br>maximumPercent: 150 | - 5 new tasks are created first<br>- Once new tasks are healthy, 5 old tasks are removed<br>- Remaining 5 new tasks are created |
+| minimumHealthyPercent: 50<br>maximumPercent: 100 | - 5 old tasks can be removed immediately<br>- 5 new tasks are created<br>- Remaining 5 old tasks are removed<br>- Remaining 5 new tasks are created |
 
-All the deployment configurations such as traffic shifting, stability checks, deployment circuit breaker are specified in the ECS deployment definition (`_depdef.json`) file, which is described in more details in [the respective section](./ecs_deployment_definition).
+#### Advantages of Rolling Updates
+- Simple to orchestrate
+- Cost-effective for high task counts
+- Controlled resource usage during deployment
+
+#### Limitations of Rolling Updates
+- Not suitable when old and new versions can't serve mixed traffic
+- Limited control over traffic shifting
+- Rollbacks require repeating the gradual process
+
+### Blue/Green Deployment
+
+For an ECS blue/green deployment, Gitmoxi:
+
+1. Creates a complete new set of tasks based on the latest changes
+2. Waits for all new tasks to achieve running status
+3. Performs traffic shifting from old to new tasks (if service uses a load balancer)
+4. Deletes old tasks after successful traffic shift
+5. Rolls back to old tasks if failures occur during deployment
+
+#### Advantages of Blue/Green Deployments
+- Easy rollbacks to stable versions
+- Granular control over traffic shifting
+- Minimized downtime risks
+
+#### Limitations of Blue/Green Deployments
+- Requires an Application Load Balancer
+- Higher cost (2x tasks running during deployment)
+- More complex configuration
+
+
+### Choosing the Right Strategy
+
+| Requirement | Recommended Strategy |
+|-------------|----------------------|
+| API versioning (e.g., /api/v1 vs /api/v2) | Blue/Green |
+| Live user sessions that shouldn't be interrupted | Blue/Green |
+| High task count with cost constraints | Rolling Update |
+| Need for rapid rollback capability | Blue/Green |
+| Simple service with stateless behavior | Either |
+
+## Traffic Shifting Patterns for Blue/Green Deployments
+
+For blue/green deployments, Gitmoxi supports several traffic shifting patterns:
+
+### CANARY
+Shifts traffic in two phases:
+1. First shift a small percentage (e.g., 20%)
+2. Monitor for a configured time interval
+3. If no alarms trigger, shift the remaining traffic (e.g., 80%)
+
+### LINEAR
+Shifts traffic in equal increments over multiple intervals:
+1. Start with initial percentage (e.g., 20%)
+2. Increase by that percentage at each step (20%, 40%, 60%, 80%, 100%)
+3. Monitor between each increment
+4. Revert to old tasks if alarms trigger at any point
+
+### ALL_AT_ONCE
+Shifts 100% of traffic to new tasks immediately:
+1. Direct all traffic to new tasks
+2. Monitor for configured wait time
+3. Revert to old tasks if alarms trigger during wait time
+
+## Deployment Stability Checks
+
+Gitmoxi performs health checks during deployment to ensure tasks reach a stable running state:
+
+### Configuration Options
+
+- `timeout`: Maximum absolute time (in seconds) to wait for task stability
+- `timeoutPerTask`: Time allotted per task (multiplied by desired count)
+- `interval`: How frequently Gitmoxi polls for task status
+
+### Example Calculations
+
+| Desired Count | Configuration | Effective Timeout |
+|---------------|---------------|-------------------|
+| 10 tasks | timeout: 600 | 600 seconds |
+| 10 tasks | timeoutPerTask: 120 | 1200 seconds (120 × 10) |
+| 10 tasks | timeout: 600<br>timeoutPerTask: 120 | 1200 seconds (max value used) |
+
+## Deployment Circuit Breaker
+
+The circuit breaker prevents wasteful deployment attempts when tasks repeatedly fail to start:
+
+### Configuration Options
+
+- `failureThreshold`: Absolute number of task failures before aborting
+- `failureThresholdPercentage`: Percentage of desired count that can fail
+
+### Example Calculations
+
+| Desired Count | Configuration | Failure Threshold |
+|---------------|---------------|-------------------|
+| 10 tasks | failureThreshold: 5 | 5 failures |
+| 10 tasks | failureThresholdPercentage: 30 | 3 failures (30% × 10) |
+| 10 tasks | failureThreshold: 5<br>failureThresholdPercentage: 30 | 3 failures (min value used) |
+
+## Troubleshooting Common Issues
+
+### Service Creation Failures
+
+| Problem | Possible Causes | Solution |
+|---------|----------------|----------|
+| Missing task definition | Neither `_taskdef.json` nor `taskDefinition` attribute exists | Create a task definition file or add the attribute to `_svcdef.json` |
+| Permission errors | Insufficient IAM permissions | Verify the execution role has appropriate permissions |
+| Resource constraints | Insufficient CPU/memory or no container instances available | Check resource availability or increase limits |
+
+### Deployment Failures
+
+| Problem | Possible Causes | Solution |
+|---------|----------------|----------|
+| Tasks failing to start | Container errors, unhealthy checks | Check container logs and health check configuration |
+| Traffic shifting alarms | Application errors in new version | Fix issues or modify alarm sensitivity |
+| Timeout during deployment | Tasks taking too long to become stable | Increase stability timeout settings |
+
+### Configuration Issues
+
+| Problem | Possible Causes | Solution |
+|---------|----------------|----------|
+| Parameter substitution errors | Missing or invalid input values | Verify all referenced parameters exist in `_input.json` |
+| File format issues | Invalid JSON syntax | Validate JSON formatting |
+| Deployment not triggered | Changes only to `_depdef.json` | Make a minor change to service or task definition |
+
+## Best Practices
+
+### General Recommendations
+
+- Use source control branches to test deployment changes before merging to production
+- Create separate deployment files for different environments (dev, staging, prod)
+- Define appropriate health checks in task definitions to ensure accurate stability reporting
+
+### Rolling Update Best Practices
+
+- Set `minimumHealthyPercent` to at least 50% for production services
+- Consider using `maximumPercent` of 150-200% for faster deployments when resources permit
+- Test deployment configuration with non-critical services first
+
+### Blue/Green Deployment Best Practices
+
+- Start with CANARY or LINEAR traffic shifting patterns to minimize risk
+- Configure appropriate CloudWatch alarms to detect issues during traffic shifting
+- Use small initial traffic percentages (10-20%) when deploying critical changes
+
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **GitOps** | Infrastructure management approach using Git as the single source of truth |
+| **Rolling Update** | Deployment strategy that gradually replaces tasks |
+| **Blue/Green Deployment** | Strategy that creates a complete parallel environment before shifting traffic |
+| **Canary Deployment** | Pattern that tests new version with a small percentage of traffic |
+| **Circuit Breaker** | Mechanism to stop deployments when failures exceed threshold |
+| **Task Definition** | ECS configuration specifying how containers should run |
+| **Service Definition** | ECS configuration defining how tasks should be deployed and maintained |
+
+## Additional Resources
+
+- <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" target="_blank">Amazon ECS Documentation</a>
+- <a href="./ecs_deployment_definition" target="_blank">Gitmoxi ECS Deployment Definition Guide</a>
+<br>
+- <a href="./input_files" target="_blank">Input Files Guide</a>
