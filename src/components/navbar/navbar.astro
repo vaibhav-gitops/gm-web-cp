@@ -31,6 +31,8 @@ const menuitems = [
 ];
 ---
 
+<script src="https://unpkg.com/alpinejs" defer></script>
+
 <StickyHeader
     class="sticky top-0 border-b z-10 transition-all bg-custom-blue"
     scrollY={50}
@@ -39,20 +41,54 @@ const menuitems = [
 >
   <Container>
     <div
-        class="flex flex-col lg:flex-row justify-between items-center relative z-10"
+        x-data="{ open: false }"
+        class="flex flex-col lg:flex-row justify-between relative z-10"
         transition:animate="none">
       <Astronav>
-        <a href="/" class="flex w-full lg:w-auto items-center justify-between">
-          <Picture
-              src={LogoImg}
-              alt="GitmoxiLogo"
-              formats={["avif", "webp"]}
-              loading="lazy"
-              class="h-9 w-auto mr-1 max-w-sm md:max-w-lg lg:max-w-md"
-          />
-          <span class="font-bold text-white" style="font-size: 1.6rem; font-weight: 500; font-family: 'Nunito', Arial, sans-serif;">Gitmoxi</span>
-        </a>
-        <MenuItems class="hidden w-full lg:w-auto mt-2 lg:flex lg:mt-0">
+        <div class="flex items-center">
+          <a href="/" class="flex w-full lg:w-auto items-center">
+            <Picture
+                src={LogoImg}
+                alt="GitmoxiLogo"
+                formats={["avif", "webp"]}
+                loading="lazy"
+                class="h-9 w-auto mr-1 max-w-sm md:max-w-lg lg:max-w-md"
+            />
+            <span class="font-bold text-white" style="font-size: 1.6rem; font-weight: 500; font-family: 'Nunito', Arial, sans-serif;">Gitmoxi</span>
+          </a>
+
+          <!-- Hamburger button for mobile -->
+          <button
+              @click="open = !open"
+              class="lg:hidden text-white focus:outline-none"
+              aria-label="Toggle Menu"
+          >
+            <svg
+                x-show="!open"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg
+                x-show="open"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+    </div>
+
+        <MenuItems :class="open ? 'flex flex-col w-full mt-2' : 'hidden lg:flex w-full lg:w-auto mt-2 lg:mt-0'">
           <ul class="flex flex-col lg:flex-row lg:gap-3">
             {
               menuitems.map((item, index) => (
