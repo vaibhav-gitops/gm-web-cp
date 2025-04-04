@@ -62,4 +62,4 @@ Additional configuration files can be provided:
 - **Deployment Configuration**: Define traffic-shifting strategies, circuit-breaking rules, etc.
 - **Input Files**: Provide infrastructure outputs (e.g., subnets, load balancers) from IaC tools like Terraform.
 
-To get started, check out our **[Getting Started Guide](./getting_started)** and begin using Gitmoxi today!
+To get started, check out our **[Getting Started Guide](/docs/getting_started)** and begin using Gitmoxi today!
