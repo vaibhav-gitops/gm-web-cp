@@ -32,7 +32,7 @@ function CopyCodeButton() {
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 transition: "background 0.2s ease-in-out",
-                zIndex: "10",
+                zIndex: "9",
             });
 
             // Hover effect
