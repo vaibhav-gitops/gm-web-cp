@@ -13,7 +13,7 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
 
 Start by downloading the Terraform manifest to install Gitmoxi in ECS Fargate. Please note that this download is **strictly for trial purposes to learn, test, and evaluate Gitmoxi**. Please do not use this for any production or sensitive environments.
 
-<a href="#" id="downloadLink" class="text-blue-600 hover:underline">Download Trial Now</a>
+<button id="downloadLink" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-800">Download Trial Now</button>
 
 ## Prerequisites
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
@@ -65,13 +65,27 @@ The Terraform output will give the ALB DNS where you can access the Gitmoxi fron
 ![Gitmoxi UI](/gitmoxi_ui_page.png)
 
 ## Repository for GitOps
-**Fork** the Gitmoxi sample applications repository, [gitmoxi/gm-demo](https://github.com/gitmoxi/gm-demo). This applications has two ECS services to testing rolling and blue/green deployments. And there are 3 Lambda functions to deploy and test with ELB, API-Gateway, and SQS event sources.
+We have provided ECS and Lambda sample applications in [gitmoxi/gm-demo](https://github.com/gitmoxi/gm-demo) repository. This repository has two ECS services one each for testing rolling and blue/green deployment. And there are 3 Lambda functions to deploy and test with ELB, API-Gateway, and SQS event sources. We will create a private repository in your GitHub user account, copy these sample files, and perform deployments securely using the private repository.
 
-Once you have forked the above sample applications repository, clone to your laptop and we will add the repository to Gitmoxi.
+1. Create a **private** repository `gm-trial` in your <a href="https://github.com/new" target="_blank">GitHub account</a>
+2. Run following commands to copy the sample applications to your GitHub repository. **Note** to set the correct GitHub user name in the environment variable.
+
 ```bash
 export GITHUB_USER_NAME=<your-github-username>
-git clone git@github.com:$GITHUB_USER_NAME/gm-demo.git
-export GITMOXI_DEMO_REPO=https://github.com/$GITHUB_USER_NAME/gm-demo
+```
+Clone the `gm-demo` repository, copy the files and push to your `gm-trial` private repository.
+```
+git clone git@github.com:gitmoxi/gm-demo.git
+cd gm-demo
+git remote remove origin
+git remote add origin git@github.com:$GITHUB_USER_NAME/gm-trial
+git branch -M main
+git push -u -f origin main
+```
+Check that the new repository has folders named `ecs` and `lambda` in the GitHub web console. Now we can add your private GitHub repository to Gitmoxi for GitOps.
+
+```bash
+export GITMOXI_DEMO_REPO=https://github.com/$GITHUB_USER_NAME/gm-trial
 gmctl repo add -r $GITMOXI_DEMO_REPO -b main -a GITHUB_TOKEN
 gmctl repo get
 ```

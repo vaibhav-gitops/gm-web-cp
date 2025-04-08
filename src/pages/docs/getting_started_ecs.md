@@ -3,66 +3,121 @@ title: "Getting Started with Gitmoxi for ECS"
 navtitle: "Getting Started ECS"
 layout: ../../layouts/MdLayout.astro
 ---
+# ECS Deployments with Gitmoxi GitOps
 
-# Testing Gitmoxi for ECS Deployments
+> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](./getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
 
-## Infrastructure for ECS test services
+## Overview
 
-We have provided a sample Terraform file which will create the required infrastructure for ECS test services:
+This guide will walk you through testing Gitmoxi's GitOps-based deployment for ECS by:
 
-* ECS Cluster - needed to create ECS service and tasks
-* VPC and Subnet both private and public - needed for Fargate tasks to run
-* Security Group - needed for Fargate tasks to run
-* ECS Task Execution Role - needed for ECS tasks to run
-* CloudWatch log group - needed for containers in ECS tasks to send logs
-* Two target groups (needed for the blue/green test)
-* An ALB with a listener that forwards traffic to the above two target groups (needed for the blue/green test)
-* All of the above is created in `us-west-2` region. You can change that in the `main.tf` file if you want. 
+1. Creating the infrastructure needed to deploy ECS sample services
+2. Creating ECS services and performing rolling and blue/green updates using Gitmoxi GitOps
+3. Cleaning up all test resources when finished
 
-**Please complete all the steps in [Getting Started](./getting_started) section to install Gitmoxi, fork and clone the `gm-demo` repository, and add your copy of the `gm-demo` repository to Gitmoxi.**
+## Infrastructure Resources
+We've provided a sample Terraform file to create the required infrastructure for ECS test services. Your IAM role must have permissions to create the following resources in the `us-west-2` region:
 
-Let us start by creating the infrastructure for ECS test services.
+| Category | Resources | Purpose |
+|----------|-----------|---------|
+| **Networking** | • VPC<br>• Public Subnets<br>• Private Subnets<br>• Security Groups | Network infrastructure and access control for Fargate tasks |
+| **ECS** | • ECS Cluster<br>• Task Execution Role | Required for creating and running ECS services and tasks |
+| **Load Balancing** | • Application Load Balancer<br>• Target Groups (2)<br>• Listener Rules | Forwards traffic to target groups for blue/green testing |
+| **Monitoring** | • CloudWatch Log Group | Container log management |
+
+> **Note:** The default region is `us-west-2`. You can modify this in the `main.tf` file if needed.
+
+Start by cloning your `gm-trial` private repository that you created in the [Getting Started](./getting_started) section. Below commands clone it in your `HOME` directory but you can clone anywhere. 
 
 ```bash
-cd gm-demo
+cd ~
+git clone git@github.com:gitmoxi/gm-trial.git
+```
+Switch to the `gm-trial` directory.
+```bash
+cd ~/gm-trial
 export WORKING_DIR=$PWD
+```
+## Create infrastructure for ECS test services
+```bash
 cd $WORKING_DIR/ecs/core-infra/terraform
 terraform init
 terraform plan
 terraform apply --auto-approve 
 terraform output --json > terraform_output.json
 ```
-Note: Keep the Terraform output JSON file name the same. This file is used to substitute the attributes in service and task definition files.
+Let the `terraform apply` and `terraform output` finish because this infrastructure is required to deploy ECS services.
+
+> **Note:** Keep the Terraform output JSON file name the same. This file is used to substitute parameterized attribute values in service and task definition files.
 
 ## Create ECS service 
-We will follow the GitOps paradigm where we will commit the deployment artifacts to a repository and then trigger the deployment for that commit. 
+Following the GitOps paradigm, we will create the ECS service deployment files and commit the changes to a repository and then trigger the deployment for that commit. 
 
-Start by copying the deployment artifacts provided in the `ecs/rolling-update` folder. 
+Start by copying the deployment artifacts provided in the `ecs/rolling-update/sample` folder. 
 
- ```bash
- cd $WORKING_DIR/ecs/rolling_update
- cp sample/nginx_taskdef.json.sample nginx_taskdef.json
- cp sample/nginx_svcdef.json.sample nginx_svcdef.json
- cp sample/nginx_depdef.json.sample nginx_depdef.json
- cp sample/nginx_input.json.sample nginx_input.json
- cd $WORKING_DIR
- git add .
- git commit -m "creating nginx svc with rolling update"
- git push
- ```
+```bash
+cd $WORKING_DIR/ecs/rolling-update
+cp sample/nginx_taskdef.json.sample nginx_taskdef.json
+cp sample/nginx_svcdef.json.sample nginx_svcdef.json
+cp sample/nginx_depdef.json.sample nginx_depdef.json
+cp sample/nginx_input.json.sample nginx_input.json
+cd $WORKING_DIR
+```
+Review the changes, you should see the above copied files and the `terraform_output.json` as new file.
 
-Now let us trigger the deployment based on above commit. The CLI command `gmctl commit deploy` will deploy the changes associated with the latest commit. 
+```bash
+git status
+``` 
+```
+...
+...
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	ecs/core-infra/terraform/terraform_output.json
+	ecs/rolling-update/nginx_depdef.json
+	ecs/rolling-update/nginx_input.json
+	ecs/rolling-update/nginx_svcdef.json
+	ecs/rolling-update/nginx_taskdef.json
+```
+
+Add files and commit changes.
+```bash
+git add .
+git commit -m "creating nginx svc with rolling update"
+git push
+```
+## Gitmoxi commit dryrun
+Before deploying the change, let us do a `dryrun` to check what all files have changed and why they are relevant for Gitmoxi with respect to ECS or Lambda deployments. The `dryrun` command tells the `latest_commit_hash`, the `previous_processed_commit_hash`, the files that have changed, and relevance of those changes for ECS service or Lambda functions.
+
+```bash
+gmctl commit dryrun -r $GITMOXI_DEMO_REPO -b main 
+```
+```
+latest_commit_hash                        previous_processed_commit_hash    file                                   change             relevance
+----------------------------------------  --------------------------------  -------------------------------------  -----------------  ------------------
+95f3ca6ea26aea02ff74938c0ee964fd5520a88d                                    ecs/rolling-update/nginx_input.json    added_or_modified  ecs_relevant_files
+95f3ca6ea26aea02ff74938c0ee964fd5520a88d                                    ecs/rolling-update/nginx_svcdef.json   added_or_modified  ecs_relevant_files
+95f3ca6ea26aea02ff74938c0ee964fd5520a88d                                    ecs/rolling-update/nginx_taskdef.json  added_or_modified  ecs_relevant_files
+```
+
+## Gitmoxi commit deploy
+Now trigger the deployment based on above commit. The CLI command `gmctl commit deploy` will deploy the changes associated with the latest commit. 
 
 ```bash
 gmctl commit deploy -r $GITMOXI_DEMO_REPO -b main 
 ```
-You should see a new service `rolling-nginx-svc` created in your ECS cluster! The `rolling-nginx-svc` has tasks attached to a public subnet and public IP is enabled. You can access the public IP to see the `nginx` welcome page.
+In Gitmoxi UI, you can click on the `ECS -> Live Deployments` section to see live timeline of the deployment and associated events. (If you did all steps in Getting Started section and are in the same terminal then the Gitmoxi UI can be printed using `echo $GITMOXI_ENDPOINT_URL`.)
+![ECS Live Deployment](/ecs_live_deployment.png)
+
+You should see a new service `rolling-nginx-svc` created in your ECS cluster in AWS console as well. The `rolling-nginx-svc` has tasks attached to a public subnet and public IP is enabled. You can access the public IP to see the `nginx` welcome page.
+
+**Congrats!** You have successfully created ECS service using Gitmoxi GitOps!
 
 ## Perform rolling update
-In previous step, Gitmoxi created the service since it didn't exist. Now we will update the container image to `httpd`, commit the changes, and trigger Gitmoxi rolling update.
+In previous step, Gitmoxi created the service since it didn't exist. Now you will update the container image to `httpd`, commit the changes, and trigger Gitmoxi rolling update.
 
 ```bash
-cd $WORKING_DIR/ecs/rolling_update
+cd $WORKING_DIR/ecs/rolling-update
 cp sample/nginx_input.json.sample.httpd nginx_input.json
 git add .
 git commit -m "changing image from nginx to httpd to test rolling update"
@@ -73,19 +128,17 @@ And deploy the changes. Just the same command as above and it will deploy the la
 ```bash
 gmctl commit deploy -r $GITMOXI_DEMO_REPO -b main
 ```
-
-Access the public IP of the tasks and you should see the text `It Works` from `httpd` container instead of the `nginx` welcome message. This will confirm that the rolling deployment has successfully completed.
-
-You can also get a list of the deployments and their status details at http://localhost:3000/deployments/ecs or using the `gmctl` commands. The first command gives a list of the deployments.
+You can check the UI again in `ECS -> Live Deployments` section. Or, also use the CLI to get the list of deployments.
 
 ```bash
-gmctl deployment ecs get -r $GITMOXI_DEMO_REPO -b main
+gmctl deployment ecs get -r $GITMOXI_DEMO_REPO  -s rolling-nginx-svc
 ```
 The flags, `-v -A`, provide more verbose details.
 
 ```bash
-gmctl deployment ecs get -r $GITMOXI_DEMO_REPO -b main -v -A
+gmctl deployment ecs get -r $GITMOXI_DEMO_REPO -s rolling-nginx-svc -v -A
 ```
+Access the public IP of the tasks and you should see the text `It Works` from `httpd` container instead of the `nginx` welcome message. This will confirm that the rolling deployment has successfully completed.
 
 ## Cool, tell me more what is happening here? 
 
@@ -116,8 +169,19 @@ git add .
 git commit -m "creating the blue/green test service"
 git push
 ```
+Do a quick dryrun to check that the service files for blue/green are the relevant changes.
+```bash
+gmctl commit dryrun -r $GITMOXI_DEMO_REPO -b main 
+```
+```
+latest_commit_hash                        previous_processed_commit_hash            file                                      change             relevance
+----------------------------------------  ----------------------------------------  ----------------------------------------  -----------------  ------------------
+ac668f7f3da9f09c07d0fb5c88a70a617263ebb7  484d16f968226c1b35f566c406b620c4e3c450cb  ecs/blue-green-update/nginx_input.json    added_or_modified  ecs_relevant_files
+ac668f7f3da9f09c07d0fb5c88a70a617263ebb7  484d16f968226c1b35f566c406b620c4e3c450cb  ecs/blue-green-update/nginx_svcdef.json   added_or_modified  ecs_relevant_files
+ac668f7f3da9f09c07d0fb5c88a70a617263ebb7  484d16f968226c1b35f566c406b620c4e3c450cb  ecs/blue-green-update/nginx_taskdef.json  added_or_modified  ecs_relevant_files
+```
 
- Now we are ready to deploy this commit.
+Now we are ready to deploy this commit.
 
 ```bash
 gmctl commit deploy -r $GITMOXI_DEMO_REPO -b main 
