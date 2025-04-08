@@ -89,4 +89,4 @@ export GITMOXI_DEMO_REPO=https://github.com/$GITHUB_USER_NAME/gm-trial
 gmctl repo add -r $GITMOXI_DEMO_REPO -b main -a GITHUB_TOKEN
 gmctl repo get
 ```
-You should see your `gm-demo` repository added. Next, we will test GitOps workflow with [ECS](./getting_started_ecs)
+You should see your `gm-demo` repository added. Next, we will test GitOps workflow with [ECS](/docs/getting_started_ecs)
