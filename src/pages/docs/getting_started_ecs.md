@@ -31,7 +31,7 @@ Start by cloning your `gm-trial` private repository that you created in the [Get
 
 ```bash
 cd ~
-git clone git@github.com:gitmoxi/gm-trial.git
+git clone git@github.com:$GITHUB_USER_NAME/gm-trial.git
 ```
 Switch to the `gm-trial` directory.
 ```bash
