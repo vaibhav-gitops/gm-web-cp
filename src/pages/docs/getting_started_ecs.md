@@ -222,7 +222,7 @@ curl -s "$(jq -r '.alb_endpoint.value' ecs/core-infra/terraform/terraform_output
 
 You should see the output flip between `It Works` message from the new `httpd` containers to the `nginx` welcome message from the old `nginx` containers. You can also open the AWS console, go to the ALB, and see that the target group weights are increasing linearly by 20%. Once the whole traffic is shifted the old tasks with `nginx` container will be deleted. The full traffic is now served by the new tasks with new container. 
 
-[Gitmoxi ECS blue/green deployment documentation]() provides further details on features such as different traffic shifting patterns, multiple target group support, controls such as shift percent and shift interval, alarms to monitor and rollback.
+[Gitmoxi ECS blue/green deployment documentation](./gm_for_ecs) provides further details on features such as different traffic shifting patterns, multiple target group support, controls such as shift percent and shift interval, alarms to monitor and rollback.
 
 ## Delete the ECS blue/green update test service
 You can delete the `bg-nginx-svc` service using command below. Please adjust the attributes if you have changed them in Terraform.
@@ -230,6 +230,10 @@ You can delete the `bg-nginx-svc` service using command below. Please adjust the
 ```bash
 aws ecs delete-service --cluster gitmoxidemo --service bg-nginx-svc --region us-west-2 --force
 ```
+
+## Quick word on GitOps
+The entire audit trail of all the changes is available in GitHub. And you can conduct reviews and approvals in GitHub before allowing changes to trigger deployments. No more wondering what changed and when; you have the full audit log!
+![GitOps Beauty](/gitops-beauty.png)
 
 ## Cleanup
 

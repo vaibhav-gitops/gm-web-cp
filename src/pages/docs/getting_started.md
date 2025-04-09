@@ -23,20 +23,18 @@ Start by downloading the Terraform manifest to install Gitmoxi in ECS Fargate. P
 ```bash
 pip install gmctl
 gmctl --help
-```
+``` 
+## Required AWS IAM Role
 
-## Required AWS IAM role
-The Gitmoxi Terraform will use your AWS credentials and create the following resources. So make sure the user that you are signed-in has permissions to create these resources: 
+The Gitmoxi Terraform will use your AWS credentials to create the following resources. Ensure that your signed-in user has permissions to create:
 
-* VPC and subnets - 1 private subnet and 1 public subnet per Availability Zone in the region. 
-* For the subnets also create require NAT and Internet Gateways
-* ALB with one listener and two target groups for blue/green deployment
-* Security group for load balancer 
-* ECS cluster 
-* Gitmoxi ECS service and task definition
-* IAM roles needed for Gitmoxi ECS task
-* Security group needed for Gitmoxi ECS task 
-* CloudWatch log group needed for Gitmoxi containers
+| Resource Type | Details |
+|---------------|---------|
+| **Network Infrastructure** | • VPC with subnets (1 private, 1 public per AZ)<br>• NAT Gateways<br>• Internet Gateways |
+| **Load Balancing** | • Application Load Balancer (ALB)<br>• One listener<br>• Two target groups for blue/green deployment<br>• Security group for load balancer |
+| **Container Services** | • ECS cluster<br>• Gitmoxi ECS service and task definition<br>• Security group for Gitmoxi ECS task |
+| **IAM** | • IAM roles for Gitmoxi ECS task<br> |
+| **Logging** | • CloudWatch log group for Gitmoxi containers<br> |
 
 ## GitHub token for GitOps
 
