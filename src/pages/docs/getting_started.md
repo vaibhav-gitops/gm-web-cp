@@ -42,11 +42,24 @@ Before deploying Gitmoxi for trial, in your GitHub account [create a developer t
 
 ![GitHub token access](/gh_token_access.png)
 
-Copy the token value and set the following `TF_VAR_`s in a terminal for Terraform to pick these values. 
+Copy the token value and set the following `TF_VAR_` in a terminal for Terraform to pick these values. 
 ```bash
 export TF_VAR_github_token=<GITHUB_TOKEN>
+```
+Set the AWS region and account to deploy the Gitmoxi trial software.
+```bash
 export TF_VAR_aws_region=<AWS_REGION>
 export TF_VAR_aws_account_id=<YOUR_AWS_ACCOUNT>
+```
+If you are using AWS Profile then set the below environment variable otherwise Terraform will likely give error. You can usually find the AWS Profile in `~/.aws/config` in the first line within the `[]` brackets.
+```bash
+cat ~/.aws/config
+
+[profile <YOUR_AWS_PROFILE_IS_LIKELY_HERE>]
+...
+```
+```bash
+export AWS_PROFILE=<YOUR AWS PROFILE>
 ```
 
 ## Install Gitmoxi
@@ -62,11 +75,15 @@ The Terraform output will give the ALB DNS where you can access the Gitmoxi fron
 
 ![Gitmoxi UI](/gitmoxi_ui_page.png)
 
+> **Note** Wait for the `gitmoxi` service to be ready. You should see the above UI before proceeding with the next steps. 
+
 ## Repository for GitOps
 We have provided ECS and Lambda sample applications in [gitmoxi/gm-demo](https://github.com/gitmoxi/gm-demo) repository. This repository has two ECS services one each for testing rolling and blue/green deployment. And there are 3 Lambda functions to deploy and test with ELB, API-Gateway, and SQS event sources. We will create a private repository in your GitHub user account, copy these sample files, and perform deployments securely using the private repository.
 
 1. Create a **private** repository `gm-trial` in your <a href="https://github.com/new" target="_blank">GitHub account</a>
-2. Run following commands to copy the sample applications to your GitHub repository. **Note** to set the correct GitHub user name in the environment variable.
+2. Run following commands to copy the sample applications to your GitHub repository. 
+
+**Note** to set the correct GitHub user name in the environment variable.
 
 ```bash
 export GITHUB_USER_NAME=<your-github-username>

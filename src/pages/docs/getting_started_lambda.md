@@ -32,8 +32,17 @@ Switch to the `gm-trial` directory.
 cd ~/gm-trial
 export WORKING_DIR=$PWD
 ```
-Start by creating the infrastructure needed for Lambda functions. 
+## Create infrastructure for Lambda test functions
+If you are using AWS Profile then set the below environment variable otherwise Terraform will likely give error. You can usually find the AWS Profile in `~/.aws/config` in the first line within the `[]` brackets.
+```bash
+cat ~/.aws/config
 
+[profile <YOUR_AWS_PROFILE_IS_LIKELY_HERE>]
+...
+```
+```bash
+export AWS_PROFILE=<YOUR AWS PROFILE>
+```
 ```bash
 cd $WORKING_DIR/lambda/core-infra/terraform
 terraform init

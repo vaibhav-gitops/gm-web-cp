@@ -39,6 +39,18 @@ cd ~/gm-trial
 export WORKING_DIR=$PWD
 ```
 ## Create infrastructure for ECS test services
+
+If you are using AWS Profile then set the below environment variable otherwise Terraform will likely give error. You can usually find the AWS Profile in `~/.aws/config` in the first line within the `[]` brackets.
+```bash
+cat ~/.aws/config
+
+[profile <YOUR_AWS_PROFILE_IS_LIKELY_HERE>]
+...
+```
+```bash
+export AWS_PROFILE=<YOUR AWS PROFILE>
+```
+
 ```bash
 cd $WORKING_DIR/ecs/core-infra/terraform
 terraform init
