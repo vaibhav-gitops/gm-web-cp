@@ -87,58 +87,6 @@ import DownloadForm from '../components/donwloadform.astro';
   </div>
 </div>
 
-<script type="module" client:load>
-  window.onload = function() {
-    function openModal() {
-      const modal = document.querySelector('#downloadModal');
-      if (modal) {
-        modal.style.display = 'block';
-        document.documentElement.style.overflow = 'hidden'; // Disable scrolling
-        document.body.style.overflow = 'hidden';
-        document.body.style.touchAction = 'none'; // Prevent touch scrolling on mobile
-      }
-    }
-
-    function closeModal() {
-      const modal = document.querySelector('#downloadModal');
-      if (modal) {
-        modal.style.display = 'none';
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-        document.body.style.touchAction = '';
-      }
-    }
-
-    // Ensure both click and touch events trigger modal
-    document.body.addEventListener('click', (e) => {
-      if (e.target && e.target.id === 'downloadLink') {
-        e.preventDefault();
-        openModal();
-      }
-    });
-
-    document.body.addEventListener('touchstart', (e) => {
-      if (e.target && e.target.id === 'downloadLink') {
-        e.preventDefault();
-        openModal();
-      }
-    });
-
-    // Closing the modal
-    const closeButton = document.querySelector('.close-modal');
-    if (closeButton) {
-      closeButton.addEventListener('click', closeModal);
-    }
-
-    // Close modal when clicking outside the content
-    document.querySelector('#downloadModal').addEventListener('click', (e) => {
-      if (e.target === document.querySelector('#downloadModal')) {
-        closeModal();
-      }
-    });
-  };
-</script>
-
 <style>
   #downloadModal {
     display: none;
