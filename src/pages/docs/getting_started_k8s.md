@@ -54,6 +54,7 @@ cd $WORKING_DIR/eks/core-infra/terraform
 terraform init
 terraform plan
 terraform apply --auto-approve
+export EKS_CLUSTER_ARN=$(terraform output -raw cluster_arn)
 aws eks update-kubeconfig --region us-west-2 --name gitmoxi-eks
 ```
 ## Give Gitmoxi controller EKS access
@@ -79,7 +80,7 @@ cd $WORKING_DIR/eks/core-infra/terraform
 
 ## Create EKS Test Workload
 
-We’ll now deploy a sample application using Gitmoxi by committing Kubernetes manifests.
+We’ll now deploy a sample application using Gitmoxi by committing Kubernetes manifests. The `awk` command is replacing placeholder cluster arn in `deployment_definition.yaml` with your EKS cluster arn that you created above. 
 
 Copy the sample manifests:
 
@@ -90,6 +91,7 @@ cp sample/service.yaml.sample service.yaml
 cp sample/ingress.yaml.sample ingress.yaml
 cp sample/secret.yaml.sample secret.yaml
 cp sample/configmap.yaml.sample configmap.yaml
+awk -v arn="$EKS_CLUSTER_ARN" '{gsub(/clusterArn: CLUSTER_ARN/, "clusterArn: " arn)}1' sample/deployment_definition.yaml.sample > temp.yaml && mv temp.yaml sample/deployment_definition.yaml.sample
 cp sample/deployment_definition.yaml.sample deployment_definition.yaml
 cd $WORKING_DIR
 ```
