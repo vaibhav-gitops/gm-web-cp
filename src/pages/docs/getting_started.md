@@ -69,13 +69,14 @@ cd gitmoxi-trial
 terraform init
 terraform apply --auto-approve
 export GITMOXI_ENDPOINT_URL="http://$(terraform output -raw alb_endpoint)"
+export GITMOXI_TASK_IAM_ROLE="$(terraform output -raw task_iam_role)"
 echo $GITMOXI_ENDPOINT_URL
 ```
-The Terraform output will give the ALB DNS where you can access the Gitmoxi frontend. Once `gitmoxi-svc` is running in the `gitmoxi` cluster in the region you specified, then you can should see below page at the ALB URL
+The Terraform output will give the ALB DNS where you can access the Gitmoxi frontend. Once `gitmoxi-svc` is running in the `gitmoxi` cluster in the region you specified, then you can should see below page at the ALB URL. The ECS task IAM role will be needed in the EKS test section; hence we have setup the environment variable `GITMOXI_TASK_IAM_ROLE`.
 
 ![Gitmoxi UI](/gitmoxi_ui_page.png)
 
-> **Note** Wait for the `gitmoxi` service to be ready. You should see the above UI before proceeding with the next steps. 
+> **Note** Wait for the `gitmoxi` service to be ready. You should see the above UI before proceeding with the next steps.
 
 ## Repository for GitOps
 We have provided ECS and Lambda sample applications in [gitmoxi/gm-demo](https://github.com/gitmoxi/gm-demo) repository. This repository has two ECS services one each for testing rolling and blue/green deployment. And there are 3 Lambda functions to deploy and test with ELB, API-Gateway, and SQS event sources. We will create a private repository in your GitHub user account, copy these sample files, and perform deployments securely using the private repository.
@@ -97,7 +98,7 @@ git remote add origin git@github.com:$GITHUB_USER_NAME/gm-trial
 git branch -M main
 git push -u -f origin main
 ```
-Check that the new repository has folders named `ecs` and `lambda` in the GitHub web console. Now we can add your private GitHub repository to Gitmoxi for GitOps.
+Check that the new repository has folders named `ecs`, `eks`, and `lambda` in the GitHub web console. Now we can add your private GitHub repository to Gitmoxi for GitOps.
 
 ```bash
 export GITMOXI_DEMO_REPO=https://github.com/$GITHUB_USER_NAME/gm-trial

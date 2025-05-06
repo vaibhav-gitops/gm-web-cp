@@ -12,14 +12,14 @@ layout: ../../layouts/MdLayout.astro
 
 This guide walks you through testing Gitmoxi’s GitOps-based deployment for Amazon EKS by:
 
-1. Creating infrastructure required to deploy EKS test workloads
-2. Deploying a Kubernetes Resources (Deployment, Service, Secret, Config, and IngresS) using Gitmoxi GitOps
+1. Creating EKS cluster and associated infrastructure required to test workloads
+2. Deploying Kubernetes Resources (Deployment, Service, Secret, Config, and IngresS) using Gitmoxi GitOps
 3. Performing a Blue/Green update to test changes
 4. Cleaning up test resources
 
 ## Infrastructure Resources
 
-We've provided a sample Terraform setup to create the necessary infrastructure for EKS test services. Ensure your IAM role has the permissions to create the following resources in the `us-west-2` region:
+We've provided a sample Terraform setup to create the necessary infrastructure for EKS. Ensure your IAM role has the permissions to create the following resources in the `us-west-2` region:
 
 | Category       | Resources                                                                                     | Purpose                                                           |
 |----------------|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
@@ -31,7 +31,7 @@ We've provided a sample Terraform setup to create the necessary infrastructure f
 
 > **Note:** The default region is `us-west-2`. You can change it in the `main.tf` file if necessary.
 
-Start by cloning your `gm-trial` repository in your home directory:
+If you **have not** cloned your `gm-trial` repo then clone it first. Below commands clone it in your `HOME` directory but you can clone anywhere. 
 
 ```bash
 cd ~
@@ -56,6 +56,26 @@ terraform plan
 terraform apply --auto-approve
 aws eks update-kubeconfig --region us-west-2 --name gitmoxi-eks
 ```
+## Give Gitmoxi controller EKS access
+To give the Gitmoxi controller running in ECS Fargate access to deploy and update EKS resources, add its task IAM role to the `aws-auth` configmap in the `kube-system` namespace.
+```yaml
+apiVersion: v1
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::381491902283:role/GitmoxiServiceTaskRole-d70e2906b67d3ee1
+      username: gitmoxi-controller
+      groups:
+        - system:masters
+    ...
+    ...
+```
+
+```bash
+cd $WORKING_DIR/eks/core-infra/terraform
+./eks_access.sh $GITMOXI_TASK_IAM_ROLE
+```
+
+> **Note:** In production you will use [AWS EKS access entries](https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html) with least privileges access. 
 
 ## Create EKS Test Workload
 
@@ -83,11 +103,14 @@ git status
 You should see the following files as untracked:
 
 ```
-eks/apps/blue-green-update/deployment.yaml
-eks/apps/blue-green-update/service.yaml
-eks/apps/blue-green-update/ingress.yaml
-eks/apps/blue-green-update/secret.yaml
-eks/apps/blue-green-update/configmap.yaml
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	eks/apps/blue-green-update/configmap.yaml
+	eks/apps/blue-green-update/deployment.yaml
+	eks/apps/blue-green-update/deployment_definition.yaml
+	eks/apps/blue-green-update/ingress.yaml
+	eks/apps/blue-green-update/secret.yaml
+	eks/apps/blue-green-update/service.yaml
 ```
 
 Add and commit the files:
@@ -97,10 +120,7 @@ git add .
 git commit -m "creating nginx workload on EKS"
 git push
 ```
-
-[//]: # (TODO: UPDATE THIS SECTION)
-## NEEDS UPDATE - Gitmoxi Commit Dryrun
-
+## Gitmoxi Commit Dryrun
 Perform a dryrun to verify that the new files are valid and relevant for Gitmoxi:
 
 ```bash
@@ -110,10 +130,14 @@ gmctl commit dryrun -r $GITMOXI_DEMO_REPO -b main
 Sample output:
 
 ```
-latest_commit_hash                        previous_processed_commit_hash    file                              change             relevance
-----------------------------------------  --------------------------------  --------------------------------  -----------------  -------------------
-2a8c9b0d1b66b01ae1ccdc254cbf9b6d0e48f54a                                    eks/rolling-update/nginx_dep.yaml added_or_modified  eks_relevant_files
-2a8c9b0d1b66b01ae1ccdc254cbf9b6d0e48f54a                                    eks/rolling-update/nginx_svc.yaml added_or_modified  eks_relevant_files
+latest_commit_hash                        previous_processed_commit_hash            file                                                   change             relevance
+----------------------------------------  ----------------------------------------  -----------------------------------------------------  -----------------  ------------------
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/configmap.yaml              added_or_modified  k8s_relevant_files
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/deployment.yaml             added_or_modified  k8s_relevant_files
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/deployment_definition.yaml  added_or_modified  k8s_relevant_files
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/ingress.yaml                added_or_modified  k8s_relevant_files
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/secret.yaml                 added_or_modified  k8s_relevant_files
+39477924369a5f61370d789aa16a7f169fbf47a4  e37578c8049a5eccdab40f189ed45df4d2912d6c  eks/apps/blue-green-update/service.yaml                added_or_modified  k8s_relevant_files
 ```
 
 ## Gitmoxi Commit Deploy
@@ -132,15 +156,13 @@ echo $GITMOXI_ENDPOINT_URL
 
 ![EKS Live Deployment](/eks_live_deployment.png)
 
-### <GITMOXI UI IMAGE HERE>
-
 You should now see a live deployment named `test-app` in your EKS cluster. You should see a new deployment `test-app` created in your EKS cluster in AWS console as well. Validate it by running:
 
 ```bash
 kubectl get all -n default
 ```
 
-You will need to wait about 2-3 minutes for the alb ingress controller to provision a new load balancer and get it to `ACTIVE` state. Once the load balancer is active, you can validate the application is exposed on the load balancer endpoint. You should see the output state `BLUE VERSION`. 
+You will need to wait about 2-3 minutes for the alb ingress controller to provision a new load balancer and get it to `ACTIVE` state. Once the load balancer is active, you can validate that the application is exposed on the load balancer endpoint. You should see the output state `BLUE VERSION`. 
 
 ```bash
 curl -s $(kubectl get ingress test-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
@@ -207,3 +229,4 @@ terraform destroy --auto-approve
 
 🎉 You have successfully deployed, updated, and managed a Kubernetes workload on Amazon EKS using Gitmoxi GitOps!
 
+Also, checkout Gitmoxi GitOps for [ECS](./getting_started_ecs) and [Lambda](./getting_started_lambda). 
