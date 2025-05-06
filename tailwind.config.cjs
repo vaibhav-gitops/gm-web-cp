@@ -61,9 +61,11 @@ module.exports = {
               padding: "2px 4px",
               borderRadius: "4px",
               fontWeight: "400",
-              whiteSpace: "pre-wrap",
-              wordWrap: "break-word",
-              overflowWrap: "break-word",
+              whiteSpace: "pre",    /* Changed from pre-wrap to pre */
+              overflowX: "auto",    /* Added for horizontal scrolling */
+              wordWrap: "normal",   /* Changed from break-word to normal */
+              overflowWrap: "normal", /* Changed from break-word to normal */
+              maxWidth: "100%",     /* Added to ensure container respect */
             },
           },
         },

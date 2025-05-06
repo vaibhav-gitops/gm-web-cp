@@ -257,5 +257,5 @@ terraform destroy --auto-approve
 cd $WORKING_DIR
 ```
 
-In the next [Lambda section](./getting_started_lambda) you will test Lambda create and update using the same GitOps flow as above providing you with a unified deployment workflow for both ECS and Lambda.
+Also, checkout [EKS section](./getting_started_k8s) and [Lambda section](./getting_started_lambda). 
 
