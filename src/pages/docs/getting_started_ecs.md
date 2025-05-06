@@ -257,5 +257,5 @@ terraform destroy --auto-approve
 cd $WORKING_DIR
 ```
 
-Also, checkout [EKS section](./getting_started_k8s) and [Lambda section](./getting_started_lambda). 
+Also, checkout Gitmoxi GitOps for [EKS](./getting_started_k8s) and [Lambda](./getting_started_lambda).
 
