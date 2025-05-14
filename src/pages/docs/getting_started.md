@@ -11,7 +11,7 @@ Gitmoxi is inspired by GitOps paradigm where you store, version control, and col
 * Perform GitOps-based creation and updates including blue/green with sample applications
 * Clean-up all the test resources
 
-Start by downloading the Terraform manifest to install Gitmoxi in ECS Fargate. Please note that this download is **strictly for trial purposes to learn, test, and evaluate Gitmoxi**. Please do not use this for any production or sensitive environments.
+Start by downloading the artifacts to deploy Gitmoxi on ECS Fargate or EKS. Please note that this download is **strictly for trial purposes to learn, test, and evaluate Gitmoxi**. Please do not use this for any production or sensitive environments.
 
 <button id="downloadLink" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-800">Download Trial Now</button>
 
@@ -19,39 +19,27 @@ Start by downloading the Terraform manifest to install Gitmoxi in ECS Fargate. P
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [Git CLI](https://github.com/git-guides/install-git#install-git-on-mac)
 * [Hashicorp Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+* [kubectl](https://kubernetes.io/releases/download/#kubectl)
 * Gitmoxi CLI
 ```bash
 pip install gmctl
 gmctl --help
-``` 
-## Required AWS IAM Role
-
-The Gitmoxi Terraform will use your AWS credentials to create the following resources. Ensure that your signed-in user has permissions to create:
-
-| Resource Type | Details |
-|---------------|---------|
-| **Network Infrastructure** | • VPC with subnets (1 private, 1 public per AZ)<br>• NAT Gateways<br>• Internet Gateways |
-| **Load Balancing** | • Application Load Balancer (ALB)<br>• One listener<br>• Two target groups for blue/green deployment<br>• Security group for load balancer |
-| **Container Services** | • ECS cluster<br>• Gitmoxi ECS service and task definition<br>• Security group for Gitmoxi ECS task |
-| **IAM** | • IAM roles for Gitmoxi ECS task<br> |
-| **Logging** | • CloudWatch log group for Gitmoxi containers<br> |
-
-## GitHub token for GitOps
+```
+* GitHub token for GitOps
 
 Before deploying Gitmoxi for trial, in your GitHub account [create a developer token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens). You will need to grant `repo` and `read:packages` access.
 
 ![GitHub token access](/gh_token_access.png)
 
-Copy the token value and set the following `TF_VAR_` in a terminal for Terraform to pick these values. 
+Copy the token value and set the following environment variable, followed by the key AWS region and account variables. 
+
 ```bash
-export TF_VAR_github_token=<GITHUB_TOKEN>
+export GITHUB_TOKEN=<GITHUB_TOKEN>
+export AWS_REGION=<region_to_install_Gitmoxi>
+export AWS_ACCOUNT=<account_id_to_install_Gitmoxi>
 ```
-Set the AWS region and account to deploy the Gitmoxi trial software.
-```bash
-export TF_VAR_aws_region=<AWS_REGION>
-export TF_VAR_aws_account_id=<YOUR_AWS_ACCOUNT>
-```
-If you are using AWS Profile then set the below environment variable otherwise Terraform will likely give error. You can usually find the AWS Profile in `~/.aws/config` in the first line within the `[]` brackets.
+
+If you are using AWS Profile then set the `AWS_PROFILE` environment variable otherwise Terraform will likely give error. You can usually find the AWS Profile in `~/.aws/config` in the first line within the `[]` brackets.
 ```bash
 cat ~/.aws/config
 
@@ -62,47 +50,5 @@ cat ~/.aws/config
 export AWS_PROFILE=<YOUR AWS PROFILE>
 ```
 
-## Install Gitmoxi
-We will assume that you have downloaded the `gitmoxi.tf` and stored it in `gitmoxi-trial` directory (you can use any folder).
-```
-cd gitmoxi-trial
-terraform init
-terraform apply --auto-approve
-export GITMOXI_ENDPOINT_URL="http://$(terraform output -raw alb_endpoint)"
-export GITMOXI_TASK_IAM_ROLE="$(terraform output -raw task_iam_role)"
-echo $GITMOXI_ENDPOINT_URL
-```
-The Terraform output will give the ALB DNS where you can access the Gitmoxi frontend. Once `gitmoxi-svc` is running in the `gitmoxi` cluster in the region you specified, then you can should see below page at the ALB URL. The ECS task IAM role will be needed in the EKS test section; hence we have setup the environment variable `GITMOXI_TASK_IAM_ROLE`.
+Next, install Gitmoxi either on [ECS Fargate](./ecs_fg_install) or [EKS](./eks_install) whichever service best fits your needs and skills.
 
-![Gitmoxi UI](/gitmoxi_ui_page.png)
-
-> **Note** Wait for the `gitmoxi` service to be ready. You should see the above UI before proceeding with the next steps.
-
-## Repository for GitOps
-We have provided ECS and Lambda sample applications in [gitmoxi/gm-demo](https://github.com/gitmoxi/gm-demo) repository. This repository has two ECS services one each for testing rolling and blue/green deployment. And there are 3 Lambda functions to deploy and test with ELB, API-Gateway, and SQS event sources. We will create a private repository in your GitHub user account, copy these sample files, and perform deployments securely using the private repository.
-
-1. Create a **private** repository `gm-trial` in your <a href="https://github.com/new" target="_blank">GitHub account</a>
-2. Run following commands to copy the sample applications to your GitHub repository. 
-
-**Note** to set the correct GitHub user name in the environment variable.
-
-```bash
-export GITHUB_USER_NAME=<your-github-username>
-```
-Clone the `gm-demo` repository, copy the files and push to your `gm-trial` private repository.
-```
-git clone git@github.com:gitmoxi/gm-demo.git
-cd gm-demo
-git remote remove origin
-git remote add origin git@github.com:$GITHUB_USER_NAME/gm-trial
-git branch -M main
-git push -u -f origin main
-```
-Check that the new repository has folders named `ecs`, `eks`, and `lambda` in the GitHub web console. Now we can add your private GitHub repository to Gitmoxi for GitOps.
-
-```bash
-export GITMOXI_DEMO_REPO=https://github.com/$GITHUB_USER_NAME/gm-trial
-gmctl repo add -r $GITMOXI_DEMO_REPO -b main -a GITHUB_TOKEN
-gmctl repo get
-```
-You should see your `gm-demo` repository added. Next, we will test GitOps workflow with [ECS](/docs/getting_started_ecs)

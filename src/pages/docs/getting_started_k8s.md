@@ -17,6 +17,8 @@ This guide walks you through testing Gitmoxi’s GitOps-based deployment for Ama
 3. Performing a Blue/Green update to test changes
 4. Cleaning up test resources
 
+> **Note** if you installed Gitmoxi in EKS, then you have already created a cluster. You can skip directly to [Create EKS Test Workload](#create-eks-test-workload).
+
 ## Infrastructure Resources
 
 We've provided a sample Terraform setup to create the necessary infrastructure for EKS. Ensure your IAM role has the permissions to create the following resources in the `us-west-2` region:
@@ -47,37 +49,19 @@ export WORKING_DIR=$PWD
 
 ## Create Infrastructure for EKS Test Workloads
 
-Navigate to the Terraform directory for EKS:
+You should have set environment variable with the Gitmoxi task IAM role from the [Getting Started](./getting_started) section. The task role is needed to provide Gitmoxi access for creating and updating the EKS resources. When you installed Gitmoxi on ECS/Fargate in the *Getting Started* section you have alerady set the environment variable with this role. 
+
+Navigate to the Terraform directory for EKS.
 
 ```bash
 cd $WORKING_DIR/eks/core-infra/terraform
+export TF_VAR_gitmoxi_iam_role_arn=$GITMOXI_TASK_IAM_ROLE
 terraform init
 terraform plan
 terraform apply --auto-approve
 export EKS_CLUSTER_ARN=$(terraform output -raw cluster_arn)
 aws eks update-kubeconfig --region us-west-2 --name gitmoxi-eks
-```
-## Give Gitmoxi controller EKS access
-To give the Gitmoxi controller running in ECS Fargate access to deploy and update EKS resources, add its task IAM role to the `aws-auth` configmap in the `kube-system` namespace.
-```yaml
-apiVersion: v1
-data:
-  mapRoles: |
-    - rolearn: arn:aws:iam::381491902283:role/GitmoxiServiceTaskRole-d70e2906b67d3ee1
-      username: gitmoxi-controller
-      groups:
-        - system:masters
-    ...
-    ...
-```
-
-```bash
-cd $WORKING_DIR/eks/core-infra/terraform
-./eks_access.sh $GITMOXI_TASK_IAM_ROLE
-```
-
-> **Note:** In production you will use [AWS EKS access entries](https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html) with least privileges access. 
-
+``` 
 ## Create EKS Test Workload
 
 We’ll now deploy a sample application using Gitmoxi by committing Kubernetes manifests. The `awk` command is replacing placeholder cluster arn in `deployment_definition.yaml` with your EKS cluster arn that you created above. 
@@ -231,4 +215,6 @@ terraform destroy --auto-approve
 
 🎉 You have successfully deployed, updated, and managed a Kubernetes workload on Amazon EKS using Gitmoxi GitOps!
 
-Also, checkout Gitmoxi GitOps for [ECS](./getting_started_ecs) and [Lambda](./getting_started_lambda). 
+Also, checkout:
+* [Testing ECS GitOps with Gitmoxi](./getting_started_ecs)
+* [Testing Lambda GitOps with Gitmoxi](./getting_started_lambda)
