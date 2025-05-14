@@ -4,17 +4,30 @@ navtitle: "Uninstall Gitmoxi"
 layout: ../../layouts/MdLayout.astro
 ---
 
-After you are doing testing Gitmoxi you can remove it using `terraform destroy`. If you are curious about the internal architecture of the Gitmoxi trial version then we have provided additional details below as well. 
-
-Go to the `gitmoxi-trial` directory (or other directory name) where you downloaded and stored the `gitmoxi.tf` trial Terraform manifest
+## Uninstall Gitmoxi from ECS Fargate 
+After you are done testing Gitmoxi you can remove it using `terraform destroy`. 
+Go to the `gitmoxi-trial` directory, which is the directory obtained by unzipping the downloaded package received in email. 
 
 ```bash
 cd gitmoxi-trial
+cd ecs-fargate
 terraform destroy --auto-approve
 ```
 
+## Uninstall Gitmoxi from EKS
+If you installed Gitmoxi on EKS then we will first delete all the Gitmoxi service components from the cluster and then delete the cluster itself.
+
+```bash
+cd gitmoxi-trial
+cd eks
+kubectl delete -k install_gitmoxi/
+cd create_cluster
+terraform destroy --auto-approve
+```
+> **Note** make sure to delete any other test applications that you deployed otherwise the terraform destroy will fail because the network interfaces will be in use by the applications pods. 
+
 ## Gitmoxi architecture for trial deployment
-For trial, we will deploy all the containers needed for Gitmoxi in a single ECS task belonging to an ECS service. Below picture captures the overall architecture for the trial deployment that will be created by Terraform. 
+For trial, we will deploy all the containers needed for Gitmoxi in a single ECS task (or EKS pod). Below picture captures the overall architecture for the trial deployment that will be created by Terraform. The same architecture applies to EKS as well with ingress controller handling the traffic routing path with ALB. 
 
 ![Gitmoxi Trial Architecture](/gitmoxi-trial-arch.png)
 

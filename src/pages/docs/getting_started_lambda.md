@@ -281,4 +281,6 @@ cd $WORKING_DIR/lambda/core-infra/terraform
 terraform destroy --auto-approve
 ```
 
-Also, checkout Gitmoxi GitOps for [ECS](./getting_started_ecs) and [EKS](./getting_started_k8s). 
+Also, checkout:
+* [Testing ECS GitOps with Gitmoxi](./getting_started_ecs)
+* [Testing EKS GitOps with Gitmoxi](./getting_started_k8s)

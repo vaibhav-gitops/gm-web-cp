@@ -5,7 +5,7 @@ layout: ../../layouts/MdLayout.astro
 ---
 
 # Introducing Gitmoxi: The Future of Unified Deployment
-Gitmoxi is the industry's first unified deployment controller designed for **Amazon ECS**, **AWS Fargate**, and **AWS Lambda**, powered by the **GitOps** paradigm. In the GitOps model, deployment artifacts such as service configurations, task definitions, and Lambda function definitions are versioned and managed within Git repositories. When these files are modified and committed, **Gitmoxi** automatically detects changes and triggers appropriate actions, such as creating or updating services and functions in ECS or Lambda. 
+Gitmoxi is the industry's first unified deployment controller designed for **Amazon EKS**, **Amazon ECS**, **AWS Fargate**, and **AWS Lambda**, powered by the **GitOps** paradigm. In the GitOps model, deployment artifacts such as service configurations, task definitions, and Lambda function definitions are versioned and managed within Git repositories. When these files are modified and committed, **Gitmoxi** automatically detects changes and triggers appropriate actions, such as creating or updating services and functions in ECS or Lambda. 
 
 Gitmoxi can orchestrate deployments across multiple clusters and regions simultaneously. It integrates deployment artifact file changes with Git repository workflows, offering an intuitive, unified solution that understands the intricacies of each AWS service. Gitmoxi also supports advanced deployment strategies such as **rolling updates**, **blue-green deployments**, and **canary deployments**, with flexible traffic shifting patterns to meet the needs of modern cloud applications.
 
