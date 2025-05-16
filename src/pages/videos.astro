@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Cta from "../components/cta.astro";
+import VideoTile from "@components/video-tile.astro";
+
+const videos = await getCollection("videos", ({ data }) => {
+    return data.publishDate < new Date();
+});
+
+const sortedVideos = videos.sort((a, b) =>
+    b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<Layout title="Videos">
+    <Container>
+        <Sectionhead>
+            <Fragment slot="title">Video Library</Fragment>
+            <Fragment slot="desc">Learn more about Gitmoxi</Fragment>
+        </Sectionhead>
+        <main class="mt-16 mb-20 px-10">
+           <div class="grid max-w-screen-xl sm:grid-cols-2 md:grid-cols-3 gap-12 lg:gap-15">
+               {
+                   sortedVideos.map((video) => (
+                           <VideoTile title={video.data.title} videoId={video.data.videoId} />
+                   ))
+               }
+           </div>
+        </main>
+    </Container>
+    <Cta />
+</Layout>
+
+<style>
+    /* Ensure consistent grid layout */
+    .container {
+        max-width: 1200px;
+    }
+</style>
