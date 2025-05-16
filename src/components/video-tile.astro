@@ -1,18 +1,21 @@
 ---
-// Props passed in from the parent (title, videoId)
 const { title, videoId } = Astro.props;
+const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 ---
 
-<li class="video-tile w-full">
-    <div class="aspect-video rounded-xl overflow-hidden bg-black shadow-md">
-        <iframe
-                src={`https://www.youtube-nocookie.com/embed/${videoId}?modestbranding=1&rel=0&showinfo=0&color=white&iv_load_policy=3&fs=1`}
-                title={title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                class="w-full h-full"
+<div class="video-tile w-full">
+    <div class="video-container aspect-video rounded-xl overflow-hidden bg-black shadow-md relative" id={`container-${videoId}`}>
+        <!-- Static thumbnail with play button -->
+        <img
+                src={thumbnailUrl}
+                alt={`Thumbnail for ${title}`}
+                class="absolute top-0 left-0 w-full h-full object-cover"
                 loading="lazy"
+                id={`thumb-${videoId}`}
         />
+        <div class="play-button-overlay" id={`overlay-${videoId}`}>
+            <span class="play-icon"></span>
+        </div>
     </div>
     <div class="mt-3 px-2">
         <h2 class="text-md md:text-lg font-semibold text-center leading-snug">
@@ -21,11 +24,84 @@ const { title, videoId } = Astro.props;
     </div>
 
     <style>
-        /* Custom styles to handle the YouTube player */
+        .video-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .play-button-overlay:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .play-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .play-button-overlay:hover .play-icon {
+            transform: scale(1.1);
+        }
+
+        .play-icon::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            margin-left: 5px;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid white;
+        }
+
         iframe {
             width: 100%;
             height: 100%;
             border: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
-</li>
+
+    <script define:vars={{ videoId }}>
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById(`overlay-${videoId}`);
+            const container = document.getElementById(`container-${videoId}`);
+            const thumb = document.getElementById(`thumb-${videoId}`);
+
+            overlay.addEventListener('click', () => {
+                // Create iframe dynamically on click to avoid initial branding
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+                iframe.className = 'w-full h-full';
+
+                // Replace the thumbnail and overlay
+                container.innerHTML = '';
+                container.appendChild(iframe);
+            });
+        });
+    </script>
+</div>
