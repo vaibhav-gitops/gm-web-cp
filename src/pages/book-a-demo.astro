@@ -1,0 +1,38 @@
+---
+import { Icon } from "astro-icon/components";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import BookDemoForm from "@components/bookdemoform.astro"; // <--- New form component
+import Cta from "../components/cta.astro";
+---
+
+<Layout title="Book a Demo">
+    <Container>
+        <Sectionhead>
+            <Fragment slot="title">Book a Demo</Fragment>
+            <Fragment slot="desc">
+                Discover how Gitmoxi can streamline your deployments. Schedule a personalized walkthrough with our team today.
+            </Fragment>
+        </Sectionhead>
+
+        <div class="grid md:grid-cols-2 gap-10 mx-auto max-w-4xl mt-16">
+            <div>
+                <h2 class="font-medium text-2xl text-gray-800">Schedule a Live Demo</h2>
+                <p class="text-lg leading-relaxed text-slate-500 mt-3">
+                    Fill out the form and our team will get back to you shortly to schedule your demo.
+                </p>
+                <div class="mt-5">
+                    <div class="flex items-center mt-2 space-x-2 text-gray-600">
+                        <!--<Icon class="text-gray-400 w-4 h-4" name="uil:envelope" />-->
+                        <!--<a href="mailto:sales@gitmoxi.io">sales@gitmoxi.io</a>-->
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-100 p-5 md:p-8 rounded-xl mb-10">
+                <BookDemoForm />
+            </div>
+        </div>
+    </Container>
+    <Cta />
+</Layout>
