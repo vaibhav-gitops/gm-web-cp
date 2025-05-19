@@ -50,5 +50,5 @@ cat ~/.aws/config
 export AWS_PROFILE=<YOUR AWS PROFILE>
 ```
 
-Next, install Gitmoxi either on [ECS Fargate](./ecs_fg_install) or [EKS](./eks_install) whichever service best fits your needs and skills.
+Next, install Gitmoxi either on [ECS Fargate](/docs/ecs_fg_install) or [EKS](/docs/eks_install) whichever service best fits your needs and skills.
 

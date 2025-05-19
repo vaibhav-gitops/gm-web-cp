@@ -6,7 +6,7 @@ layout: ../../layouts/MdLayout.astro
 # Install Gitmoxi on EKS
 
 ## Prerequisites
-Make sure you have done all the steps in the [Getting Started](./getting_started) section and set the following environment variables which are required for installing Gitmoxi on EKS.
+Make sure you have done all the steps in the [Getting Started](/docs/getting_started) section and set the following environment variables which are required for installing Gitmoxi on EKS.
 ```
 AWS_REGION
 AWS_ACCOUNT
@@ -143,4 +143,4 @@ http://k8s-gitmoxi-xxxxx-xxxxx.us-west-2.elb.amazonaws.com
 
 ![Gitmoxi UI](/gitmoxi_ui_page.png)
 
-Next, we will [add a GitHub repository](./repo_setup) to Gitmoxi to test the GitOps workflow.
+Next, we will [add a GitHub repository](/docs/repo_setup) to Gitmoxi to test the GitOps workflow.

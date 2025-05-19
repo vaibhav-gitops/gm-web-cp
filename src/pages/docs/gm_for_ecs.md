@@ -170,7 +170,7 @@ These settings control how Gitmoxi transitions between old and new task revision
 ```
 </details>
 
-For complete details on deployment configuration options, see the [ECS Deployment Definition Guide](./ecs_deployment_definition).
+For complete details on deployment configuration options, see the [ECS Deployment Definition Guide](/docs/ecs_deployment_definition).
 
 ## Input File
 
@@ -219,7 +219,7 @@ The ECS deployment input JSON file (`_input.json`) provides substitution values 
 ```
 </details>
 
-For more details on parameter substitution, see the [Input Files Guide](./input_files).
+For more details on parameter substitution, see the [Input Files Guide](/docs/input_files).
 
 ## Gitmoxi GitOps for ECS
 
@@ -415,6 +415,6 @@ The circuit breaker prevents wasteful deployment attempts when tasks repeatedly 
 ## Additional Resources
 
 - <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" target="_blank">Amazon ECS Documentation</a>
-- <a href="./ecs_deployment_definition" target="_blank">Gitmoxi ECS Deployment Definition Guide</a>
+- <a href="/docs/ecs_deployment_definition" target="_blank">Gitmoxi ECS Deployment Definition Guide</a>
 <br>
-- <a href="./input_files" target="_blank">Input Files Guide</a>
+- <a href="/docs/input_files" target="_blank">Input Files Guide</a>

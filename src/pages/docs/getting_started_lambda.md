@@ -6,7 +6,7 @@ layout: ../../layouts/MdLayout.astro
 
 # Lambda Deployments with Gitmoxi GitOps
 
-> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](./getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
+> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](/docs/getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
 
 This guide helps you test the deployment of AWS Lambda functions with GitMoxi. It sets up the necessary infrastructure to create and deploy Lambda functions while also testing their end-to-end integration with API Gateway, Elastic Load Balancer (ELB), and Amazon SQS. Additionally, we will test blue-green deployments with Lambda and incremental traffic shifting.
 
@@ -282,5 +282,5 @@ terraform destroy --auto-approve
 ```
 
 Also, checkout:
-* [Testing ECS GitOps with Gitmoxi](./getting_started_ecs)
-* [Testing EKS GitOps with Gitmoxi](./getting_started_k8s)
+* [Testing ECS GitOps with Gitmoxi](/docs/getting_started_ecs)
+* [Testing EKS GitOps with Gitmoxi](/docs/getting_started_k8s)

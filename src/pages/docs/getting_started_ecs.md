@@ -5,7 +5,7 @@ layout: ../../layouts/MdLayout.astro
 ---
 # ECS Deployments with Gitmoxi GitOps
 
-> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](./getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
+> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](/docs/getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
 
 ## Overview
 
@@ -27,7 +27,7 @@ We've provided a sample Terraform file to create the required infrastructure for
 
 > **Note:** The default region is `us-west-2`. You can modify this in the `main.tf` file if needed.
 
-Start by cloning your `gm-trial` private repository that you created in the [Getting Started](./getting_started) section. Below commands clone it in your `HOME` directory but you can clone anywhere. 
+Start by cloning your `gm-trial` private repository that you created in the [Getting Started](/docs/getting_started) section. Below commands clone it in your `HOME` directory but you can clone anywhere. 
 
 ```bash
 cd ~
@@ -234,7 +234,7 @@ curl -s "$(jq -r '.alb_endpoint.value' ecs/core-infra/terraform/terraform_output
 
 You should see the output flip between `It Works` message from the new `httpd` containers to the `nginx` welcome message from the old `nginx` containers. You can also open the AWS console, go to the ALB, and see that the target group weights are increasing linearly by 20%. Once the whole traffic is shifted the old tasks with `nginx` container will be deleted. The full traffic is now served by the new tasks with new container. 
 
-[Gitmoxi ECS blue/green deployment documentation](./gm_for_ecs) provides further details on features such as different traffic shifting patterns, multiple target group support, controls such as shift percent and shift interval, alarms to monitor and rollback.
+[Gitmoxi ECS blue/green deployment documentation](/docs/gm_for_ecs) provides further details on features such as different traffic shifting patterns, multiple target group support, controls such as shift percent and shift interval, alarms to monitor and rollback.
 
 ## Delete the ECS blue/green update test service
 You can delete the `bg-nginx-svc` service using command below. Please adjust the attributes if you have changed them in Terraform.
@@ -258,6 +258,6 @@ cd $WORKING_DIR
 ```
 
 Also, checkout:
-* [Testing EKS GitOps with Gitmoxi](./getting_started_k8s)
-* [Testing Lambda GitOps with Gitmoxi](./getting_started_lambda)
+* [Testing EKS GitOps with Gitmoxi](/docs/getting_started_k8s)
+* [Testing Lambda GitOps with Gitmoxi](/docs/getting_started_lambda)
 
