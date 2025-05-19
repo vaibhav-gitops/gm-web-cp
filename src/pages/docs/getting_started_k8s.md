@@ -6,7 +6,7 @@ layout: ../../layouts/MdLayout.astro
 
 # EKS Deployments with Gitmoxi GitOps
 
-> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](./getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
+> **⚠️ IMPORTANT:** Before proceeding, complete all steps in the [Getting Started](/docs/getting_started) section to install Gitmoxi, create your private **`gm-trial`** repository, and add that repository to Gitmoxi.
 
 ## Overview
 
@@ -216,5 +216,5 @@ terraform destroy --auto-approve
 🎉 You have successfully deployed, updated, and managed a Kubernetes workload on Amazon EKS using Gitmoxi GitOps!
 
 Also, checkout:
-* [Testing ECS GitOps with Gitmoxi](./getting_started_ecs)
-* [Testing Lambda GitOps with Gitmoxi](./getting_started_lambda)
+* [Testing ECS GitOps with Gitmoxi](/docs/getting_started_ecs)
+* [Testing Lambda GitOps with Gitmoxi](/docs/getting_started_lambda)

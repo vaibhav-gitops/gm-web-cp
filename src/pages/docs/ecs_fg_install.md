@@ -5,7 +5,7 @@ layout: ../../layouts/MdLayout.astro
 ---
 # Install Gitmoxi on ECS Fargate
 ## Prerequisites
-Make sure you have done all the steps in the [Getting Started](./getting_started) section and set the following environment variables which are required for installing Gitmoxi on ECS Fargate.
+Make sure you have done all the steps in the [Getting Started](/docs/getting_started) section and set the following environment variables which are required for installing Gitmoxi on ECS Fargate.
 ```
 AWS_REGION
 AWS_ACCOUNT
@@ -51,4 +51,4 @@ The Terraform output will give the ALB DNS where you can access the Gitmoxi fron
 Wait for the `gitmoxi` service to be ready. You should see the below UI at `$GITMOXI_ENDPOINT_URL` before proceeding with the next steps.
 ![Gitmoxi UI](/gitmoxi_ui_page.png)
 
-Next, we will [add a GitHub repository](./repo_setup) to Gitmoxi to test the GitOps workflow.
+Next, we will [add a GitHub repository](/docs/repo_setup) to Gitmoxi to test the GitOps workflow.

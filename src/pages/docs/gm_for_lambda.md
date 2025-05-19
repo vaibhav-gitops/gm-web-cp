@@ -27,10 +27,10 @@ The Lambda function definition JSON file (`_lambdadef.json`) can contain all the
 Lambda functions are invoked either by a push-based source such as API-GW, ALB; or pull-based sources (or pollers) such as SQS, Amazon Managed Service for Kafka (MSK). The [event source mapping section](./lambda_event_source_mapping) describes how to define these invocation sources.
 
 ## Deployment definition file
-The Lambda deployment definition JSON file (`_depdef.json`) contains various settings such as traffic shifting, stability checks which are used by Gitmoxi during Lambda service deployment. These settings are described in more details in [the next section](./lambda_deployment_definition).
+The Lambda deployment definition JSON file (`_depdef.json`) contains various settings such as traffic shifting, stability checks which are used by Gitmoxi during Lambda service deployment. These settings are described in more details in the [Lambda Deployment Definition](/docs/lambda_deployment_definition).
 
 ## Input file
-The Lambda deployment input JSON file (`_input.json`) provides substitution values when you want to parameterize the attributes in function, event source, or deployment definition files. These files are explained in the [input files section](./input_files).
+The Lambda deployment input JSON file (`_input.json`) provides substitution values when you want to parameterize the attributes in function, event source, or deployment definition files. These files are explained in the [input files section](/docs/input_files).
 
 Let us understand how the changes to these files influence associated ECS service objects.
 ## Gitmoxi GitOps for Lambda
@@ -54,10 +54,3 @@ Gitmoxi deletes an active Lambda function **only** when the associated function 
     * CANARY: Shifts traffic in two phases. E.g. First shift 20%, wait for a configured time interval and if no alarm triggers then shift the remaining 80%.
     * LINEAR: Shifts traffic in equal increments over multiple intervals. E.g. a LINEAR shift of 20% will result in 20%, 40%, 60%, 80%, and 100% traffic shift pattern. Gitmoxi will wait for the configured time interval after each percent shift and only increase the percent if there are no alarm triggers. 
     * ALL_AT_ONCE: Shifts 100% of traffic to the new tasks and if there is any alarm triggers during the wait time then rever traffic to old tasks. 
-
-## Gitmoxi deployment stability checks and circuit breaker
-For every deployment, Gitmoxi checks that the desired number of tasks get to running state. Gitmoxi stability check configuration allows you to specify a timeout and polling interval to call the ECS APIs and check for task status. If all tasks don't become stable within the specified timeout then the deployment is considered failed. You can specify either an absolute timeout or specify it based on desired number of tasks. If a service task takes longer to startup or if there are too many replica counts, then it might be better to provide the timeout in terms of desired count. For example, if your service has desired count of 10, you can either specify absolute time, say 600 seconds as the timeout, or specify 120 seconds per task for the timeout setting which will make the absolute time 1200 seconds (120 x 10). If both absolute and per task values are specified then Gitmoxi will take the max of the two values and do the stability check in that time window.
-
-Gitmoxi also has a deployment circuit breaker which will stop and rollback the deployment if number of new task failures exceeds a configured threshold. For this as well, you can either provide an absolute threshold or specify it as a percent of the desired count. For example, if your service has desired count of 10, then you can specify 5 as absolute failure threshold. Or, you can specify 30% task failures, which will set the threshold as 3 failures (30% * 10). If both values are provided Gitmoxi takes the minimum of the two values as the threshold.
-
-All the deployment configurations such as traffic shifting, stability checks, deployment circuit breaker are specified in the ECS deployment definition (`_depdef.json`) file, which is described in more details in [the respective section](./ecs_deployment_definition).

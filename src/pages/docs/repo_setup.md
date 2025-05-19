@@ -47,6 +47,6 @@ gmctl repo get
 You should see your `gm-demo` repository added. 
 
 Next, you can test any or all of the following services for GitOps-based deployments.
-* [Testing ECS GitOps with Gitmoxi](./getting_started_ecs)
-* [Testing EKS GitOps with Gitmoxi](./getting_started_k8s)
-* [Testing Lambda GitOps with Gitmoxi](./getting_started_lambda)
+* [Testing ECS GitOps with Gitmoxi](/docs/getting_started_ecs)
+* [Testing EKS GitOps with Gitmoxi](/docs/getting_started_k8s)
+* [Testing Lambda GitOps with Gitmoxi](/docs/getting_started_lambda)
