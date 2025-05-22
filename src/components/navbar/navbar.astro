@@ -31,7 +31,9 @@ const menuitems = [
 ];
 ---
 
-<script src="https://unpkg.com/alpinejs" defer></script>
+<!-- No Alpine script needed anymore -->
+<!-- Include vanilla JS -->
+<script src="/menu-toggle.js" defer></script>
 
 <StickyHeader
     class="sticky top-0 border-b z-10 transition-all bg-custom-blue"
@@ -41,9 +43,9 @@ const menuitems = [
 >
   <Container>
     <div
-        x-data="{ open: false }"
+        id="menu-container"
         class="flex flex-col lg:flex-row justify-between relative z-10"
-        transition:animate="none">
+    >
       <Astronav>
         <div class="flex items-center">
           <a href="/" class="flex w-full lg:w-auto items-center">
@@ -54,41 +56,57 @@ const menuitems = [
                 loading="lazy"
                 class="h-9 w-auto mr-1 max-w-sm md:max-w-lg lg:max-w-md"
             />
-            <span class="font-bold text-white" style="font-size: 1.6rem; font-weight: 500; font-family: 'Nunito', Arial, sans-serif;">Gitmoxi</span>
+            <span
+                class="font-bold text-white"
+                style="font-size: 1.6rem; font-weight: 500; font-family: 'Nunito', Arial, sans-serif;"
+            >
+              Gitmoxi
+            </span>
           </a>
 
           <!-- Hamburger button for mobile -->
           <button
-              @click="open = !open"
+              id="menu-toggle"
               class="lg:hidden text-white focus:outline-none"
               aria-label="Toggle Menu"
           >
             <svg
-                x-show="!open"
+                id="icon-open"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"/>
+              <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
             <svg
-                x-show="open"
+                id="icon-close"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
+                class="h-6 w-6 hidden"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"/>
+              <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
-    </div>
+        </div>
 
-        <MenuItems :class="open ? 'flex flex-col w-full mt-2' : 'hidden lg:flex w-full lg:w-auto mt-2 lg:mt-0'">
+        <MenuItems
+            id="menu-items"
+            class="hidden lg:flex w-full lg:w-auto mt-2 lg:mt-0 flex-col lg:flex-row"
+        >
           <ul class="flex flex-col lg:flex-row lg:gap-3">
             {
               menuitems.map((item, index) => (
@@ -106,7 +124,8 @@ const menuitems = [
                           <a
                               href={item.path}
                               class="flex lg:px-3 py-2 text-custom-light-gray hover:text-custom-gray focus-visible:ring-2 focus-visible:ring-offset-2 transition focus-visible:ring-gray-300 focus-visible:outline-none focus-visible:shadow-outline-gray rounded-full"
-                              style="font-size: 1rem">
+                              style="font-size: 1rem"
+                          >
                             {item.title}
                           </a>
                         </li>
@@ -117,22 +136,26 @@ const menuitems = [
           </ul>
         </MenuItems>
       </Astronav>
+
       <div>
         <div class="hidden lg:flex items-center gap-4">
           <Link
               href="/book-a-demo"
               size="sm"
-              class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors">
+              class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors"
+          >
             <span class="text-white">Book a Demo</span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                class="w-4 h-4 mt-px group-hover:translate-x-1 transition-transform">
+                class="w-4 h-4 mt-px group-hover:translate-x-1 transition-transform"
+            >
               <path
                   fill-rule="evenodd"
                   d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"></path>
+                  clip-rule="evenodd"
+              ></path>
             </svg>
           </Link>
         </div>
