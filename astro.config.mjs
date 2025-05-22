@@ -17,4 +17,23 @@ export default defineConfig({
     sitemap(),
     react(),
   ],
+  vite: {
+    build: {
+      assetsInlineLimit: 0, // Prevent any asset inlining
+      rollupOptions: {
+        output: {
+          // Ensure scripts are kept as separate files
+          manualChunks: undefined,
+          assetFileNames: 'assets/[name].[hash][extname]',
+          chunkFileNames: 'assets/[name].[hash].js',
+          entryFileNames: 'assets/[name].[hash].js'
+        }
+      }
+    }
+  },
+  build: {
+    inlineStylesheets: 'never', // Never inline CSS
+    // Ensure external scripts stay external
+    assets: 'assets'
+  }
 });

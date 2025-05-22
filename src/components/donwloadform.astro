@@ -743,8 +743,8 @@ let formSuccess = false;
 <!--    }-->
 
 <div class="download-container flex justify-center items-center p-2">
-    <div class="download-card bg-white rounded-lg shadow-md p-5 max-w-full max-h-screen overflow-y-auto">
-        <form method="POST" class="download-form flex flex-col gap-3" id="downloadForm">
+    <div class="download-card bg-white rounded-lg shadow-md p-5 max-w-lg w-full max-h-screen overflow-y-auto" style="max-height: 90vh;">
+        <form method="POST" class="download-form flex flex-col gap-3" id="downloadForm" data-form-type="download">
             <div class="form-group flex flex-col gap-2">
                 <h4 class="my-2 text-sm font-medium">Email Address *</h4>
                 <input
@@ -763,7 +763,7 @@ let formSuccess = false;
                 <h4 class="my-2 text-sm font-medium">End User License Agreement</h4>
                 <div class="eula-scroll-box overflow-y-auto p-2 border border-gray-300 rounded bg-gray-50 text-xs"
                      style="height: 350px;" id="eulaScrollBox">
-                        <pre class="whitespace-pre-wrap font-inherit m-0">{eulaText}</pre>
+                    <pre class="whitespace-pre-wrap font-inherit m-0">{eulaText}</pre>
                 </div>
                 <div class="eula-checkbox-container flex items-center gap-3 mt-3">
                     <input
@@ -781,13 +781,14 @@ let formSuccess = false;
             </div>
 
             <button type="submit"
-                    class="download-button bg-teal-custom text-white border-none rounded mt-2 px-2 py-3 text-base font-medium cursor-pointer transition-all duration-200 hover:bg-teal-custom-hover disabled:opacity-60 disabled:cursor-not-allowed"
+                    class="download-button bg-teal-600 hover:bg-teal-700 text-white border-none rounded mt-2 px-2 py-3 text-base font-medium cursor-pointer transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed w-full"
                     id="downloadButton"
                     disabled>
                 <span id="buttonText">Send Download Link</span>
-                <span class="spinner hidden inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></span>
+                <span class="spinner hidden inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" id="spinner"></span>
             </button>
         </form>
     </div>
 </div>
-<script src="/download-form.js" defer></script>
+
+<script src="/contact-form.js" type="module" defer></script>
