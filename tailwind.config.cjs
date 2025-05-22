@@ -17,7 +17,9 @@ module.exports = {
         'custom-blue': '#0A1822',
         'custom-light-gray':'#cbdfec',
         'custom-gray': '#6B8DA1',
-        'custom-green': '#7EDBD7'
+        'custom-green': '#7EDBD7',
+        'teal-custom': '#00897B',
+        'teal-custom-hover': '#00796B',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

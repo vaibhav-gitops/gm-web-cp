@@ -5,6 +5,7 @@ import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
 import Modal from '../components/ui/modal.astro';
 import DownloadForm from '../components/donwloadform.astro';
+import GoogleAnalytics from '../components/google-analytics.astro'; // New component
 
 interface Props {
   title?: string;
@@ -12,32 +13,19 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const resolvedImageWithDomain = new URL(
-    "/opengraph.png",
-    Astro.site
-).toString();
+const resolvedImageWithDomain = new URL("/opengraph.png", Astro.site).toString();
 const { title, footerMargin = false } = Astro.props;
 
-const makeTitle = title
-    ? title
-    : "Gitmoxi";
+const makeTitle = title ? title : "Gitmoxi";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-W23EDZDX8Q"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-W23EDZDX8Q');
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" href="/favicon.png" />
+
   <SEO
       title={makeTitle}
       description="Supercharge your ECS and Lambda Deployments with Gitmoxi."
@@ -59,20 +47,16 @@ const makeTitle = title
         },
       }}
   />
-  <style is:global>
-    img {
-      content-visibility: auto;
-    }
-    details > summary.list-none::-webkit-details-marker,
-    details > summary.list-none::marker {
-      display: none;
-    }
-  </style>
+
+  <GoogleAnalytics />
+
   <ViewTransitions />
 </head>
-<body>
+<body class="bg-white text-gray-900 antialiased">
 <Navbar />
-<slot />
+<main>
+  <slot />
+</main>
 <Footer margin={footerMargin} />
 </body>
 </html>

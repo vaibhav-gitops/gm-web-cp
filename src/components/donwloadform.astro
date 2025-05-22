@@ -109,553 +109,685 @@ let formError = '';
 let formSuccess = false;
 ---
 
-<div class="download-container">
-    <div class="download-card">
-        {!formSuccess && (
-                <form method="POST" class="download-form" id="downloadForm">
-                    <div class="form-group">
-                        <h4>Email Address *</h4>
-                        <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="your@email.com"
-                                required
-                        />
-                        <span id="email-error" class="error-message hidden"></span>
-                    </div>
+<!--<div class="download-container">-->
+<!--    <div class="download-card">-->
+<!--        {!formSuccess && (-->
+<!--                <form method="POST" class="download-form" id="downloadForm">-->
+<!--                    <div class="form-group">-->
+<!--                        <h4>Email Address *</h4>-->
+<!--                        <input-->
+<!--                                type="email"-->
+<!--                                id="email"-->
+<!--                                name="email"-->
+<!--                                placeholder="your@email.com"-->
+<!--                                required-->
+<!--                        />-->
+<!--                        <span id="email-error" class="error-message hidden"></span>-->
+<!--                    </div>-->
 
-                    <div class="eula-container">
-                        <h4>End User License Agreement</h4>
-                        <div class="eula-scroll-box" id="eulaScrollBox">
-                            <pre>{eulaText}</pre>
-                        </div>
-                        <div class="eula-checkbox-container">
-                            <input
-                                    type="checkbox"
-                                    id="acceptTerms"
-                                    name="acceptTerms"
-                                    required
-                                    disabled
-                            />
-                            <h4>
-                                I have read and accept the End User License Agreement
-                            </h4>
-                        </div>
-                    </div>
+<!--                    <div class="eula-container">-->
+<!--                        <h4>End User License Agreement</h4>-->
+<!--                        <div class="eula-scroll-box" id="eulaScrollBox">-->
+<!--                            <pre>{eulaText}</pre>-->
+<!--                        </div>-->
+<!--                        <div class="eula-checkbox-container">-->
+<!--                            <input-->
+<!--                                    type="checkbox"-->
+<!--                                    id="acceptTerms"-->
+<!--                                    name="acceptTerms"-->
+<!--                                    required-->
+<!--                                    disabled-->
+<!--                            />-->
+<!--                            <h4>-->
+<!--                                I have read and accept the End User License Agreement-->
+<!--                            </h4>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    {formError && <div class="error-message">{formError}</div>}
+<!--                    {formError && <div class="error-message">{formError}</div>}-->
 
-                    <button type="submit" class="download-button" id="downloadButton" disabled>
-                        <span id="buttonText">Send Download Link</span>
-                        <span class="spinner hidden" id="spinner"></span>
-                    </button>
-                </form>
-        )}
+<!--                    <button type="submit" class="download-button" id="downloadButton" disabled>-->
+<!--                        <span id="buttonText">Send Download Link</span>-->
+<!--                        <span class="spinner hidden" id="spinner"></span>-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--        )}-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // Self-executing function for modal, EULA, and form submission functionality-->
+<!--    (function() {-->
+<!--        // ====== STATE TRACKING ======-->
+<!--        let modalInitialized = false;-->
+<!--        let eulaInitialized = false;-->
+<!--        let formSubmitInitialized = false;-->
+
+<!--        // ====== MODAL FUNCTIONALITY ======-->
+<!--        function initializeModalHandlers() {-->
+<!--            if (modalInitialized) return;-->
+
+<!--            function openModal() {-->
+<!--                const modal = document.querySelector('#downloadModal');-->
+<!--                if (modal) {-->
+<!--                    modal.style.display = 'block';-->
+<!--                    document.documentElement.style.overflow = 'hidden';-->
+<!--                    document.body.style.overflow = 'hidden';-->
+<!--                    document.body.style.touchAction = 'none';-->
+
+<!--                    // Reset and initialize EULA logic when modal opens-->
+<!--                    resetAndInitializeEULALogic();-->
+<!--                }-->
+<!--            }-->
+
+<!--            function closeModal() {-->
+<!--                const modal = document.querySelector('#downloadModal');-->
+<!--                if (modal) {-->
+<!--                    modal.style.display = 'none';-->
+<!--                    document.documentElement.style.overflow = '';-->
+<!--                    document.body.style.overflow = '';-->
+<!--                    document.body.style.touchAction = '';-->
+<!--                }-->
+<!--            }-->
+
+<!--            // Event delegation for download links-->
+<!--            document.body.addEventListener('click', (e) => {-->
+<!--                // Check for download links-->
+<!--                if (e.target && e.target.id === 'downloadLink') {-->
+<!--                    e.preventDefault();-->
+<!--                    openModal();-->
+<!--                }-->
+
+<!--                // Check for close button clicks-->
+<!--                if (e.target && (-->
+<!--                    e.target.classList.contains('close-modal') ||-->
+<!--                    (e.target.parentElement && e.target.parentElement.classList.contains('close-modal'))-->
+<!--                )) {-->
+<!--                    closeModal();-->
+<!--                }-->
+
+<!--                // Close when clicking outside modal content-->
+<!--                if (e.target && e.target.id === 'downloadModal') {-->
+<!--                    closeModal();-->
+<!--                }-->
+<!--            });-->
+
+<!--            // Handle touch events-->
+<!--            document.body.addEventListener('touchstart', (e) => {-->
+<!--                if (e.target && e.target.id === 'downloadLink') {-->
+<!--                    e.preventDefault();-->
+<!--                    openModal();-->
+<!--                }-->
+<!--            });-->
+
+<!--            // Set up modal-specific event listeners-->
+<!--            const modal = document.querySelector('#downloadModal');-->
+<!--            if (modal) {-->
+<!--                const closeButton = modal.querySelector('.close-modal');-->
+<!--                if (closeButton) {-->
+<!--                    closeButton.addEventListener('click', closeModal);-->
+<!--                }-->
+
+<!--                modal.addEventListener('click', (e) => {-->
+<!--                    if (e.target === modal) {-->
+<!--                        closeModal();-->
+<!--                    }-->
+<!--                });-->
+<!--            }-->
+
+<!--            modalInitialized = true;-->
+<!--        }-->
+
+<!--        // ====== EULA FUNCTIONALITY ======-->
+<!--        function resetAndInitializeEULALogic() {-->
+<!--            const downloadForm = document.getElementById('downloadForm');-->
+<!--            if (!downloadForm) {-->
+<!--                return false;-->
+<!--            }-->
+
+<!--            // Clear the initialization flag to force reinitialization-->
+<!--            downloadForm.removeAttribute('data-initialized');-->
+
+<!--            // Get form elements-->
+<!--            const eulaScrollBox = document.getElementById('eulaScrollBox');-->
+<!--            const acceptTermsCheckbox = document.getElementById('acceptTerms');-->
+<!--            const downloadButton = document.getElementById('downloadButton');-->
+
+<!--            if (!eulaScrollBox || !acceptTermsCheckbox || !downloadButton) {-->
+<!--                return false;-->
+<!--            }-->
+
+<!--            // Reset form state-->
+<!--            acceptTermsCheckbox.disabled = true;-->
+<!--            acceptTermsCheckbox.checked = false;-->
+<!--            downloadButton.disabled = true;-->
+
+<!--            // Force scroll back to top-->
+<!--            if (eulaScrollBox) {-->
+<!--                eulaScrollBox.scrollTop = 0;-->
+<!--            }-->
+
+<!--            // Now initialize the EULA logic-->
+<!--            initializeEULALogic();-->
+
+<!--            return true;-->
+<!--        }-->
+
+<!--        function initializeEULALogic() {-->
+<!--            const eulaScrollBox = document.getElementById('eulaScrollBox');-->
+<!--            const acceptTermsCheckbox = document.getElementById('acceptTerms');-->
+<!--            const downloadButton = document.getElementById('downloadButton');-->
+<!--            const emailInput = document.getElementById('email');-->
+<!--            const emailError = document.getElementById('email-error');-->
+<!--            const form = document.getElementById('downloadForm');-->
+
+<!--            if (!eulaScrollBox || !acceptTermsCheckbox || !downloadButton || !emailInput || !emailError || !form) return;-->
+
+<!--            const emailPattern = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;-->
+
+<!--            function validateEmail() {-->
+<!--                if (emailInput.value === '') {-->
+<!--                    emailError.textContent = 'Email is required';-->
+<!--                    emailError.classList.remove('hidden');-->
+<!--                    return false;-->
+<!--                } else if (!emailPattern.test(emailInput.value)) {-->
+<!--                    emailError.textContent = 'Please enter a valid email address';-->
+<!--                    emailError.classList.remove('hidden');-->
+<!--                    return false;-->
+<!--                } else {-->
+<!--                    emailError.classList.add('hidden');-->
+<!--                    return true;-->
+<!--                }-->
+<!--            }-->
+
+<!--            function checkScrolledToBottom() {-->
+<!--                const scrollableHeight = eulaScrollBox.scrollHeight - eulaScrollBox.clientHeight;-->
+<!--                const SCROLL_THRESHOLD = 20;-->
+<!--                if (eulaScrollBox.scrollTop + SCROLL_THRESHOLD >= scrollableHeight) {-->
+<!--                    acceptTermsCheckbox.disabled = false;-->
+<!--                }-->
+<!--            }-->
+
+<!--            checkScrolledToBottom();-->
+
+<!--            function updateDownloadButtonState() {-->
+<!--                const isEmailValid = validateEmail();-->
+<!--                const isCheckboxChecked = acceptTermsCheckbox.checked;-->
+<!--                downloadButton.disabled = !(isEmailValid && isCheckboxChecked);-->
+<!--            }-->
+
+<!--            emailInput.addEventListener('input', updateDownloadButtonState);-->
+<!--            emailInput.addEventListener('blur', updateDownloadButtonState);-->
+<!--            eulaScrollBox.addEventListener('scroll', checkScrolledToBottom);-->
+<!--            acceptTermsCheckbox.addEventListener('change', updateDownloadButtonState);-->
+
+<!--            form.addEventListener('submit', (e) => {-->
+<!--                if (!validateEmail()) {-->
+<!--                    e.preventDefault();-->
+<!--                    emailInput.focus();-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+
+<!--        // ====== FORM SUBMISSION FUNCTIONALITY ======-->
+<!--        function initializeFormSubmission() {-->
+<!--            if (formSubmitInitialized) return;-->
+
+<!--            const form = document.getElementById('downloadForm');-->
+<!--            const downloadModal = document.getElementById('downloadModal');-->
+
+<!--            if (!form) {-->
+<!--                return;-->
+<!--            }-->
+
+<!--            // Remove any existing submit listeners to prevent duplicates-->
+<!--            const newForm = form.cloneNode(true);-->
+<!--            form.parentNode.replaceChild(newForm, form);-->
+
+<!--            // Re-add the EULA initialization after cloning-->
+<!--            if (document.getElementById('eulaScrollBox')) {-->
+<!--                initializeEULALogic();-->
+<!--            }-->
+
+<!--            // Add the submit event listener to the new form-->
+<!--            newForm.addEventListener('submit', async (event) => {-->
+<!--                event.preventDefault(); // Prevent default form submission-->
+
+<!--                const emailInput = document.getElementById('email');-->
+<!--                const acceptTermsCheckbox = document.getElementById('acceptTerms');-->
+<!--                const downloadButton = document.getElementById('downloadButton');-->
+<!--                const buttonText = document.getElementById('buttonText');-->
+<!--                const spinner = document.getElementById('spinner');-->
+
+<!--                if (!emailInput || !acceptTermsCheckbox || !downloadButton) {-->
+<!--                    return;-->
+<!--                }-->
+
+<!--                spinner.classList.remove("hidden");-->
+<!--                buttonText.classList.add("hidden");-->
+
+<!--                const apiUrl = "https://7tip4nqocj.execute-api.us-east-1.amazonaws.com/SendDownloadMail";-->
+
+<!--                try {-->
+<!--                    const response = await fetch(apiUrl, {-->
+<!--                        method: "POST",-->
+<!--                        credentials: 'include',-->
+<!--                        headers: {-->
+<!--                            "Content-Type": "application/json",-->
+<!--                        },-->
+<!--                        body: JSON.stringify({ email: emailInput.value }),-->
+<!--                    });-->
+
+<!--                    if (!response.ok) {-->
+<!--                        throw new Error("Failed to send email");-->
+<!--                    }-->
+
+<!--                    alert("Thank you! We've sent an email with the Gitmoxi Trial download link. Please check your inbox (and spam folder) in a few minutes.");-->
+
+<!--                } catch (error) {-->
+<!--                    alert("Error sending email. Please try again.");-->
+<!--                } finally {-->
+<!--                    buttonText.classList.remove("hidden");-->
+<!--                    spinner.classList.add("hidden");-->
+<!--                    downloadButton.disabled = true;-->
+<!--                    newForm.reset();-->
+
+<!--                    // Re-disable the checkbox for the next time-->
+<!--                    const checkbox = document.getElementById('acceptTerms');-->
+<!--                    if (checkbox) {-->
+<!--                        checkbox.disabled = true;-->
+<!--                        checkbox.checked = false;-->
+<!--                    }-->
+
+<!--                    setTimeout(() => {-->
+<!--                        if (downloadModal) {-->
+<!--                            downloadModal.style.display = 'none';-->
+<!--                            document.documentElement.style.overflow = '';-->
+<!--                            document.body.style.overflow = '';-->
+<!--                            document.body.style.touchAction = '';-->
+<!--                        }-->
+<!--                    }, 400);-->
+<!--                }-->
+<!--            });-->
+
+<!--            formSubmitInitialized = true;-->
+<!--        }-->
+
+<!--        // ====== CHECK AND INITIALIZE ======-->
+<!--        function checkAndInitializeAll() {-->
+<!--            // First, initialize modal handlers if download link exists-->
+<!--            if (!modalInitialized && document.getElementById('downloadLink')) {-->
+<!--                initializeModalHandlers();-->
+<!--            }-->
+
+<!--            // Then, check for standalone download form-->
+<!--            if (!eulaInitialized && document.getElementById('downloadForm')) {-->
+<!--                initializeEULALogic();-->
+<!--            }-->
+
+<!--            // Finally, set up form submission logic-->
+<!--            if (!formSubmitInitialized && document.getElementById('downloadForm')) {-->
+<!--                initializeFormSubmission();-->
+<!--            }-->
+<!--        }-->
+
+<!--        // ====== RUN AT MULTIPLE POINTS ======-->
+
+<!--        // 1. Immediate check-->
+<!--        checkAndInitializeAll();-->
+
+<!--        // 2. On DOMContentLoaded-->
+<!--        document.addEventListener('DOMContentLoaded', checkAndInitializeAll);-->
+
+<!--        // 3. On window load-->
+<!--        window.addEventListener('load', checkAndInitializeAll);-->
+
+<!--        // ====== OBSERVE DOM CHANGES ======-->
+<!--        const observer = new MutationObserver((mutations) => {-->
+<!--            let shouldCheck = false;-->
+
+<!--            for (const mutation of mutations) {-->
+<!--                if (mutation.type === 'childList' && mutation.addedNodes.length) {-->
+<!--                    // Look for our target elements-->
+<!--                    for (const node of mutation.addedNodes) {-->
+<!--                        if (node.nodeType === Node.ELEMENT_NODE) {-->
+<!--                            // Direct match or contains our elements-->
+<!--                            if (node.id === 'downloadLink' || node.id === 'downloadForm' ||-->
+<!--                                node.id === 'downloadModal' ||-->
+<!--                                node.querySelector('#downloadLink') ||-->
+<!--                                node.querySelector('#downloadForm') ||-->
+<!--                                node.querySelector('#downloadModal')) {-->
+<!--                                shouldCheck = true;-->
+<!--                                break;-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+
+<!--                if (shouldCheck) break;-->
+<!--            }-->
+
+<!--            if (shouldCheck) {-->
+<!--                checkAndInitializeAll();-->
+<!--            }-->
+<!--        });-->
+
+<!--        // Start observing-->
+<!--        observer.observe(document.body, {-->
+<!--            childList: true,-->
+<!--            subtree: true,-->
+<!--            attributes: false,-->
+<!--            characterData: false-->
+<!--        });-->
+
+<!--        // ====== HANDLE NAVIGATION ======-->
+
+<!--        // Track URL changes-->
+<!--        let lastUrl = location.href;-->
+
+<!--        // History API navigation-->
+<!--        window.addEventListener('popstate', () => {-->
+<!--            // Reset initialization flags when navigating-->
+<!--            if (location.href !== lastUrl) {-->
+<!--                modalInitialized = false;-->
+<!--                eulaInitialized = false;-->
+<!--                formSubmitInitialized = false;-->
+<!--                lastUrl = location.href;-->
+<!--            }-->
+
+<!--            setTimeout(checkAndInitializeAll, 100);-->
+<!--        });-->
+
+<!--        // URL change detector-->
+<!--        new MutationObserver(() => {-->
+<!--            const url = location.href;-->
+<!--            if (url !== lastUrl) {-->
+<!--                modalInitialized = false;-->
+<!--                eulaInitialized = false;-->
+<!--                formSubmitInitialized = false;-->
+<!--                lastUrl = url;-->
+<!--                setTimeout(checkAndInitializeAll, 100);-->
+<!--            }-->
+<!--        }).observe(document, { subtree: true, childList: true });-->
+<!--    })();-->
+<!--</script>-->
+
+<!--<style>-->
+<!--    .download-container {-->
+<!--        display: flex;-->
+<!--        justify-content: center;-->
+<!--        align-items: center;-->
+<!--        padding: 0.5rem;-->
+<!--    }-->
+
+<!--    .download-card {-->
+<!--        background-color: white;-->
+<!--        border-radius: 0.5rem;-->
+<!--        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);-->
+<!--        padding: 1.25rem;-->
+<!--        max-width: 700px;-->
+<!--        width: 100%;-->
+<!--        max-height: 90vh;-->
+<!--        overflow-y: auto;-->
+<!--    }-->
+
+<!--    .download-form {-->
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        gap: 0.75rem;-->
+<!--    }-->
+
+<!--    .form-group {-->
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        gap: 0.5rem;-->
+<!--    }-->
+
+<!--    .eula-container {-->
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        gap: 0.5rem;-->
+<!--    }-->
+
+<!--    .eula-scroll-box {-->
+<!--        height: 350px;-->
+<!--        overflow-y: auto;-->
+<!--        padding: 0.5rem;-->
+<!--        border: 1px solid #ddd;-->
+<!--        border-radius: 0.25rem;-->
+<!--        background-color: #f9fafb;-->
+<!--        font-size: 0.75rem;-->
+<!--    }-->
+
+<!--    .eula-scroll-box pre {-->
+<!--        white-space: pre-wrap;-->
+<!--        font-family: inherit;-->
+<!--        margin: 0;-->
+<!--    }-->
+
+<!--    .eula-checkbox-container {-->
+<!--        display: flex;-->
+<!--        align-items: center;-->
+<!--        gap: 0.75rem;-->
+<!--        margin-top: 0.75rem;-->
+<!--    }-->
+
+<!--    input, textarea {-->
+<!--        font-size: 16px;-->
+<!--        -webkit-text-size-adjust: 100%;-->
+<!--    }-->
+
+<!--    input[type="email"] {-->
+<!--        padding: 0.6rem;-->
+<!--        border: 1px solid #ddd;-->
+<!--        border-radius: 0.25rem;-->
+<!--        font-size: 0.85rem;-->
+<!--    }-->
+
+<!--    input[type="email"], input[type="text"] {-->
+<!--        font-size: 16px;-->
+<!--    }-->
+
+<!--    input[type="checkbox"]:disabled {-->
+<!--        opacity: 0.6;-->
+<!--        cursor: not-allowed;-->
+<!--    }-->
+
+<!--    .download-button {-->
+<!--        background-color: #00897B;-->
+<!--        color: white;-->
+<!--        border: none;-->
+<!--        border-radius: 0.25rem;-->
+<!--        margin-top: 0.5rem;-->
+<!--        padding: 0.75rem 0.5rem;-->
+<!--        font-size: 1rem;-->
+<!--        font-weight: 500;-->
+<!--        cursor: pointer;-->
+<!--        transition: background-color 0.2s, opacity 0.2s;-->
+<!--    }-->
+
+<!--    .download-button:hover:not(:disabled) {-->
+<!--        background-color: #00796B;-->
+<!--    }-->
+
+<!--    .download-button:disabled {-->
+<!--        opacity: 0.6;-->
+<!--        cursor: not-allowed;-->
+<!--    }-->
+
+<!--    .error-message {-->
+<!--        color: #dc2626;-->
+<!--        font-size: 0.875rem;-->
+<!--    }-->
+
+<!--    .success-message {-->
+<!--        text-align: center;-->
+<!--        padding: 1.5rem;-->
+<!--        background-color: #f0fdf4;-->
+<!--        border-radius: 0.25rem;-->
+<!--        border: 1px solid #86efac;-->
+<!--    }-->
+
+<!--    h4 {-->
+<!--        margin: 0.5rem 0;-->
+<!--        font-size: 0.9rem;-->
+<!--    }-->
+
+<!--    .spinner {-->
+<!--        display: inline-block;-->
+<!--        width: 16px;-->
+<!--        height: 16px;-->
+<!--        border: 2px solid white;-->
+<!--        border-top: 2px solid transparent;-->
+<!--        border-radius: 50%;-->
+<!--        animation: spin 0.7s linear infinite;-->
+<!--        margin-left: 8px;-->
+<!--    }-->
+
+<!--    .hidden {-->
+<!--        display: none;-->
+<!--    }-->
+
+<!--    @keyframes spin {-->
+<!--        0% { transform: rotate(0deg); }-->
+<!--        100% { transform: rotate(360deg); }-->
+<!--    }-->
+
+<!--    @media (max-width: 768px) {-->
+<!--        input, textarea {-->
+<!--            font-size: 16px;-->
+<!--        }-->
+<!--    }-->
+<!--</style>-->
+
+
+<!--&lt;!&ndash; Download Modal Markup &ndash;&gt;-->
+<!--<div class="download-container">-->
+<!--    <div class="download-card">-->
+<!--        {!formSuccess && (-->
+<!--                <form method="POST" class="download-form" id="downloadForm">-->
+<!--                    <div class="form-group">-->
+<!--                        <h4 class="text-lg font-semibold mb-1">Email Address *</h4>-->
+<!--                        <input-->
+<!--                                type="email"-->
+<!--                                id="email"-->
+<!--                                name="email"-->
+<!--                                placeholder="your@email.com"-->
+<!--                                required-->
+<!--                                class="w-full p-2 border border-gray-300 rounded"-->
+<!--                        />-->
+<!--                        <span id="email-error" class="text-red-500 text-sm mt-1 hidden"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="eula-container mt-4">-->
+<!--                        <h4 class="text-lg font-semibold mb-1">End User License Agreement</h4>-->
+<!--                        <div class="eula-scroll-box h-48 overflow-y-scroll border border-gray-300 p-2 mb-2" id="eulaScrollBox">-->
+<!--                            <pre class="whitespace-pre-wrap text-sm">{eulaText}</pre>-->
+<!--                        </div>-->
+<!--                        <div class="eula-checkbox-container flex items-start gap-2">-->
+<!--                            <input-->
+<!--                                    type="checkbox"-->
+<!--                                    id="acceptTerms"-->
+<!--                                    name="acceptTerms"-->
+<!--                                    required-->
+<!--                                    disabled-->
+<!--                                    class="mt-1"-->
+<!--                            />-->
+<!--                            <h4 class="text-sm">-->
+<!--                                I have read and accept the End User License Agreement-->
+<!--                            </h4>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    {formError && <div class="text-red-500 text-sm mt-2">{formError}</div>}-->
+
+<!--                    <button-->
+<!--                            type="submit"-->
+<!--                            class="download-button mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50 flex items-center justify-center gap-2"-->
+<!--                            id="downloadButton"-->
+<!--                            disabled-->
+<!--                    >-->
+<!--                        <span id="buttonText">Send Download Link</span>-->
+<!--                        <span id="spinner" class="spinner hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--        )}-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; External JS Initialization Hook &ndash;&gt;-->
+<!--<script type="module" src="/download-form.js"></script>-->
+
+<!--    .download-container {-->
+<!--        display: flex;-->
+<!--        justify-content: center;-->
+<!--        align-items: center;-->
+<!--        padding: 0.5rem;-->
+<!--    }-->
+
+<!--    .download-card {-->
+<!--        background-color: white;-->
+<!--        border-radius: 0.5rem;-->
+<!--        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);-->
+<!--        padding: 1.25rem;-->
+<!--        max-width: 700px;-->
+<!--        width: 100%;-->
+<!--        max-height: 90vh;-->
+<!--        overflow-y: auto;-->
+<!--    }-->
+
+<!--    .download-form {-->
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        gap: 0.75rem;-->
+<!--    }-->
+
+<div class="download-container flex justify-center items-center p-2">
+    <div class="download-card bg-white rounded-lg shadow-md p-5 max-w-full max-h-screen overflow-y-auto">
+        <form method="POST" class="download-form flex flex-col gap-3" id="downloadForm">
+            <div class="form-group flex flex-col gap-2">
+                <h4 class="my-2 text-sm font-medium">Email Address *</h4>
+                <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        class="p-2.5 border border-gray-300 rounded text-sm"
+                        style="font-size: 16px; -webkit-text-size-adjust: 100%;"
+                        required
+                />
+                <span id="email-error" class="error-message text-red-600 text-sm hidden"></span>
+            </div>
+
+            <div class="eula-container flex flex-col gap-2">
+                <h4 class="my-2 text-sm font-medium">End User License Agreement</h4>
+                <div class="eula-scroll-box overflow-y-auto p-2 border border-gray-300 rounded bg-gray-50 text-xs"
+                     style="height: 350px;" id="eulaScrollBox">
+                        <pre class="whitespace-pre-wrap font-inherit m-0">{eulaText}</pre>
+                </div>
+                <div class="eula-checkbox-container flex items-center gap-3 mt-3">
+                    <input
+                            type="checkbox"
+                            id="acceptTerms"
+                            name="acceptTerms"
+                            class="disabled:opacity-60 disabled:cursor-not-allowed"
+                            required
+                            disabled
+                    />
+                    <h4 class="my-2 text-sm font-medium">
+                        I have read and accept the End User License Agreement
+                    </h4>
+                </div>
+            </div>
+
+            <button type="submit"
+                    class="download-button bg-teal-custom text-white border-none rounded mt-2 px-2 py-3 text-base font-medium cursor-pointer transition-all duration-200 hover:bg-teal-custom-hover disabled:opacity-60 disabled:cursor-not-allowed"
+                    id="downloadButton"
+                    disabled>
+                <span id="buttonText">Send Download Link</span>
+                <span class="spinner hidden inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></span>
+            </button>
+        </form>
     </div>
 </div>
-
-<script>
-    // Self-executing function for modal, EULA, and form submission functionality
-    (function() {
-        // ====== STATE TRACKING ======
-        let modalInitialized = false;
-        let eulaInitialized = false;
-        let formSubmitInitialized = false;
-
-        // ====== MODAL FUNCTIONALITY ======
-        function initializeModalHandlers() {
-            if (modalInitialized) return;
-
-            function openModal() {
-                const modal = document.querySelector('#downloadModal');
-                if (modal) {
-                    modal.style.display = 'block';
-                    document.documentElement.style.overflow = 'hidden';
-                    document.body.style.overflow = 'hidden';
-                    document.body.style.touchAction = 'none';
-
-                    // Reset and initialize EULA logic when modal opens
-                    resetAndInitializeEULALogic();
-                }
-            }
-
-            function closeModal() {
-                const modal = document.querySelector('#downloadModal');
-                if (modal) {
-                    modal.style.display = 'none';
-                    document.documentElement.style.overflow = '';
-                    document.body.style.overflow = '';
-                    document.body.style.touchAction = '';
-                }
-            }
-
-            // Event delegation for download links
-            document.body.addEventListener('click', (e) => {
-                // Check for download links
-                if (e.target && e.target.id === 'downloadLink') {
-                    e.preventDefault();
-                    openModal();
-                }
-
-                // Check for close button clicks
-                if (e.target && (
-                    e.target.classList.contains('close-modal') ||
-                    (e.target.parentElement && e.target.parentElement.classList.contains('close-modal'))
-                )) {
-                    closeModal();
-                }
-
-                // Close when clicking outside modal content
-                if (e.target && e.target.id === 'downloadModal') {
-                    closeModal();
-                }
-            });
-
-            // Handle touch events
-            document.body.addEventListener('touchstart', (e) => {
-                if (e.target && e.target.id === 'downloadLink') {
-                    e.preventDefault();
-                    openModal();
-                }
-            });
-
-            // Set up modal-specific event listeners
-            const modal = document.querySelector('#downloadModal');
-            if (modal) {
-                const closeButton = modal.querySelector('.close-modal');
-                if (closeButton) {
-                    closeButton.addEventListener('click', closeModal);
-                }
-
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        closeModal();
-                    }
-                });
-            }
-
-            modalInitialized = true;
-        }
-
-        // ====== EULA FUNCTIONALITY ======
-        function resetAndInitializeEULALogic() {
-            const downloadForm = document.getElementById('downloadForm');
-            if (!downloadForm) {
-                return false;
-            }
-
-            // Clear the initialization flag to force reinitialization
-            downloadForm.removeAttribute('data-initialized');
-
-            // Get form elements
-            const eulaScrollBox = document.getElementById('eulaScrollBox');
-            const acceptTermsCheckbox = document.getElementById('acceptTerms');
-            const downloadButton = document.getElementById('downloadButton');
-
-            if (!eulaScrollBox || !acceptTermsCheckbox || !downloadButton) {
-                return false;
-            }
-
-            // Reset form state
-            acceptTermsCheckbox.disabled = true;
-            acceptTermsCheckbox.checked = false;
-            downloadButton.disabled = true;
-
-            // Force scroll back to top
-            if (eulaScrollBox) {
-                eulaScrollBox.scrollTop = 0;
-            }
-
-            // Now initialize the EULA logic
-            initializeEULALogic();
-
-            return true;
-        }
-
-        function initializeEULALogic() {
-            const eulaScrollBox = document.getElementById('eulaScrollBox');
-            const acceptTermsCheckbox = document.getElementById('acceptTerms');
-            const downloadButton = document.getElementById('downloadButton');
-            const emailInput = document.getElementById('email');
-            const emailError = document.getElementById('email-error');
-            const form = document.getElementById('downloadForm');
-
-            if (!eulaScrollBox || !acceptTermsCheckbox || !downloadButton || !emailInput || !emailError || !form) return;
-
-            const emailPattern = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-            function validateEmail() {
-                if (emailInput.value === '') {
-                    emailError.textContent = 'Email is required';
-                    emailError.classList.remove('hidden');
-                    return false;
-                } else if (!emailPattern.test(emailInput.value)) {
-                    emailError.textContent = 'Please enter a valid email address';
-                    emailError.classList.remove('hidden');
-                    return false;
-                } else {
-                    emailError.classList.add('hidden');
-                    return true;
-                }
-            }
-
-            function checkScrolledToBottom() {
-                const scrollableHeight = eulaScrollBox.scrollHeight - eulaScrollBox.clientHeight;
-                const SCROLL_THRESHOLD = 20;
-                if (eulaScrollBox.scrollTop + SCROLL_THRESHOLD >= scrollableHeight) {
-                    acceptTermsCheckbox.disabled = false;
-                }
-            }
-
-            checkScrolledToBottom();
-
-            function updateDownloadButtonState() {
-                const isEmailValid = validateEmail();
-                const isCheckboxChecked = acceptTermsCheckbox.checked;
-                downloadButton.disabled = !(isEmailValid && isCheckboxChecked);
-            }
-
-            emailInput.addEventListener('input', updateDownloadButtonState);
-            emailInput.addEventListener('blur', updateDownloadButtonState);
-            eulaScrollBox.addEventListener('scroll', checkScrolledToBottom);
-            acceptTermsCheckbox.addEventListener('change', updateDownloadButtonState);
-
-            form.addEventListener('submit', (e) => {
-                if (!validateEmail()) {
-                    e.preventDefault();
-                    emailInput.focus();
-                }
-            });
-        }
-
-        // ====== FORM SUBMISSION FUNCTIONALITY ======
-        function initializeFormSubmission() {
-            if (formSubmitInitialized) return;
-
-            const form = document.getElementById('downloadForm');
-            const downloadModal = document.getElementById('downloadModal');
-
-            if (!form) {
-                return;
-            }
-
-            // Remove any existing submit listeners to prevent duplicates
-            const newForm = form.cloneNode(true);
-            form.parentNode.replaceChild(newForm, form);
-
-            // Re-add the EULA initialization after cloning
-            if (document.getElementById('eulaScrollBox')) {
-                initializeEULALogic();
-            }
-
-            // Add the submit event listener to the new form
-            newForm.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Prevent default form submission
-
-                const emailInput = document.getElementById('email');
-                const acceptTermsCheckbox = document.getElementById('acceptTerms');
-                const downloadButton = document.getElementById('downloadButton');
-                const buttonText = document.getElementById('buttonText');
-                const spinner = document.getElementById('spinner');
-
-                if (!emailInput || !acceptTermsCheckbox || !downloadButton) {
-                    return;
-                }
-
-                spinner.classList.remove("hidden");
-                buttonText.classList.add("hidden");
-
-                const apiUrl = "https://7tip4nqocj.execute-api.us-east-1.amazonaws.com/SendDownloadMail";
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: "POST",
-                        credentials: 'include',
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ email: emailInput.value }),
-                    });
-
-                    if (!response.ok) {
-                        throw new Error("Failed to send email");
-                    }
-
-                    alert("Thank you! We've sent an email with the Gitmoxi Trial download link. Please check your inbox (and spam folder) in a few minutes.");
-
-                } catch (error) {
-                    alert("Error sending email. Please try again.");
-                } finally {
-                    buttonText.classList.remove("hidden");
-                    spinner.classList.add("hidden");
-                    downloadButton.disabled = true;
-                    newForm.reset();
-
-                    // Re-disable the checkbox for the next time
-                    const checkbox = document.getElementById('acceptTerms');
-                    if (checkbox) {
-                        checkbox.disabled = true;
-                        checkbox.checked = false;
-                    }
-
-                    setTimeout(() => {
-                        if (downloadModal) {
-                            downloadModal.style.display = 'none';
-                            document.documentElement.style.overflow = '';
-                            document.body.style.overflow = '';
-                            document.body.style.touchAction = '';
-                        }
-                    }, 400);
-                }
-            });
-
-            formSubmitInitialized = true;
-        }
-
-        // ====== CHECK AND INITIALIZE ======
-        function checkAndInitializeAll() {
-            // First, initialize modal handlers if download link exists
-            if (!modalInitialized && document.getElementById('downloadLink')) {
-                initializeModalHandlers();
-            }
-
-            // Then, check for standalone download form
-            if (!eulaInitialized && document.getElementById('downloadForm')) {
-                initializeEULALogic();
-            }
-
-            // Finally, set up form submission logic
-            if (!formSubmitInitialized && document.getElementById('downloadForm')) {
-                initializeFormSubmission();
-            }
-        }
-
-        // ====== RUN AT MULTIPLE POINTS ======
-
-        // 1. Immediate check
-        checkAndInitializeAll();
-
-        // 2. On DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', checkAndInitializeAll);
-
-        // 3. On window load
-        window.addEventListener('load', checkAndInitializeAll);
-
-        // ====== OBSERVE DOM CHANGES ======
-        const observer = new MutationObserver((mutations) => {
-            let shouldCheck = false;
-
-            for (const mutation of mutations) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                    // Look for our target elements
-                    for (const node of mutation.addedNodes) {
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            // Direct match or contains our elements
-                            if (node.id === 'downloadLink' || node.id === 'downloadForm' ||
-                                node.id === 'downloadModal' ||
-                                node.querySelector('#downloadLink') ||
-                                node.querySelector('#downloadForm') ||
-                                node.querySelector('#downloadModal')) {
-                                shouldCheck = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (shouldCheck) break;
-            }
-
-            if (shouldCheck) {
-                checkAndInitializeAll();
-            }
-        });
-
-        // Start observing
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: false,
-            characterData: false
-        });
-
-        // ====== HANDLE NAVIGATION ======
-
-        // Track URL changes
-        let lastUrl = location.href;
-
-        // History API navigation
-        window.addEventListener('popstate', () => {
-            // Reset initialization flags when navigating
-            if (location.href !== lastUrl) {
-                modalInitialized = false;
-                eulaInitialized = false;
-                formSubmitInitialized = false;
-                lastUrl = location.href;
-            }
-
-            setTimeout(checkAndInitializeAll, 100);
-        });
-
-        // URL change detector
-        new MutationObserver(() => {
-            const url = location.href;
-            if (url !== lastUrl) {
-                modalInitialized = false;
-                eulaInitialized = false;
-                formSubmitInitialized = false;
-                lastUrl = url;
-                setTimeout(checkAndInitializeAll, 100);
-            }
-        }).observe(document, { subtree: true, childList: true });
-    })();
-</script>
-
-<style>
-    .download-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0.5rem;
-    }
-
-    .download-card {
-        background-color: white;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 1.25rem;
-        max-width: 700px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .download-form {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .eula-container {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .eula-scroll-box {
-        height: 350px;
-        overflow-y: auto;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 0.25rem;
-        background-color: #f9fafb;
-        font-size: 0.75rem;
-    }
-
-    .eula-scroll-box pre {
-        white-space: pre-wrap;
-        font-family: inherit;
-        margin: 0;
-    }
-
-    .eula-checkbox-container {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-top: 0.75rem;
-    }
-
-    input, textarea {
-        font-size: 16px;
-        -webkit-text-size-adjust: 100%;
-    }
-
-    input[type="email"] {
-        padding: 0.6rem;
-        border: 1px solid #ddd;
-        border-radius: 0.25rem;
-        font-size: 0.85rem;
-    }
-
-    input[type="email"], input[type="text"] {
-        font-size: 16px;
-    }
-
-    input[type="checkbox"]:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    .download-button {
-        background-color: #00897B;
-        color: white;
-        border: none;
-        border-radius: 0.25rem;
-        margin-top: 0.5rem;
-        padding: 0.75rem 0.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s, opacity 0.2s;
-    }
-
-    .download-button:hover:not(:disabled) {
-        background-color: #00796B;
-    }
-
-    .download-button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    .error-message {
-        color: #dc2626;
-        font-size: 0.875rem;
-    }
-
-    .success-message {
-        text-align: center;
-        padding: 1.5rem;
-        background-color: #f0fdf4;
-        border-radius: 0.25rem;
-        border: 1px solid #86efac;
-    }
-
-    h4 {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-    }
-
-    .spinner {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border: 2px solid white;
-        border-top: 2px solid transparent;
-        border-radius: 50%;
-        animation: spin 0.7s linear infinite;
-        margin-left: 8px;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 768px) {
-        input, textarea {
-            font-size: 16px;
-        }
-    }
-</style>
+<script src="/download-form.js" defer></script>

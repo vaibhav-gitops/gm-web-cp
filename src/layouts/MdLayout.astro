@@ -92,49 +92,9 @@ import DownloadForm from '../components/donwloadform.astro';
 </Layout>
 
 <!-- Modal Component -->
-<div id="downloadModal" client:load>
-  <div class="modal-content">
+<div id="downloadModal" class="hidden fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-70 z-[9999]">
+  <div class="bg-white rounded-lg max-w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg w-auto sm:w-[90%]">
     <DownloadForm />
-    <span class="close-modal">&times;</span>
+    <span class="absolute top-1 right-2 text-2xl cursor-pointer close-modal">&times;</span>
   </div>
 </div>
-
-  <style>
-  #downloadModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
-    max-width: 100%;
-  }
-
-  #downloadModal .modal-content {
-    background-color: white;
-    border-radius: 8px;
-    width: auto;
-    max-width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    #downloadModal .modal-content {
-      width: 90%;
-    }
-  }
-
-  .close-modal {
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 25px;
-  }
-</style>
