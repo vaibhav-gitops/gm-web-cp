@@ -8,7 +8,7 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: "https://gitmoxi.io",
   image: {
-    domains: ["unsplash.com", "images.unsplash.com"],
+    domains: [],
   },
   integrations: [
     tailwind(),

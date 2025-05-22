@@ -8,7 +8,7 @@ import Button from "./ui/button.astro";
         class="needs-validation contact-form"
         data-astro-reload
         novalidate>
-    <input type="checkbox" class="hidden" style="display:none" name="botcheck" />
+    <input type="checkbox" class="hidden" name="botcheck" />
 
     <div class="mb-5">
         <input
@@ -44,12 +44,11 @@ import Button from "./ui/button.astro";
         <div class="empty-feedback text-red-400 text-sm mt-1 hidden">Please enter your job title.</div>
     </div>
 
-    <button type="submit"
-            class="submit-button w-full text-white border-none rounded mt-2 px-2 py-3 text-base font-medium cursor-pointer transition-all duration-200"
-            style="background-color: #00897B;"
-            onmouseover="this.style.backgroundColor='#00695C'"
-            onmouseout="this.style.backgroundColor='#00897B'"
-            id="submitButton">
+    <button
+            type="submit"
+            id="submitButton"
+            class="w-full mt-2 py-3 px-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center bg-teal-custom hover:bg-teal-custom-hover"
+    >
         <span id="buttonText">Book Your 1:1 Demo</span>
         <span class="spinner hidden inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" id="spinner"></span>
     </button>
@@ -57,4 +56,4 @@ import Button from "./ui/button.astro";
     <div id="result" class="mt-3 text-center"></div>
 </form>
 
-<script is:inline src="/contact-form.js" defer></script>
+<script src="/contact-form.js" defer></script>

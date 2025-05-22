@@ -62,10 +62,7 @@ import Button from "./ui/button.astro";
   <button
       type="submit"
       id="submitButton"
-      class="w-full mt-2 py-3 px-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
-      style="background-color: #0f766e;"
-      onmouseover="if(!this.disabled) this.style.backgroundColor='#115e59'"
-      onmouseout="if(!this.disabled) this.style.backgroundColor='#0f766e'"
+      class="w-full mt-2 py-3 px-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center bg-teal-custom hover:bg-teal-custom-hover"
   >
     <span id="buttonText">Send Message</span>
     <span
