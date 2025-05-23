@@ -5,6 +5,7 @@
     script-src 'self' 'sha256-LbUBLfvOKSTk2euU6+X7TBkhL6p/g7QxItieHCELt/s=' 'sha256-Ht0ngdkDyvCBWVu1X+FACU2wx3cygKwtOhY1R9m39Pg=' 'sha256-WN0hqek1jEauhlhWVVXeQPa5BD3f0rsMdmwSZtw1Cys=' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://www.googletagmanager.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' data: https:;
+    frame-src 'self' https://www.youtube.com https://youtube.com;
     font-src 'self' https:;
     connect-src 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com https://www.google-analytics.com;
     object-src 'none';
