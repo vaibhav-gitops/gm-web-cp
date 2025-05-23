@@ -2,6 +2,7 @@
 class FormHandler {
     constructor() {
         this.initialized = false;
+        this.setupComplete = new Set(); // Track which forms have been set up
         this.init();
     }
 
@@ -31,12 +32,14 @@ class FormHandler {
             document.getElementById('contactForm') ||
             document.getElementById('form');
 
-        if (downloadForm) {
+        if (downloadForm && !this.setupComplete.has('download')) {
             this.setupDownloadForm(downloadForm);
+            this.setupComplete.add('download');
         }
 
-        if (contactForm && contactForm !== downloadForm) {
+        if (contactForm && contactForm !== downloadForm && !this.setupComplete.has('contact')) {
             this.setupContactForm(contactForm);
+            this.setupComplete.add('contact');
         }
     }
 
@@ -89,15 +92,21 @@ class FormHandler {
         // Check initial scroll state
         checkScrolledToBottom();
 
-        // Form submission
+        // Form submission with duplicate prevention
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Prevent duplicate submissions
+            if (form.dataset.submitting === 'true') {
+                return;
+            }
 
             if (!validateEmail()) {
                 emailInput.focus();
                 return;
             }
 
+            form.dataset.submitting = 'true';
             const buttonText = form.querySelector('#buttonText');
             const spinner = form.querySelector('#spinner');
 
@@ -125,6 +134,7 @@ class FormHandler {
             } catch (error) {
                 alert("Error sending email. Please try again.");
             } finally {
+                form.dataset.submitting = 'false';
                 if (buttonText && spinner) {
                     buttonText.classList.remove("hidden");
                     spinner.classList.add("hidden");
@@ -145,9 +155,15 @@ class FormHandler {
         // Setup validation
         this.setupValidation(form);
 
-        // Form submission
+        // Form submission with duplicate prevention
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+
+            // Prevent duplicate submissions
+            if (form.dataset.submitting === 'true') {
+                return;
+            }
+
             form.classList.add("was-validated");
             form.setAttribute("data-submitted", "true");
 
@@ -162,6 +178,7 @@ class FormHandler {
                 return;
             }
 
+            form.dataset.submitting = 'true';
             const buttonText = form.querySelector("#buttonText");
             const spinner = form.querySelector("#spinner");
 
@@ -200,6 +217,7 @@ class FormHandler {
                 result.innerHTML = "Something went wrong!";
                 result.style.display = "block";
             } finally {
+                form.dataset.submitting = 'false';
                 form.reset();
                 if (buttonText && spinner) {
                     buttonText.classList.remove("hidden");
@@ -259,5 +277,7 @@ class FormHandler {
     }
 }
 
-// Initialize the form handler
-new FormHandler();
+// Initialize the form handler - Use singleton pattern to prevent multiple instances
+if (!window.formHandlerInstance) {
+    window.formHandlerInstance = new FormHandler();
+}

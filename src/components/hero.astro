@@ -2,6 +2,7 @@
 import { Picture } from "astro:assets";
 import heroImage from "../assets/hero-screenshot.png";
 import Container from "@components/container.astro";
+import Link from "./ui/link.astro";
 ---
 
 <div class="overflow-x-clip bg-custom-blue"
@@ -22,6 +23,27 @@ import Container from "@components/container.astro";
             For EKS, ECS, Fargate, and Lambda
           </span>
         </p>
+        <div class="hidden sm:flex md:flex lg:flex items-center justify-center gap-4 pt-4">
+          <Link
+              href="/book-a-demo"
+              size="lg"
+              class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2"
+          >
+            <span class="text-white text-xl">Book a Demo</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+            >
+              <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+              ></path>
+            </svg>
+          </Link>
+        </div>
       </div>
       <!--<div class="py-3 lg:col-span-3 lg:-mr-44">-->
       <!--  <Picture-->
