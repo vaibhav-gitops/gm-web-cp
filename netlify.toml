@@ -2,15 +2,14 @@
 for = "/*"
 [headers.values]
 Content-Security-Policy = """
-default-src 'self';
-script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com;
-style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;
-img-src 'self' data: https:;
-font-src 'self' https:;
-connect-src 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com;
-object-src 'none';
-base-uri 'self';
-form-action 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com;
+    default-src 'self';
+    script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://www.googletagmanager.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    font-src 'self' https:;
+    connect-src 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com https://www.google-analytics.com;
+    object-src 'none';
+    base-uri 'self'; form-action 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com;
 """
 
 Referrer-Policy = "strict-origin-when-cross-origin"
