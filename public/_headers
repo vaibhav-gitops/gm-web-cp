@@ -7,7 +7,7 @@
     img-src 'self' data: https:;
     frame-src 'self' https://www.youtube-nocookie.com/;
     font-src 'self' https:;
-    connect-src 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com https://www.google-analytics.com;
+    connect-src 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com https://www.google-analytics.com https://region1.google-analytics.com;
     object-src 'none';
     base-uri 'self'; form-action 'self' https://7tip4nqocj.execute-api.us-east-1.amazonaws.com;
 
