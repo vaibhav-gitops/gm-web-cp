@@ -3,22 +3,24 @@ import Link from "./ui/link.astro";
 ---
 
 <div
-    class="bg-custom-blue p-8 py-16 sm:py-20 md:px-20 md:py-32 flex flex-col items-center text-center border-t border-custom-gray">
-  <h2 class="text-white text-4xl md:text-6xl tracking-tight pb-6">
+    class="bg-custom-blue p-4 py-12 sm:p-8 sm:py-16 md:px-20 md:py-32 flex flex-col items-center text-center border-t border-custom-gray">
+  <h2 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-6xl tracking-tight pb-4 sm:pb-6 leading-tight max-w-4xl">
     You deserve safe, simple, Git-native deployments.
   </h2>
-  <div class="hidden sm:flex md:flex lg:flex items-center justify-center gap-10 pt-8">
+
+  <!-- Mobile buttons (stacked) -->
+  <div class="flex sm:hidden flex-col items-center gap-4 pt-6 w-full max-w-sm">
     <Link
         href="/docs/getting_started"
         size="lg"
-        class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2"
+        class="inline-flex items-center justify-center group gap-px bg-white hover:bg-custom-gray transition-colors py-3 px-6 rounded-lg w-full"
     >
-      <span class="text-custom-blue text-xl">Try For Free</span>
+      <span class="text-custom-blue text-lg font-medium">Try For Free</span>
       <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+          class="w-5 h-5 mt-px group-hover:translate-x-1 transition-transform ml-2"
       >
         <path
             fill="#111827"
@@ -31,14 +33,57 @@ import Link from "./ui/link.astro";
     <Link
         href="/book-a-demo"
         size="lg"
-        class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2"
+        class="inline-flex items-center justify-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-3 px-6 rounded-lg w-full"
+    >
+      <span class="text-white text-lg font-medium">Book A Demo</span>
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-5 h-5 mt-px group-hover:translate-x-1 transition-transform ml-2"
+      >
+        <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+        ></path>
+      </svg>
+    </Link>
+  </div>
+
+  <!-- Desktop buttons (side by side) -->
+  <div class="hidden sm:flex items-center justify-center gap-6 md:gap-10 pt-6 md:pt-8">
+    <Link
+        href="/docs/getting_started"
+        size="lg"
+        class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2 px-4 rounded-lg"
+    >
+      <span class="text-custom-blue text-xl">Try For Free</span>
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform ml-1"
+      >
+        <path
+            fill="#111827"
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+        ></path>
+      </svg>
+    </Link>
+    <Link
+        href="/book-a-demo"
+        size="lg"
+        class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2 px-4 rounded-lg"
     >
       <span class="text-white text-xl">Book A Demo</span>
       <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform ml-1"
       >
         <path
             fill-rule="evenodd"
