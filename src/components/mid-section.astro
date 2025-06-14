@@ -4,80 +4,80 @@ import { Icon } from "astro-icon/components";
 const { nomargin } = Astro.props;
 ---
 
-<div class="bg-custom-blue lg:col-span-5 pb-10">
-  <div class="pb-10 ml-40 mr-20">
-      <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
-        Is your deployment pipeline duct-taped together?
-      </h3>
-      <ul class="mt-6 space-y-5 text-left">
-        <li class="flex items-center gap-3 text-custom-gray">
-          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
-          <span class="text-xl">Manual scripts with no rollback strategy</span>
-        </li>
-        <li class="flex items-center gap-3 text-custom-gray">
-          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
-          <span class="text-xl">No traffic shifting — updates still break prod</span>
-        </li>
-        <li class="flex items-center gap-3 text-custom-gray">
-          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
-          <span class="text-xl">Ops teams scrambling during incidents</span>
-        </li>
-        <li class="flex items-center gap-3 text-custom-gray">
-          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
-          <span class="text-xl">Zero visibility into what was deployed and why</span>
-        </li>
-        <li class="flex items-center gap-3 text-custom-gray">
-          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
-          <span class="text-xl">No Git traceability — configs live outside version control</span>
-        </li>
-      </ul>
-    <p class="italic text-2xl border-l-4 border-teal-custom pl-2 mt-8 text-white">You shouldn't be scared to deploy on a Friday.</p>
+<div class="bg-custom-blue lg:col-span-5 pb-6 md:pb-10">
+  <div class="pb-6 md:pb-10 px-4 sm:px-6 md:px-8 lg:ml-40 lg:mr-20">
+    <h3 class="text-2xl sm:text-3xl md:text-4xl mb-6 md:mb-8 [text-wrap:balance] text-white font-bold leading-tight">
+      Is your deployment pipeline duct-taped together?
+    </h3>
+    <ul class="mt-4 md:mt-6 space-y-3 md:space-y-5 text-left">
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="ph:circle-fill" class="w-4 h-4 md:w-5 md:h-5 min-w-4 min-h-4 md:min-w-5 md:min-h-5 mt-1" />
+        <span class="text-base md:text-xl">Manual scripts with no rollback strategy</span>
+      </li>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="ph:circle-fill" class="w-4 h-4 md:w-5 md:h-5 min-w-4 min-h-4 md:min-w-5 md:min-h-5 mt-1" />
+        <span class="text-base md:text-xl">No traffic shifting — updates still break prod</span>
+      </li>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="ph:circle-fill" class="w-4 h-4 md:w-5 md:h-5 min-w-4 min-h-4 md:min-w-5 md:min-h-5 mt-1" />
+        <span class="text-base md:text-xl">Ops teams scrambling during incidents</span>
+      </li>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="ph:circle-fill" class="w-4 h-4 md:w-5 md:h-5 min-w-4 min-h-4 md:min-w-5 md:min-h-5 mt-1" />
+        <span class="text-base md:text-xl">Zero visibility into what was deployed and why</span>
+      </li>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="ph:circle-fill" class="w-4 h-4 md:w-5 md:h-5 min-w-4 min-h-4 md:min-w-5 md:min-h-5 mt-1" />
+        <span class="text-base md:text-xl">No Git traceability — configs live outside version control</span>
+      </li>
+    </ul>
+    <p class="italic text-lg md:text-2xl border-l-4 border-teal-custom pl-2 mt-6 md:mt-8 text-white leading-relaxed">You shouldn't be scared to deploy on a Friday.</p>
   </div>
 
-  <div class="mt-20 pb-10 ml-40 mr-40">
-    <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
+  <div class="mt-12 md:mt-20 pb-6 md:pb-10 px-4 sm:px-6 md:px-8 lg:ml-40 lg:mr-40">
+    <h3 class="text-2xl sm:text-3xl md:text-4xl mb-6 md:mb-8 [text-wrap:balance] text-white font-bold leading-tight">
       Gitmoxi makes your deploys as safe and simple as a Git commit
     </h3>
-      <div class="grid grid-cols-3 gap-10 mt-8 flex-wrap">
-        <div class="flex-1 bg-gray-200 rounded-xl p-5">
-          <div class="font-bold pb-3 text-xl">1. Git-Powered Deployments</div>
-          <p class="text-xl">Push a config file to Git. That’s it. We handle deploy logic, CI/CD, and rollback.</p>
-        </div>
-        <div class="flex-1 bg-gray-200 rounded-xl p-5">
-          <div class="font-bold pb-3 text-xl">2. Safe Deployment Strategies</div>
-          <p class="text-xl">Blue/green, rolling, canary — with health checks and alarms. Breaks? We auto-revert.</p>
-        </div>
-        <div class="flex-1 bg-gray-200 rounded-xl p-5">
-          <div class="font-bold pb-3 text-xl">3. Complete Audit Trail</div>
-          <p class="text-xl">Every change is traceable to a commit, user, and timestamp. No more guesswork.</p>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10 mt-6 md:mt-8">
+      <div class="bg-gray-200 rounded-xl p-4 md:p-5">
+        <div class="font-bold pb-2 md:pb-3 text-lg md:text-xl">1. Git-Powered Deployments</div>
+        <p class="text-base md:text-xl leading-relaxed">Push a config file to Git. That's it. We handle deploy logic, CI/CD, and rollback.</p>
+      </div>
+      <div class="bg-gray-200 rounded-xl p-4 md:p-5">
+        <div class="font-bold pb-2 md:pb-3 text-lg md:text-xl">2. Safe Deployment Strategies</div>
+        <p class="text-base md:text-xl leading-relaxed">Blue/green, rolling, canary — with health checks and alarms. Breaks? We auto-revert.</p>
+      </div>
+      <div class="bg-gray-200 rounded-xl p-4 md:p-5 md:col-span-2 lg:col-span-1">
+        <div class="font-bold pb-2 md:pb-3 text-lg md:text-xl">3. Complete Audit Trail</div>
+        <p class="text-base md:text-xl leading-relaxed">Every change is traceable to a commit, user, and timestamp. No more guesswork.</p>
+      </div>
     </div>
   </div>
 
-  <div class="mt-20 pb-10 ml-40 mr-40">
-    <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
-      From chaos to confidence — here’s what changes
+  <div class="mt-12 md:mt-20 pb-6 md:pb-10 px-4 sm:px-6 md:px-8 lg:ml-40 lg:mr-40">
+    <h3 class="text-2xl sm:text-3xl md:text-4xl mb-6 md:mb-8 [text-wrap:balance] text-white font-bold leading-tight">
+      From chaos to confidence — here's what changes
     </h3>
-    <ul class="mt-6 space-y-5 text-left">
-      <li class="flex items-center gap-3 text-custom-gray">
-        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
-        <span class="text-xl">Zero-downtime Deploys</span>
+    <ul class="mt-4 md:mt-6 space-y-3 md:space-y-5 text-left">
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-500 mt-1" />
+        <span class="text-base md:text-xl">Zero-downtime Deploys</span>
       </li>
-      <li class="flex items-center gap-3 text-custom-gray">
-        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
-        <span class="text-xl">Full Observability</span>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-500 mt-1" />
+        <span class="text-base md:text-xl">Full Observability</span>
       </li>
-      <li class="flex items-center gap-3 text-custom-gray">
-        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
-        <span class="text-xl">AI-Powered Troubleshooting</span>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-500 mt-1" />
+        <span class="text-base md:text-xl">AI-Powered Troubleshooting</span>
       </li>
-      <li class="flex items-center gap-3 text-custom-gray">
-        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
-        <span class="text-xl">Lower Cloud Spend</span>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-500 mt-1" />
+        <span class="text-base md:text-xl">Lower Cloud Spend</span>
       </li>
-      <li class="flex items-center gap-3 text-custom-gray">
-        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
-        <span class="text-xl">Dev & Ops Move Faster</span>
+      <li class="flex items-start gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-500 mt-1" />
+        <span class="text-base md:text-xl">Dev & Ops Move Faster</span>
       </li>
     </ul>
   </div>
