@@ -24,7 +24,7 @@ import Link from "./ui/link.astro";
 
         <!-- Mobile buttons (stacked) -->
         <div class="flex sm:hidden flex-col items-center gap-4 pt-8 w-full max-w-sm mx-auto">
-          <Link
+          <a
               href="/docs/getting_started"
               size="lg"
               class="inline-flex items-center justify-center group gap-2 bg-white hover:bg-custom-gray transition-colors py-3 px-6 rounded-lg w-full"
@@ -43,11 +43,11 @@ import Link from "./ui/link.astro";
                   clip-rule="evenodd"
               ></path>
             </svg>
-          </Link>
+          </a>
           <Link
               href="/book-a-demo"
               size="lg"
-              class="inline-flex items-center justify-center group gap-2 bg-custom-green hover:bg-teal-400 transition-colors py-3 px-6 rounded-lg w-full"
+              class="inline-flex items-center justify-center group gap-2 transition-colors py-3 px-6 rounded-lg w-full"
           >
             <span class="text-white text-base font-medium">Book A Demo</span>
             <svg
@@ -67,7 +67,7 @@ import Link from "./ui/link.astro";
 
         <!-- Desktop buttons (side by side) -->
         <div class="hidden sm:flex items-center justify-center gap-4 md:gap-6 lg:gap-10 pt-8">
-          <Link
+          <a
               href="/docs/getting_started"
               size="lg"
               class="inline-flex items-center group gap-2 bg-white hover:bg-custom-gray transition-colors py-2 px-4 rounded-lg"
@@ -86,11 +86,11 @@ import Link from "./ui/link.astro";
                   clip-rule="evenodd"
               ></path>
             </svg>
-          </Link>
+          </a>
           <Link
               href="/book-a-demo"
               size="lg"
-              class="inline-flex items-center group gap-2 bg-custom-green hover:bg-teal-400 transition-colors py-2 px-4 rounded-lg"
+              class="inline-flex items-center group gap-2 transition-colors py-2 px-4 rounded-lg"
           >
             <span class="text-white text-lg lg:text-xl">See Gitmoxi in Action - Book Demo</span>
             <svg

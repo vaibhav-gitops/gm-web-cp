@@ -10,9 +10,10 @@ import Link from "./ui/link.astro";
 
   <!-- Mobile buttons (stacked) -->
   <div class="flex sm:hidden flex-col items-center gap-4 pt-6 w-full max-w-sm">
-    <Link
+    <a
         href="/docs/getting_started"
         size="lg"
+        styles="inverted"
         class="inline-flex items-center justify-center group gap-px bg-white hover:bg-custom-gray transition-colors py-3 px-6 rounded-lg w-full"
     >
       <span class="text-custom-blue text-lg font-medium">Try For Free</span>
@@ -29,11 +30,11 @@ import Link from "./ui/link.astro";
             clip-rule="evenodd"
         ></path>
       </svg>
-    </Link>
+    </a>
     <Link
         href="/book-a-demo"
         size="lg"
-        class="inline-flex items-center justify-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-3 px-6 rounded-lg w-full"
+        class="inline-flex items-center justify-center group gap-px transition-colors py-3 px-6 rounded-lg w-full"
     >
       <span class="text-white text-lg font-medium">Book A Demo</span>
       <svg
@@ -53,9 +54,10 @@ import Link from "./ui/link.astro";
 
   <!-- Desktop buttons (side by side) -->
   <div class="hidden sm:flex items-center justify-center gap-6 md:gap-10 pt-6 md:pt-8">
-    <Link
+    <a
         href="/docs/getting_started"
         size="lg"
+        styles="inverted"
         class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2 px-4 rounded-lg"
     >
       <span class="text-custom-blue text-xl">Try For Free</span>
@@ -72,11 +74,11 @@ import Link from "./ui/link.astro";
             clip-rule="evenodd"
         ></path>
       </svg>
-    </Link>
+    </a>
     <Link
         href="/book-a-demo"
         size="lg"
-        class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2 px-4 rounded-lg"
+        class="inline-flex items-center group gap-px bg-teal-600 hover:bg-teal-800 transition-colors py-2 px-4 rounded-lg"
     >
       <span class="text-white text-xl">Book A Demo</span>
       <svg
