@@ -19,6 +19,7 @@
     "@fontsource/nunito": "^5.1.0",
     "@iconify-json/bx": "^1.1.10",
     "@iconify-json/fluent": "^1.1.47",
+    "@iconify-json/lucide": "^1.2.48",
     "@iconify-json/ph": "^1.1.10",
     "@iconify-json/simple-icons": "^1.2.31",
     "@iconify-json/uil": "^1.1.8",

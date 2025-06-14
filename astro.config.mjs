@@ -13,16 +13,19 @@ export default defineConfig({
   integrations: [
     tailwind(),
     mdx(),
-    icon(),
+    icon({
+      collections: {
+        lucide: () => import('@iconify-json/lucide/icons.json'),
+      },
+    }),
     sitemap(),
     react(),
   ],
   vite: {
     build: {
-      assetsInlineLimit: 0, // Prevent any asset inlining
+      assetsInlineLimit: 0,
       rollupOptions: {
         output: {
-          // Ensure scripts are kept as separate files
           manualChunks: undefined,
           assetFileNames: 'assets/[name].[hash][extname]',
           chunkFileNames: 'assets/[name].[hash].js',
@@ -32,8 +35,7 @@ export default defineConfig({
     }
   },
   build: {
-    inlineStylesheets: 'never', // Never inline CSS
-    // Ensure external scripts stay external
+    inlineStylesheets: 'never',
     assets: 'assets'
   }
 });

@@ -1,0 +1,84 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { nomargin } = Astro.props;
+---
+
+<div class="bg-custom-blue lg:col-span-5 pb-10">
+  <div class="pb-10 ml-40 mr-20">
+      <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
+        Is your deployment pipeline duct-taped together?
+      </h3>
+      <ul class="mt-6 space-y-5 text-left">
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
+          <span class="text-xl">Manual scripts with no rollback strategy</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
+          <span class="text-xl">No traffic shifting — updates still break prod</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
+          <span class="text-xl">Ops teams scrambling during incidents</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
+          <span class="text-xl">Zero visibility into what was deployed and why</span>
+        </li>
+        <li class="flex items-center gap-3 text-custom-gray">
+          <Icon name="ph:circle-fill" class="w-5 h-5 min-w-5 min-h-5" />
+          <span class="text-xl">No Git traceability — configs live outside version control</span>
+        </li>
+      </ul>
+    <p class="italic text-2xl border-l-4 border-teal-custom pl-2 mt-8 text-white">You shouldn't be scared to deploy on a Friday.</p>
+  </div>
+
+  <div class="mt-20 pb-10 ml-40 mr-40">
+    <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
+      Gitmoxi makes your deploys as safe and simple as a Git commit
+    </h3>
+      <div class="grid grid-cols-3 gap-10 mt-8 flex-wrap">
+        <div class="flex-1 bg-gray-200 rounded-xl p-5">
+          <div class="font-bold pb-3 text-xl">1. Git-Powered Deployments</div>
+          <p class="text-xl">Push a config file to Git. That’s it. We handle deploy logic, CI/CD, and rollback.</p>
+        </div>
+        <div class="flex-1 bg-gray-200 rounded-xl p-5">
+          <div class="font-bold pb-3 text-xl">2. Safe Deployment Strategies</div>
+          <p class="text-xl">Blue/green, rolling, canary — with health checks and alarms. Breaks? We auto-revert.</p>
+        </div>
+        <div class="flex-1 bg-gray-200 rounded-xl p-5">
+          <div class="font-bold pb-3 text-xl">3. Complete Audit Trail</div>
+          <p class="text-xl">Every change is traceable to a commit, user, and timestamp. No more guesswork.</p>
+        </div>
+    </div>
+  </div>
+
+  <div class="mt-20 pb-10 ml-40 mr-40">
+    <h3 class="text-4xl mb-8 [text-wrap:balance] text-white font-bold">
+      From chaos to confidence — here’s what changes
+    </h3>
+    <ul class="mt-6 space-y-5 text-left">
+      <li class="flex items-center gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
+        <span class="text-xl">Zero-downtime Deploys</span>
+      </li>
+      <li class="flex items-center gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
+        <span class="text-xl">Full Observability</span>
+      </li>
+      <li class="flex items-center gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
+        <span class="text-xl">AI-Powered Troubleshooting</span>
+      </li>
+      <li class="flex items-center gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
+        <span class="text-xl">Lower Cloud Spend</span>
+      </li>
+      <li class="flex items-center gap-3 text-custom-gray">
+        <Icon name="lucide:check-circle" class="w-5 h-5 text-green-500" />
+        <span class="text-xl">Dev & Ops Move Faster</span>
+      </li>
+    </ul>
+  </div>
+</div>

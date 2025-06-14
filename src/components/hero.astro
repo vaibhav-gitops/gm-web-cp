@@ -10,26 +10,42 @@ import Link from "./ui/link.astro";
   <Container>
     <main class="grid lg:grid-cols-5 place-items-center relative">
       <div class="max-w-sm md:max-w-max lg:col-span-5 mt-40 mb-28">
-        <p class="text-lg mt-4 text-custom-gray lg:text-2xl text-center">
-            <span class="font-medium leading-[50px]">
-            Industry's First
-            </span>
-        </p>
         <h1 class="text-white font-medium-plus text-6xl md:text-7xl text-center">
-          <span class="leading-[80px]">GitOps based <br/>Unified Deployment Controller</span>
+          <div class="leading-[80px]">Deployments break. Rollbacks suck.</div>
+          <div class="pt-5 font-medium-plus">Gitmoxi Fixes That.</div>
         </h1>
-        <p class="text-lg mt-4 text-custom-gray lg:text-2xl text-center">
-          <span class="font-medium leading-[50px]">
-            For EKS, ECS, Fargate, and Lambda
+        <p class="text-lg mt-8 text-custom-gray lg:text-2xl text-center">
+          <span class="font-medium leading-[35px]">
+            Script-based deploys are fragile. No visibility. No safety nets. Gitmoxi brings reliable, Git-powered deployments to ECS, Lambda, EKS, and Fargate.
           </span>
         </p>
-        <div class="hidden sm:flex md:flex lg:flex items-center justify-center gap-4 pt-4">
+        <div class="hidden sm:flex md:flex lg:flex items-center justify-center gap-10 pt-8">
+          <Link
+              href="/docs/getting_started"
+              size="lg"
+              class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2"
+          >
+            <span class="text-custom-blue text-xl">Start Deploying Today - Try Free</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+            >
+              <path
+                  fill="#111827"
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+              ></path>
+            </svg>
+          </Link>
           <Link
               href="/book-a-demo"
               size="lg"
               class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2"
           >
-            <span class="text-white text-xl">Book a Demo</span>
+            <span class="text-white text-xl">See Gitmoxi in Action - Book Demo</span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

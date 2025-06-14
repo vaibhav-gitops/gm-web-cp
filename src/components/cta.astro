@@ -4,13 +4,48 @@ import Link from "./ui/link.astro";
 
 <div
     class="bg-custom-blue p-8 py-16 sm:py-20 md:px-20 md:py-32 flex flex-col items-center text-center border-t border-custom-gray">
-  <h2 class="text-white text-4xl md:text-6xl tracking-tight">
-    Elevate Your Deployment Experience Today
+  <h2 class="text-white text-4xl md:text-6xl tracking-tight pb-6">
+    You deserve safe, simple, Git-native deployments.
   </h2>
-  <p class="text-custom-gray mt-4 text-lg md:text-xl">
-    Experience the power of Gitmoxi — your go-to solution for simple, flexible, and transparent deployment management
-  </p>
-  <div class="flex mt-5">
-    <Link href="/book-a-demo">Book a Demo</Link>
+  <div class="hidden sm:flex md:flex lg:flex items-center justify-center gap-10 pt-8">
+    <Link
+        href="/docs/getting_started"
+        size="lg"
+        class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2"
+    >
+      <span class="text-custom-blue text-xl">Try For Free</span>
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+      >
+        <path
+            fill="#111827"
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+        ></path>
+      </svg>
+    </Link>
+    <Link
+        href="/book-a-demo"
+        size="lg"
+        class="inline-flex items-center group gap-px bg-custom-green hover:bg-teal-400 transition-colors py-2"
+    >
+      <span class="text-white text-xl">Book A Demo</span>
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
+      >
+        <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+        ></path>
+      </svg>
+    </Link>
   </div>
 </div>
