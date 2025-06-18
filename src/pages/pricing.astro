@@ -10,7 +10,7 @@ import Cta from "../components/cta.astro";
 const plans = [
   {
     name: "Explore",
-    price: "Free Trial",
+    price: null,
     desc: "Perfect for testing and experimentation",
     color: "teal",
     popular: false,
@@ -26,16 +26,16 @@ const plans = [
   },
   {
     name: "Scale",
-    price: null,
+    price: "15,000",
     desc: "Tailored for production deployments",
     popular: true,
     color: "teal",
     features: [
-      "Support for multiple installations",
+      "Perpetual License for Gitmoxi v1.0",
       "Unlimited Users and Deployments",
       "Full feature access",
       "Authentication and Authorization",
-      "Extended premium support",
+      "First year of premium support included",
       "Custom integrations and training",
     ],
     button: {
@@ -54,10 +54,10 @@ const plans = [
         Gitmoxi is a self-hosted software. Customers purchase software and support. There are no restrictions to users or number of deployments!
       </Fragment>
     </Sectionhead>
-    <div class="grid md:grid-cols-2 gap-40 mx-auto max-w-screen-lg mt-12 mb-20 px-10">
+    <div class="grid md:grid-cols-2 gap-40 mx-auto max-w-[1100px] mt-12 mb-20 px-10">
       {plans.map((item) => <PricingComponent plan={item} />)}
     </div>
-    <!--<PricingFaq />-->
+    <PricingFaq />
   </Container>
   <Cta />
 </Layout>
