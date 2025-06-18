@@ -3,13 +3,15 @@ import Cta from "@components/cta.astro";
 import FeatureAlt from "@components/feature-alt.astro";
 import Hero from "@components/hero.astro";
 import Logos from "@components/logos.astro";
-import MidSection from "@components/mid-section.astro";
+import ProblemSolutions from "@components/problem-solutions.astro";
 import Layout from "@layouts/Layout.astro";
+import Features from "../components/features.astro";
 ---
 
 <Layout footerMargin={false}>
   <Hero />
-  <MidSection />
+  <ProblemSolutions />
+  <Features />
   <Logos/>
   <Cta />
 </Layout>

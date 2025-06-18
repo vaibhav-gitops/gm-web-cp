@@ -5,16 +5,16 @@ import Container from "@components/container.astro";
 import Link from "./ui/link.astro";
 ---
 
-<div class="overflow-x-clip bg-custom-blue"
+<div class="overflow-x-clip bg-black"
      style="font-family: 'helvetica', sans-serif;">
   <Container>
     <main class="grid lg:grid-cols-5 place-items-center relative">
-      <div class="w-full max-w-4xl lg:col-span-5 mt-16 sm:mt-24 md:mt-32 lg:mt-40 mb-16 sm:mb-20 md:mb-24 lg:mb-28 px-4 sm:px-6 md:px-8">
+      <div class="w-full lg:col-span-5 mt-16 sm:mt-24 md:mt-32 lg:mt-40 mb-16 sm:mb-20 md:mb-24 lg:mb-28 px-4 sm:px-6 md:px-8">
         <h1 class="text-white font-medium-plus text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-center">
           <div class="leading-tight sm:leading-tight md:leading-tight lg:leading-[80px]">
             Deployments break. Rollbacks suck.
           </div>
-          <div class="pt-3 sm:pt-4 md:pt-5 font-medium-plus">Gitmoxi Fixes That.</div>
+          <div class="pt-3 sm:pt-4 md:pt-5 font-medium-plus"><span class="text-teal-500">Gitmoxi</span> Fixes That.</div>
         </h1>
         <p class="text-base sm:text-lg md:text-xl lg:text-2xl mt-6 sm:mt-8 text-custom-gray text-center max-w-4xl mx-auto">
           <span class="font-medium leading-relaxed sm:leading-relaxed md:leading-[35px]">
@@ -27,22 +27,9 @@ import Link from "./ui/link.astro";
           <a
               href="/docs/getting_started"
               size="lg"
-              class="inline-flex items-center justify-center group gap-2 bg-white hover:bg-custom-gray transition-colors py-3 px-6 rounded-lg w-full"
+              class="inline-flex items-center group gap-px justify-center border border-white/30 text-white hover:bg-white/10 py-2 px-6 rounded-lg transition"
           >
-            <span class="text-custom-blue text-base font-medium">Start Deploying Today</span>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-5 h-5 group-hover:translate-x-1 transition-transform"
-            >
-              <path
-                  fill="#111827"
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-              ></path>
-            </svg>
+            <span class="text-white text-base font-medium">Try For Free</span>
           </a>
           <Link
               href="/book-a-demo"
@@ -50,18 +37,6 @@ import Link from "./ui/link.astro";
               class="inline-flex items-center justify-center group gap-2 transition-colors py-3 px-6 rounded-lg w-full"
           >
             <span class="text-white text-base font-medium">Book A Demo</span>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-5 h-5 group-hover:translate-x-1 transition-transform"
-            >
-              <path
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-              ></path>
-            </svg>
           </Link>
         </div>
 
@@ -70,55 +45,19 @@ import Link from "./ui/link.astro";
           <a
               href="/docs/getting_started"
               size="lg"
-              class="inline-flex items-center group gap-2 bg-white hover:bg-custom-gray transition-colors py-2 px-4 rounded-lg"
+              class="inline-flex items-center group gap-px justify-center border border-white/30 text-white hover:bg-white/10 py-2 px-6 rounded-lg transition"
           >
-            <span class="text-custom-blue text-lg lg:text-xl">Start Deploying Today - Try Free</span>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
-            >
-              <path
-                  fill="#111827"
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-              ></path>
-            </svg>
+            <span class="text-white text-lg lg:text-xl">Try For Free</span>
           </a>
           <Link
               href="/book-a-demo"
               size="lg"
               class="inline-flex items-center group gap-2 transition-colors py-2 px-4 rounded-lg"
           >
-            <span class="text-white text-lg lg:text-xl">See Gitmoxi in Action - Book Demo</span>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform"
-            >
-              <path
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-              ></path>
-            </svg>
+            <span class="text-white text-lg lg:text-xl">Book A Demo</span>
           </Link>
         </div>
       </div>
-      <!--<div class="py-3 lg:col-span-3 lg:-mr-44">-->
-      <!--  <Picture-->
-      <!--    src={heroImage}-->
-      <!--    alt="Deployments made easy"-->
-      <!--    formats={["avif", "webp"]}-->
-      <!--    sizes="(max-width: 1024px) 100vw, 50vw"-->
-      <!--    widths={[240, 540, 720, heroImage.width]}-->
-      <!--    loading="eager"-->
-      <!--    fetchpriority="high"-->
-      <!--  />-->
-      <!--</div>-->
     </main>
   </Container>
 </div>

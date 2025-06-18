@@ -1,12 +1,18 @@
 ---
 import Link from "./ui/link.astro";
+import {Icon} from "astro-icon/components";
 ---
 
 <div
-    class="bg-custom-blue p-4 py-12 sm:p-8 sm:py-16 md:px-20 md:py-32 flex flex-col items-center text-center border-t border-custom-gray">
-  <h2 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-6xl tracking-tight pb-4 sm:pb-6 leading-tight max-w-4xl">
-    You deserve safe, simple, Git-native deployments.
+    class="bg-black p-4 py-4 sm:p-8 sm:py-12 md:px-16 md:py-24 flex flex-col items-center text-center border-t border-custom-gray">
+  <h2 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-6xl tracking-tight pb-2 sm:pb-2 leading-tight max-w-4xl">
+    Ready to Simplify Your Deployments?
   </h2>
+  <p class="text-base sm:text-lg md:text-xl lg:text-2xl mt-2 sm:mt-2 text-custom-gray text-center max-w-4xl">
+          <span class="leading-relaxed sm:leading-relaxed md:leading-[35px]">
+          Join teams who have eliminated deployment complexity with Gitmoxi's GitOps-native approach.
+          </span>
+  </p>
 
   <!-- Mobile buttons (stacked) -->
   <div class="flex sm:hidden flex-col items-center gap-4 pt-6 w-full max-w-sm">
@@ -14,22 +20,9 @@ import Link from "./ui/link.astro";
         href="/docs/getting_started"
         size="lg"
         styles="inverted"
-        class="inline-flex items-center justify-center group gap-px bg-white hover:bg-custom-gray transition-colors py-3 px-6 rounded-lg w-full"
+        class="inline-flex items-center group gap-px justify-center border border-white/30 text-white hover:bg-white/10 py-2 px-6 rounded-lg transition"
     >
-      <span class="text-custom-blue text-lg font-medium">Try For Free</span>
-      <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-5 h-5 mt-px group-hover:translate-x-1 transition-transform ml-2"
-      >
-        <path
-            fill="#111827"
-            fill-rule="evenodd"
-            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-            clip-rule="evenodd"
-        ></path>
-      </svg>
+      <span class="text-white text-lg font-medium">Try For Free</span>
     </a>
     <Link
         href="/book-a-demo"
@@ -37,18 +30,6 @@ import Link from "./ui/link.astro";
         class="inline-flex items-center justify-center group gap-px transition-colors py-3 px-6 rounded-lg w-full"
     >
       <span class="text-white text-lg font-medium">Book A Demo</span>
-      <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-5 h-5 mt-px group-hover:translate-x-1 transition-transform ml-2"
-      >
-        <path
-            fill-rule="evenodd"
-            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-            clip-rule="evenodd"
-        ></path>
-      </svg>
     </Link>
   </div>
 
@@ -58,41 +39,16 @@ import Link from "./ui/link.astro";
         href="/docs/getting_started"
         size="lg"
         styles="inverted"
-        class="inline-flex items-center group gap-px bg-white hover:bg-custom-gray transition-colors py-2 px-4 rounded-lg"
+        class="inline-flex items-center group gap-px justify-center border border-white/30 text-white hover:bg-white/10 py-2 px-6 rounded-lg transition"
     >
-      <span class="text-custom-blue text-xl">Try For Free</span>
-      <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform ml-1"
-      >
-        <path
-            fill="#111827"
-            fill-rule="evenodd"
-            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-            clip-rule="evenodd"
-        ></path>
-      </svg>
+      <span class="text-white text-xl">Try For Free</span>
     </a>
     <Link
         href="/book-a-demo"
         size="lg"
-        class="inline-flex items-center group gap-px bg-teal-600 hover:bg-teal-800 transition-colors py-2 px-4 rounded-lg"
+        class="inline-flex items-center group gap-px bg-teal-600 hover:bg-teal-800 transition-colors px-4 rounded-lg transition"
     >
       <span class="text-white text-xl">Book A Demo</span>
-      <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-6 h-6 mt-px group-hover:translate-x-1 transition-transform ml-1"
-      >
-        <path
-            fill-rule="evenodd"
-            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-            clip-rule="evenodd"
-        ></path>
-      </svg>
     </Link>
   </div>
 </div>

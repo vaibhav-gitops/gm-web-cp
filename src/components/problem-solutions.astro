@@ -1,0 +1,141 @@
+---
+import { Icon } from "astro-icon/components";
+
+const problemsAndSolutions = [
+  {
+    problem: {
+      title: "Deployment Tracking & Rollbacks",
+      description: "What changed? Why wasn't this caught? How do we rollback?",
+      icon: "lucide:alert-triangle",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "GitOps-based deployment",
+      description: "All artifacts stored, reviewed, and version controlled in Git. Deployments and rollbacks as simple as git commit. Full traceability of all changes.",
+      icon: "lucide:git-branch",
+      color: "text-green-400"
+    }
+  },
+  {
+    problem: {
+      title: "Infrastructure Conflicts",
+      description: "Why is Terraform updating security groups? Why is CloudFormation/CDK stack stuck?",
+      icon: "lucide:settings",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "Smart Infrastructure Integration",
+      description: "Integrates with Terraform and CDK. Keeps application assets separate from infrastructure-as-code. Makes application deployments safe and reliable.",
+      icon: "lucide:shield",
+      color: "text-green-400"
+    }
+  },
+  {
+    problem: {
+      title: "Blue/Green Complexity",
+      description: "Why can't we do blue/green? Why is blue/green so convoluted?",
+      icon: "lucide:alert-triangle",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "Simplified Blue/Green Deployment",
+      description: "Elegantly simple for ECS, Fargate, Lambda, and EKS. Flexible traffic shifting. Alert-based rollbacks.",
+      icon: "lucide:zap",
+      color: "text-green-400"
+    }
+  },
+  {
+    problem: {
+      title: "Deployment Debugging",
+      description: "Why is the deployment failing? How do I share deployment details with dev teams?",
+      icon: "lucide:bug",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "Comprehensive Monitoring",
+      description: "Details from orchestrator, container logs, and alerts. Simple deployment failure debugging. Deployment details available directly in Slack.",
+      icon: "lucide:check-circle",
+      color: "text-green-400"
+    }
+  },
+  {
+    problem: {
+      title: "Security & Third-Party Access",
+      description: "You're giving admin access to your AWS accounts to a third-party SaaS service",
+      icon: "lucide:shield",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "Self-Hosted Solution",
+      description: "You control security and compliance. No third-party access required. Deploy on your own terms.",
+      icon: "lucide:shield",
+      color: "text-green-400"
+    }
+  },
+  {
+    problem: {
+      title: "Pricing Model",
+      description: "Why pay per app, per cluster? Why the metering at all?",
+      icon: "lucide:dollar-sign",
+      color: "text-red-400"
+    },
+    solution: {
+      title: "Simple License Model",
+      description: "Purchase once, yours forever. Unlimited apps across unlimited clusters. No usage-based pricing.",
+      icon: "lucide:check-circle",
+      color: "text-green-400"
+    }
+  }
+];
+---
+
+<section class="py-16 px-6 bg-black text-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Problems & Solutions
+      </h2>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+        Gitmoxi addresses the most common deployment challenges with elegant, GitOps-native solutions.
+      </p>
+    </div>
+
+    <div class="grid gap-8">
+      {problemsAndSolutions.map((item, index) => (
+          <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden" key={index}>
+            <div class="grid md:grid-cols-2 h-full">
+              <!-- Problem Block -->
+              <div class="p-8 bg-red-900/20 border-r border-white/10">
+                <div class="flex items-start space-x-4">
+                  <div class="flex-shrink-0">
+                    <Icon name={item.problem.icon} class={`w-8 h-8 ${item.problem.color}`} />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-bold mb-3">Problem: {item.problem.title}</h3>
+                    <p class="text-slate-300 leading-relaxed">
+                      {item.problem.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solution Block -->
+              <div class="p-8 bg-green-900/20">
+                <div class="flex items-start space-x-4">
+                  <div class="flex-shrink-0">
+                    <Icon name={item.solution.icon} class={`w-8 h-8 ${item.solution.color}`} />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-bold mb-3">Solution: {item.solution.title}</h3>
+                    <p class="text-slate-300 leading-relaxed">
+                      {item.solution.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      ))}
+    </div>
+  </div>
+</section>

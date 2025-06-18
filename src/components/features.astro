@@ -1,79 +1,75 @@
 ---
-import Badge from "@components/ui/badge.astro";
 import { Icon } from "astro-icon/components";
 
 const features = [
   {
-    title: "Bring Your Own Framework",
-    description:
-      "Build your site using React, Svelte, Vue, Preact, web components, or just plain ol' HTML + JavaScript.",
-    icon: "fluent:document-javascript-24-regular",
+    icon: "lucide:git-branch",
+    title: "GitOps Native",
+    description: "Every deployment is a git commit. Full version control and traceability for all changes.",
+    color: "text-blue-400"
   },
   {
-    title: "100% Static HTML, No JS",
-    description:
-      "Astro renders your entire page to static HTML, removing all JavaScript from your final build by default.",
-    icon: "fluent:trophy-24-regular",
+    icon: "lucide:shield",
+    title: "Self-Hosted Security",
+    description: "Complete control over your deployment pipeline. No third-party access to your AWS accounts.",
+    color: "text-green-400"
   },
   {
-    title: "On-Demand Components",
-    description:
-      "Need some JS? Astro can automatically hydrate interactive components when they become visible on the page.  ",
-    icon: "fluent:box-24-regular",
+    icon: "lucide:zap",
+    title: "Blue/Green Simplified",
+    description: "Elegant blue/green deployments for ECS, Fargate, Lambda, and EKS with intelligent traffic shifting.",
+    color: "text-yellow-400"
   },
   {
-    title: "Broad Integration",
-    description:
-      "Astro supports TypeScript, Scoped CSS, CSS Modules, Sass, Tailwind, Markdown, MDX, and any other npm packages.",
-    icon: "fluent:box-multiple-24-regular",
+    icon: "lucide:settings",
+    title: "Infrastructure Integration",
+    description: "Works seamlessly with Terraform and CDK while keeping application assets separate.",
+    color: "text-purple-400"
   },
   {
-    title: "SEO Enabled",
-    description:
-      "Automatic sitemaps, RSS feeds, pagination and collections take the pain out of SEO and syndication. It just works!",
-    icon: "fluent:book-search-24-regular",
+    icon: "lucide:check-circle",
+    title: "Comprehensive Monitoring",
+    description: "Detailed insights from orchestrators, container logs, and alerts. Debug deployments with ease.",
+    color: "text-emerald-400"
   },
   {
-    title: "Community",
-    description:
-      "Astro is an open source project powered by hundreds of contributors making thousands of individual contributions.",
-    icon: "fluent:people-community-24-regular",
-  },
+    icon: "lucide:dollar-sign",
+    title: "Simple Pricing",
+    description: "One-time license purchase. Unlimited apps, unlimited clusters. No usage-based metering.",
+    color: "text-orange-400"
+  }
 ];
 ---
 
-<!-- <div class="mt-16">
-  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
-    We have got more awesome <span class="text-indigo-600">features</span>
-  </h2>
-  <p class="text-lg mt-4 text-slate-600">
-    Use this section to highlight not so important features of your product.
-  </p>
-</div> -->
-<div class="mt-24 max-w-3xl mx-auto flex flex-col items-center justify-center">
-  <Badge color="purple">MORE FEATURES</Badge>
-  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-4 text-center">
-    We've got you covered
-  </h2>
-  <p class="text-lg mt-4 text-slate-600 text-center [text-wrap:pretty]">
-    Our template covers all things SAAS. If you don't find what you're looking
-    for, contact us and we'll either help you or steer you in the right
-    direction.
-  </p>
-</div>
+<section class="py-20 px-6 bg-black text-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Why Choose Gitmoxi?
+      </h2>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+        Built for teams who need reliable, secure, and cost-effective deployment solutions.
+      </p>
+    </div>
 
-<div class="grid sm:grid-cols-2 md:grid-cols-3 mt-16 gap-8 md:gap-16">
-  {
-    features.map((item) => (
-      <div class="flex flex-col gap-4 items-start group hover:bg-slate-50 hover:border-slate-100 border border-transparent rounded-lg transition-all md:-m-5 p-5">
-        <div class="mt-1 bg-indigo-50 border shadow shadow-indigo-100/50 border-indigo-100 transition-colors rounded-lg grid place-items-center  p-2 w-10 h-10 shrink-0">
-          <Icon class="text-indigo-500" name={item.icon} size={24} />
-        </div>
-        <div>
-          <h3 class="font-semibold text-lg">{item.title}</h3>{" "}
-          <p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
-        </div>
-      </div>
-    ))
-  }
-</div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      {features.map((feature, index) => (
+          <div
+              key={index}
+              class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-300 group p-8"
+          >
+            <div class="flex items-center mb-4">
+              <Icon
+                  name={feature.icon}
+                  class={`w-10 h-10 ${feature.color} group-hover:scale-110 transition-transform`}
+              />
+            </div>
+            <h3 class="text-xl font-bold mb-3">{feature.title}</h3>
+            <p class="text-slate-300 leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+      ))}
+    </div>
+  </div>
+</section>
